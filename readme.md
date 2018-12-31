@@ -13,7 +13,7 @@ Sebelum melakukan instalasi, pastikan composer telah terinstall.
 
 1. Download source code dalam bentuk zip atau menggunakan git
 
-   `git clone https://github.com/reshap0318/SIMASSET.git`
+   `git clone https://github.com/reshap0318/kp_polda_kapolres.git`
 
 2. Install php package dengan perintah
 
@@ -29,7 +29,7 @@ Sebelum melakukan instalasi, pastikan composer telah terinstall.
 
    `php artisan migrate --seed`
 
-6. Buka aplikasi dengan menggunakan browser dan login dengan menggunakan username `admin` password `4dm1n#123`
+6. Buka aplikasi dengan menggunakan browser dan login dengan menggunakan username `admin` password `admin`
 
 # Catatan Untuk Sentinel :
 `Sentinel Menggunakan Array, jadi Usahakan Selalu Menggunakan Array, disini saya menggunakan array dengan nama creadentials

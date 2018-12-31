@@ -28,13 +28,18 @@ class User extends SentinelUser implements RoleableInterface, PermissibleInterfa
      */
     protected $fillable = [
         'username',
-        'nama',
-        'email',
+        'kode',
         'avatar',
         'last_login',
+        'polres_id',
         'permissions',
         'remember_token',
     ];
+
+    public function polres($value='')
+    {
+          return $this->hasOne(polres::class,'id','polres_id');
+    }
 
     /**
      * The attributes that should be hidden for arrays.

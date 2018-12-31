@@ -21,9 +21,9 @@ Users
       <th class="text-center">
         <input type="checkbox" name="select_all" value="1" id="example-select-all">
       </th>
-      <th>Nama </th>
+      <th>Kode </th>
+      <th>Polres </th>
       <th>Email </th>
-      <th>Jabatan </th>
       <th class="no-link last"><span class="nobr">Action</span>
       </th>
       <th class="bulk-actions" colspan="7">
@@ -36,13 +36,9 @@ Users
     @foreach($users as $user)
 
           <td class="text-center">{{ Form::checkbox('sel', $user->id, null, ['class' => ''])}}</td>
-          <td class=" ">{{$user->nama}}</td>
-          <td class=" ">{{$user->email}}</td>
-          @if(is_null($user->roles()->first()))
-            <td class=" ">Jabatan Belum Ada</td>
-          @else
-            <td class=" ">{{$user->roles()->first()->name}}</td>
-          @endif
+          <td class=" ">{{$user->kode}}</td>
+          <td class=" ">{{optional($user->polres)->nama}}</td>
+          <td class="">{{optional($user->polres)->email}}</td>
           <td class=" last">
             @if (Sentinel::getUser()->hasAccess(['user.show']))
               <a href="{{route('user.show', $user->id)}}" class="btn btn-success btn-xs">View</a>

@@ -48,5 +48,8 @@ Route::group(['middleware' => ['web', 'auth', 'permission'] ], function () {
 	//role permission
 	Route::get('role/{id}/permission','RoleController@permissions')->name('role.permissions');
 	Route::post('role/{id}/permission', 'RoleController@simpan')->name('role.simpan');
-  
+
+  //polres
+	Route::resource('polres','PolresController');
+
 });
