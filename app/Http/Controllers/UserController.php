@@ -6,6 +6,7 @@ use App\user;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Role;
+use App\polres;
 use Sentinel;
 use Activation;
 use Route;
@@ -25,30 +26,31 @@ class UserController extends Controller
     {
         $action = 'create';
         $role = Role::get()->pluck('name', 'id');
+        $polres = polres::pluck('nama','id');
         //dd($role);
-        return view('backend.user.create',compact('role','action'));
+        return view('backend.user.create',compact('role','action', 'polres'));
     }
 
 
     public function store(Request $request)
     {
-        //dd($request->first_name);
+        // dd($request->all());
         $request->validate([
             'username' => 'required|min:3|unique:users',
-            'nama' => 'required|min:3',
-            'email' => 'required|email',
+            'kode' => 'required|min:3',
+            'polres_id' => 'required',
             'role' => 'required',
             'password' => 'required|same:password_confirm',
             'avatar' => 'image|mimes:jpg,png,jpeg,gif',
         ]);
         $user = new User;
         $user->username = $request->username;
-        $user->permissions = '{"home.dashboard":true}';
+        $user->permissions = ['{"home.dashboard":true}'];
         //dd([$request->role, $user->permissions]);
-        $user->nama = $request->nama;
-        $user->email = $request->email;
+        $user->kode = $request->kode;
+        $user->polres_id = $request->polres_id;
         $user->password = bcrypt($request->password);
-        $qrLogin=bcrypt($user->personal_number.$user->email.str_random(40));
+        $qrLogin=bcrypt($user->personal_number.$user->polres_id.str_random(40));
         $user->QRpassword= $qrLogin;
 
         if ($request->hasFile('avatar') && $request->avatar->isValid()) {
@@ -83,15 +85,8 @@ class UserController extends Controller
 
     public function show($id)
     {
-        $user = user::find($id);
-        $piket = piket::where('user_id',$id)->get();
-        $denda = denda::where('user_id',$id)->get();
-        $asistenacc = denda::where('asisten_acc',$id)->get();
-        $piket_detail = piket_detail::where('piket_id',$id)->get();
-        $izin_piket = izin_piket::where('piket_id',$id)->get();
-        $postingan = postingan::where('user_id',$id)->get();
-        //dd([$piket,$denda,$asistenacc, $piket_detail, $izin_piket]);
-        return view('backend.user.show',compact('user','piket','denda','asistenacc','piket_detail','izin_piket','postingan'));
+      $user = user::find($id);
+      return view('backend.user.show',compact('user'));
     }
 
 
@@ -100,7 +95,8 @@ class UserController extends Controller
         $action = 'edit';
         $role = Role::get()->pluck('name', 'id');
         $user = User::find($id);
-        return view('backend.user.edit',compact('role','user','action'));
+        $polres = polres::pluck('nama','id');
+        return view('backend.user.edit',compact('role','user','action','polres'));
     }
 
 
@@ -109,15 +105,15 @@ class UserController extends Controller
         //dd($request->all());
         $request->validate([
             'username' => 'required',
-            'nama' => 'required|min:3',
-            'email' => 'required|email',
+            'kode' => 'required|min:3',
+            'polres_id' => 'required',
             'role' => 'required',
         ]);
 
         $user = User::find($id);
         $user->username = $request->username;
-        $user->nama = $request->nama;
-        $user->email = $request->email;
+        $user->kode = $request->kode;
+        $user->polres_id = $request->polres_id;
 
         if($user->save()){
             if ($request->role) {
@@ -147,16 +143,8 @@ class UserController extends Controller
 
     public function showprofil()
     {
-        $user = Sentinel::getuser();
-        $id=$user->id;
-        $piket = piket::where('user_id',$id)->get();
-        $denda = denda::where('user_id',$id)->get();
-        $asistenacc = denda::where('asisten_acc',$id)->get();
-        $piket_detail = piket_detail::whereRaw('piket_id in (select id from pikets where user_id = '.$id.')')->get();
-        $izin_piket = izin_piket::whereRaw('piket_id in (select id from pikets where user_id = '.$id.')')->get();
-        $postingan = postingan::where('user_id',$id)->get();
-        //dd([$piket,$denda,$asistenacc, $piket_detail, $izin_piket,$postingan]);
-        return view('backend.user.show',compact('user','piket','denda','asistenacc','piket_detail','izin_piket','postingan'));
+      $user = Sentinel::getuser();
+      return view('backend.user.show',compact('user'));
     }
 
     public function gantiprofil(Request $request,$id)

@@ -1,6 +1,6 @@
 <div class="left_col scroll-view">
   <div class="navbar nav_title" style="border: 0;">
-    <a href="{{url('dashboard')}}" class="site_title"><i class="fa fa-paw"></i> <span>SI-110</span></a>
+    <a href="{{url('dashboard')}}" class="site_title"><i class="fa fa-paw"></i> <span>{{ config('app.name', 'Laravel') }}</span></a>
   </div>
 
   <div class="clearfix"></div>
@@ -43,6 +43,12 @@
         @endif
         @if(Sentinel::getUser()->hasAccess(['polres.index']))
           <li class=""><a href="{{route('polres.index')}}"><i class="fa fa-building"></i>Polres</a></li>
+        @endif
+        @if(Sentinel::getUser()->hasAccess(['panggilan.index']))
+          <li class=""><a href="{{route('panggilan.index')}}"><i class="fa fa-headphones"></i>Panggilan</a></li>
+        @endif
+        @if(Sentinel::getUser()->hasAccess(['inventaris.index']))
+          <li class=""><a href="{{route('inventaris.index')}}"><i class="fa fa-headphones"></i>Inventaris</a></li>
         @endif
           <li class=""><a href="{{ url('My-QrCode') }}"><i class="fa fa-qrcode"></i>My QR-Code</a></li>
       </ul>
