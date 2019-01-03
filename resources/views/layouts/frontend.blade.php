@@ -38,6 +38,7 @@
     <!-- Datatables -->
     <link rel="stylesheet" href="{{ URL::asset('/gantela/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('/gantela/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('/gantela/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.css') }}">
     @yield('style')
   </head>
 
@@ -115,6 +116,15 @@
     <!-- datatables -->
     <script src="{{ URL::asset('/gantela/vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('/gantela/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ URL::asset('/gantela/vendors/datatables.net-buttons/js/dataTables.buttons.js') }}"></script>
+    <script src="{{ URL::asset('/gantela/vendors/datatables.net-buttons/js/buttons.colVis.js') }}"></script>
+    <script src="{{ URL::asset('/gantela/vendors/datatables.net-buttons/js/buttons.flash.js') }}"></script>
+    <script src="{{ URL::asset('/gantela/vendors/datatables.net-buttons/js/buttons.html5.js') }}"></script>
+    <script src="{{ URL::asset('/gantela/vendors/datatables.net-buttons/js/buttons.print.js') }}"></script>
+    <script src="{{ URL::asset('/gantela/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.js') }}"></script>
+
+
+
     <script type="text/javascript">
       $.ajaxSetup({
           headers: {

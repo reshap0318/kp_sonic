@@ -19,10 +19,13 @@
       <thead>
         <tr class="headings">
           <th class="text-center">No</th>
+          @if(Sentinel::getuser()->id==1)
+          <th>Polres</th>
+          @endif
           <th>Jenis</th>
           <th>Baik</th>
           <th>Rusak</th>
-          <th>Perbaikan</th>
+          <th>Rusak Berat</th>
           <th>Total</th>
           <th class="no-link last"><span class="nobr">Action</span></th>
           <th class="bulk-actions" colspan="7">
@@ -34,12 +37,18 @@
       <tbody>
         @foreach($inventariss as $inventaris)
               <td class=" text-center">{{ ++$no }}</td>
+              @if(Sentinel::getuser()->id==1)
+              <td class=" ">{{optional($inventaris->polres)->nama}}</td>
+              @endif
               <td class=" ">{{$inventaris->jenis}}</td>
-              <td class=" "></td>
-              <td class=" "></td>
-              <td class=" "></td>
-              <td class=" "></td>
+              <td class=" ">{{$inventaris->baik}} Buah</td>
+              <td class=" ">{{$inventaris->rusak}} Buah</td>
+              <td class=" ">{{$inventaris->rusakberat}} Buah</td>
+              <td class=" ">{{$inventaris->baik + $inventaris->rusak + $inventaris->rusakberat}} Buah</td>
               <td class=" last">
+                @if (Sentinel::getUser()->hasAccess(['inventaris.show']))
+                  <a href="{{route('inventaris.show', $inventaris->id)}}" class="btn btn-success btn-xs">Detail</a>
+                @endif
                 @if (Sentinel::getUser()->hasAccess(['inventaris.edit']))
                   <a href="{{route('inventaris.edit', $inventaris->id)}}" class="btn btn-success btn-xs">edit</a>
                 @endif
@@ -67,6 +76,39 @@
              'searchable':false,
              'orderable':false,
             }],
+            dom: 'Bfrtip',
+            buttons: [
+              {
+                  extend: 'copy',
+                  exportOptions: {
+                      columns: [0, 1, 2, 3, 4, 5, 6]
+                  }
+              },
+              {
+                  extend: 'print',
+                  exportOptions: {
+                      columns: [0, 1, 2, 3, 4, 5, 6]
+                  }
+              },
+              {
+                  extend: 'csv',
+                  exportOptions: {
+                      columns: [0, 1, 2, 3, 4, 5, 6]
+                  }
+              },
+              {
+                  extend: 'excel',
+                  exportOptions: {
+                      columns: [0, 1, 2, 3, 4, 5, 6]
+                  }
+              },
+              {
+                  extend: 'pdf',
+                  exportOptions: {
+                      columns: [0, 1, 2, 3, 4, 5, 6]
+                  }
+              }
+            ]
         });
     });
 

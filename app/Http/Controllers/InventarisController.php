@@ -5,14 +5,33 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\inventaris;
 use Sentinel;
+use DB;
 
 class InventarisController extends Controller
 {
   public function index()
   {
-      $inventariss = inventaris::all();
+      $inventariss = inventaris::select('inventaris.id','jenis','polres_id',
+      DB::raw('count(case when inventaris_details.kondisi=1 then 1 end) as baik,
+      count(case when inventaris_details.kondisi=2 then 1 end) as rusak,
+      count(case when inventaris_details.kondisi=3 then 1 end) as rusakberat'))
+      ->leftjoin('inventaris_details','inventaris.id','=','inventaris_details.inventaris_id')
+      ->groupby('inventaris.id','jenis','polres_id')
+      ->distinct()
+      ->get();
+
       if(Sentinel::getuser()->polres_id && Sentinel::getuser()->username!="Admin"){
-          $inventariss = inventaris::SelectRaw('*')->where('polres_id',Sentinel::getuser()->polres_id)->get();
+        $inventariss = inventaris::select('inventaris.id','jenis','polres_id',
+        DB::raw('count(case when inventaris_details.kondisi=1 then 1 end) as baik,
+        count(case when inventaris_details.kondisi=2 then 1 end) as rusak,
+        count(case when inventaris_details.kondisi=3 then 1 end) as rusakberat'))
+        ->leftjoin('inventaris_details','inventaris.id','=','inventaris_details.inventaris_id')
+        ->groupby('inventaris.id','jenis','polres_id')
+        ->distinct()
+        ->where('polres_id',Sentinel::getuser()->polres_id)->get();
+      }
+      if(!$inventariss){
+        return redirect()->back();
       }
       return view('backend.inventaris.index',compact('inventariss'));
   }
@@ -46,7 +65,7 @@ class InventarisController extends Controller
 
   public function show($id)
   {
-      return redirect()->back();;
+      return redirect()->route('inventaris_detail.index',['inventarisId='.$id]);
   }
 
   public function edit($id)

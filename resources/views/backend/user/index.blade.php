@@ -34,7 +34,7 @@ Users
 
   <tbody>
     @foreach($users as $user)
-
+          @if($user->id != Sentinel::getuser()->id)
           <td class="text-center">{{ Form::checkbox('sel', $user->id, null, ['class' => ''])}}</td>
           <td class=" ">{{$user->kode}}</td>
           <td class=" ">{{optional($user->polres)->nama}}</td>
@@ -70,6 +70,7 @@ Users
             @endif
           </td>
           </tr>
+          @endif
     @endforeach
   </tbody>
 </table>
@@ -95,7 +96,40 @@ Users
          'searchable':false,
          'orderable':false,
             }],
-          'order': [1, 'asc']
+          'order': [1, 'asc'],
+          dom: 'Bfrtip',
+          buttons: [
+            {
+                extend: 'copy',
+                exportOptions: {
+                    columns: [1, 2, 3]
+                }
+            },
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: [1, 2, 3]
+                }
+            },
+            {
+                extend: 'csv',
+                exportOptions: {
+                    columns: [1, 2, 3]
+                }
+            },
+            {
+                extend: 'excel',
+                exportOptions: {
+                    columns: [1, 2, 3]
+                }
+            },
+            {
+                extend: 'pdf',
+                exportOptions: {
+                    columns: [1, 2, 3]
+                }
+            }
+          ]
             });
     });
       // Handle click on "Select all" control

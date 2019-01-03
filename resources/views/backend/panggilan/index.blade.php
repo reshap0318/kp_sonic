@@ -1,12 +1,12 @@
 @extends('layouts.frontend')
 @section('title')
-  List Laporan Panggilan
+  Laporan Panggilan {{optional(Sentinel::getuser()->polres)->nama}}
 @stop
 
 @section('content')
 <div class="x_panel">
   <div class="x_title">
-    <h2>Daftar Laporan Panggilan</h2>
+    <h2>Laporan Panggilan {{optional(Sentinel::getuser()->polres)->nama}}</h2>
     <ul class="nav navbar-right panel_toolbox">
       @if (Sentinel::getUser()->hasAccess(['panggilan.create']))
         <a href="{{route('panggilan.create')}}" class="btn btn-success">New Laporan Panggilan</a>
@@ -69,6 +69,39 @@
              'searchable':false,
              'orderable':false,
             }],
+            dom: 'Bfrtip',
+            buttons: [
+              {
+                  extend: 'copy',
+                  exportOptions: {
+                      columns: [0, 1, 2, 3, 4, 5, 6]
+                  }
+              },
+              {
+                  extend: 'print',
+                  exportOptions: {
+                      columns: [0, 1, 2, 3, 4, 5, 6]
+                  }
+              },
+              {
+                  extend: 'csv',
+                  exportOptions: {
+                      columns: [0, 1, 2, 3, 4, 5, 6]
+                  }
+              },
+              {
+                  extend: 'excel',
+                  exportOptions: {
+                      columns: [0, 1, 2, 3, 4, 5, 6]
+                  }
+              },
+              {
+                  extend: 'pdf',
+                  exportOptions: {
+                      columns: [0, 1, 2, 3, 4, 5, 6]
+                  }
+              }
+            ]
         });
     });
 

@@ -45,10 +45,15 @@
           <li class=""><a href="{{route('polres.index')}}"><i class="fa fa-building"></i>Polres</a></li>
         @endif
         @if(Sentinel::getUser()->hasAccess(['panggilan.index']))
-          <li class=""><a href="{{route('panggilan.index')}}"><i class="fa fa-headphones"></i>Panggilan</a></li>
+          <li class=""><a href="{{route('panggilan.index')}}"><i class="fa fa-headphones"></i>Laporan Panggilan</a></li>
         @endif
         @if(Sentinel::getUser()->hasAccess(['inventaris.index']))
-          <li class=""><a href="{{route('inventaris.index')}}"><i class="fa fa-headphones"></i>Inventaris</a></li>
+          <li class=""><a><i class="fa fa-cubes"></i>Laporan Inventaris <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu" style="display:none;">
+              <li><a href="{{route('inventaris.index')}}">List</a></li>
+              <li><a href="{{url('cek inventaris')}}">Cek Inventaris</a></li>
+            </ul>
+          </li>
         @endif
           <li class=""><a href="{{ url('My-QrCode') }}"><i class="fa fa-qrcode"></i>My QR-Code</a></li>
       </ul>
