@@ -35,5 +35,9 @@
     </div>
 </div>
 
+<div class="text-center">
+  <a href="{{url('edit-profil')}}" class="btn btn-primary">Edit Profil</a>
+</div>
+
 
 @stop

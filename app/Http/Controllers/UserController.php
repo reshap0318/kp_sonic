@@ -26,7 +26,7 @@ class UserController extends Controller
     {
         $action = 'create';
         $role = Role::get()->pluck('name', 'id');
-        $polres = polres::pluck('nama','id');
+        $polres = polres::orderby('nama','asc')->pluck('nama','id');
         //dd($role);
         return view('backend.user.create',compact('role','action', 'polres'));
     }
@@ -147,6 +147,32 @@ class UserController extends Controller
       return view('backend.user.show',compact('user'));
     }
 
+    public function editprofil()
+    {
+      $user = Sentinel::getuser();
+      return view('backend.user.editprofil',compact('user'));
+    }
+
+    public function updateprofile($id, Request $request)
+    {
+      $request->validate([
+        'username' => 'required',
+        'kode' => 'required',
+      ]);
+
+      $user = User::find($id);
+      // dd($user);
+      $user->username=$request->username;
+      $user->kode=$request->kode;
+      try {
+          $user->save();
+          return redirect('profil');
+      } catch (\Exception $e) {
+        return redirect()->back();
+      }
+
+    }
+
     public function gantiprofil(Request $request,$id)
     {
         $user = User::find($id);
@@ -163,10 +189,16 @@ class UserController extends Controller
             $realpath = storage_path('app/'.$filepath);
             $user->avatar = $filename;
             //hapus foto lama
-            File::delete(storage_path('app'.'/'. $path . '/' . $oldfile));
-            File::delete(public_path($path . '/' . $oldfile));
+
+            try {
+              $user->update();
+              File::delete(storage_path('app'.'/'. $path . '/' . $oldfile));
+              File::delete(public_path($path . '/' . $oldfile));
+              return redirect('profil');
+            } catch (\Exception $e) {
+              return redirect()->back();
+            }
         }
-        $user->save();
     }
 
     public function showpassword()

@@ -29,6 +29,8 @@ Route::group(['middleware' => ['web', 'auth', 'permission'] ], function () {
 	//users profil
 	Route::post('user/ganti-profil/{id}', ['uses' => 'UserController@gantiprofil']);
 	Route::get('profil', ['uses' => 'UserController@showprofil']);
+	Route::get('edit-profil', ['uses' => 'UserController@editprofil']);
+	Route::patch('edit-profil/{id}', ['uses' => 'UserController@updateprofile']);
 	//user password
 	Route::get('password', ['uses' => 'UserController@showpassword']);
 	Route::post('password', ['uses' => 'UserController@gantipassword']);

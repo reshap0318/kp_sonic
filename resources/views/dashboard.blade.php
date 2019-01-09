@@ -128,6 +128,9 @@
                           data: y
                       },
                 		});
+                    document.getElementById("ptmax").innerHTML = rows['ptmax'];
+                    document.getElementById("pmax").innerHTML = rows['pmax'];
+                    document.getElementById("pbanyak").innerHTML = rows['pbanyak'];
                   }
                 });
             }
@@ -145,7 +148,7 @@
     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
       <div class="tile-stats">
         <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-        <div class="count">{{$banyakmax->angka}}</div>
+        <div id="pbanyak" class="count">{{$banyakmax}}</div>
         <h3>Telfon</h3>
         <p>Panggilan Terbanyak</p>
       </div>
@@ -153,7 +156,7 @@
     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
       <div class="tile-stats">
         <div class="icon"><i class="fa fa-comments-o"></i></div>
-        <div class="count">{{$panggilanmax->angka}}</div>
+        <div id="pmax" class="count">{{$panggilanmax}}</div>
         <h3>Telfon</h3>
         <p>Panggilan Terjawab Terbanyak</p>
       </div>
@@ -161,7 +164,7 @@
     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
       <div class="tile-stats">
         <div class="icon"><i class="fa fa-sort-amount-desc"></i></div>
-        <div class="count">{{$panggilantidakmax->angka}}</div>
+        <div id="ptmax" class="count">{{$panggilantidakmax}}</div>
         <h3>Telfon</h3>
         <p>Panggilan Tidak Terjawab Terbanyak</p>
       </div>
