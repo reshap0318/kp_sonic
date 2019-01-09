@@ -8,7 +8,7 @@
   <div class="x_title">
     <h2>Laporan Panggilan {{optional(Sentinel::getuser()->polres)->nama}}</h2>
     <ul class="nav navbar-right panel_toolbox">
-      @if (Sentinel::getUser()->hasAccess(['panggilan.create']))
+      @if (Sentinel::getUser()->hasAccess(['panggilan.create']) && $ada==null )
         <a href="{{route('panggilan.create')}}" class="btn btn-success">New Laporan Panggilan</a>
       @endif
     </ul>

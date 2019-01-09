@@ -27,4 +27,9 @@ class polres extends Model
   {
       return $this->belongsTo(App\User);
   }
+
+  public function laporan($value='')
+  {
+      return $this->hasOne(rekapPanggilan::class,'polres_id','id');
+  }
 }

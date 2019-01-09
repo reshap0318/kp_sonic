@@ -14,7 +14,7 @@
 </div>
 
 <div class="form-group">
-  {!! Form::label('role', 'Jabatan *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+  {!! Form::label('role', 'Status *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
   <div class="col-md-6 col-sm-6 col-xs-12">
     {!! Form::select('role', $role, null, ['class' => 'foselect2_single form-control']) !!}
   </div>

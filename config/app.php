@@ -163,6 +163,8 @@ return [
         Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
         //qrcode
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+        //chart
+        ConsoleTVs\Charts\ChartsServiceProvider::class,
 
     ],
 

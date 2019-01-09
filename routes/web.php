@@ -60,5 +60,6 @@ Route::group(['middleware' => ['web', 'auth', 'permission'] ], function () {
     Route::resource('inventaris_detail','InventarisDetailController');
     Route::post('ceks','InventarisDetailController@ceking');
     Route::get('cek inventaris','InventarisDetailController@cek');
+    Route::get('datadash','HomeController@data');
 
 });

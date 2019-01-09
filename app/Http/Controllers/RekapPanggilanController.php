@@ -12,10 +12,11 @@ class RekapPanggilanController extends Controller
   public function index()
   {
       $panggilans = panggilan::all();
+      $ada = panggilan::where('polres_id',Sentinel::getuser()->polres_id)->whereday('created_at',now()->day)->first();
       if(Sentinel::getuser()->polres_id && Sentinel::getuser()->username!="Admin"){
           $panggilans = panggilan::where('polres_id',Sentinel::getuser()->polres_id)->get();
       }
-      return view('backend.panggilan.index',compact('panggilans'));
+      return view('backend.panggilan.index',compact('panggilans','ada'));
   }
 
 
