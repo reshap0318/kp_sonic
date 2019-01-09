@@ -9,7 +9,7 @@
   <div class="profile clearfix">
     <div class="profile_pic">
       @if(is_null(Sentinel::getUser()->avatar)||Sentinel::getUser()->avatar=="")
-        <img src="{{ asset('/img/lea.png') }}" alt="..." class="img-circle profile_img">
+        <img src="{{ asset('/img/lea.png') }}" alt="..." class="img-circle profile_img" style="height: 70px;width: 70px">
       @else
         <img src="{{ url('avatar/profile-pict/'.Sentinel::getUser()->avatar) }}" alt="..." class="img-circle profile_img" style="height: 70px;width: 70px">
       @endif

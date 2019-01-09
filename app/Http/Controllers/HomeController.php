@@ -28,58 +28,77 @@ class HomeController extends Controller
     public function dashboard(Request $request)
     {
 
+      $panggilanmax = panggilan::select('created_at',DB::raw('max(panggilan_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
+      $panggilantidakmax = panggilan::select('created_at',DB::raw('max(panggilan_tidak_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
+      $banyakmax = panggilan::select('created_at',DB::raw('max(panggilan_terjawab + panggilan_tidak_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
       $polress = polres::select('polres.nama','rekap_panggilans.panggilan_terjawab','rekap_panggilans.panggilan_tidak_terjawab')
       ->leftjoin('rekap_panggilans','polres.id','=','rekap_panggilans.polres_id')
       ->whereday('rekap_panggilans.created_at',now()->day)->get();
 
       if($request->data){
+        $data = explode(",",$request->data);
         $polress = polres::select('polres.nama','rekap_panggilans.panggilan_terjawab','rekap_panggilans.panggilan_tidak_terjawab')
         ->leftjoin('rekap_panggilans','polres.id','=','rekap_panggilans.polres_id')
-        ->whereraw('rekap_panggilans.created_at ')->get();
+        ->whereraw("DATE_FORMAT(rekap_panggilans.created_at, '%d/%m/%Y') BETWEEN '$data[0]' AND '$data[1]' ")->get();
       }
-
-
-      // dd($polress);
 
       $chart = new Echarts;
       $label = [];
-      $masuk = [];
-      $jawab = [];
-      $tjawab = [];
       foreach ($polress as $polres) {
         Array_push($label,$polres->nama);
-        Array_push($masuk,$polres->panggilan_terjawab + $polres->panggilan_tidak_terjawab);
-        Array_push($jawab,$polres->panggilan_terjawab);
-        Array_push($tjawab,$polres->panggilan_tidak_terjawab);
       }
 
-      $chart->labels($label);
-      // $chart->title('Laporan Telfon Pelayaran Masyarakat');
-      // $chart->options([
-      //   'title' => [
-      //     'textStyle' => [
-      //       'fontSize' => 100,
-      //       'bold' => true
-      //     ]
-      //   ]
-      // ]);
-
-      $chart->dataset('Panggilan Masuk', 'bar', $masuk)->color('#006400');
-      $chart->dataset('Panggilan Terjawab', 'bar', $jawab)->color('#00008B');
-      $chart->dataset('Panggilan Tidak Terjawab', 'bar', $tjawab);
-      // dd($chart);
-      return view('dashboard', compact('chart'));
+      $chart->labels($label)->load(url('datadash'));
+      return view('dashboard', compact('chart','panggilanmax','panggilantidakmax','banyakmax'));
     }
 
     public function data(Request $request)
     {
-        if(!$request->data){
-          $chart = new Echarts;
-          $chart->dataset('Sample Test1', 'bar', [3,4,1]);
-          $chart->dataset('Sample Test2', 'bar', [1,4,3]);
+        $panggilans = panggilan::select(DB::RAW('polres.nama, sum(rekap_panggilans.panggilan_terjawab) as terjawab, SUM(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab, sum(rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_terjawab) as total'))
+        ->leftjoin('polres','rekap_panggilans.polres_id','=','polres.id')
+        ->whereday('rekap_panggilans.created_at',now()->day)
+        ->groupby('polres.nama')->get();
 
-          return $chart->api();
-        }
+        if($request->data){
+            $data = explode(",",$request->data);
+            $mulai = date('Ymd', strtotime($data[0]));
+            $akhir = date('Ymd', strtotime($data[1]));
+            $panggilans = panggilan::select(DB::RAW('polres.nama, sum(rekap_panggilans.panggilan_terjawab) as terjawab, SUM(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab, sum(rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_terjawab) as total'))
+            ->leftjoin('polres','rekap_panggilans.polres_id','=','polres.id')
+            ->whereRAW("DATE_FORMAT(rekap_panggilans.created_at, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'")
+            ->groupby('polres.nama')->get();
+          }
+
+          $chart = new Echarts;
+          $label = [];
+          $masuk = [];
+          $jawab = [];
+          $tjawab = [];
+          foreach ($panggilans as $panggilan) {
+            Array_push($label,$panggilan->nama);
+            Array_push($masuk,$panggilan->total);
+            Array_push($jawab,$panggilan->terjawab);
+            Array_push($tjawab,$panggilan->tidak_terjawab);
+          }
+
+          $chart->labels($label);
+
+
+          $chart->dataset('Panggilan Masuk', 'bar', $masuk)->color('#006400');
+          $chart->dataset('Panggilan Terjawab', 'bar', $jawab)->color('#00008B');
+          $chart->dataset('Panggilan Tidak Terjawab', 'bar', $tjawab)->color('#a30e38');
+          $hasil = [];
+          // dd($chart->datasets[0]);
+          $dat = [];
+          foreach($chart->datasets as $data){
+               foreach ($data->options as $key) {
+                   $color = $key;
+               }
+              array_push($dat,array("data"=>$data->values,"name"=>$data->name,"type"=>$data->type));
+          }
+          $hasil = ['angka'=>$dat,'label'=>$label];
+          return $hasil;
+          // return $chart->api();
     }
 
 }

@@ -23,7 +23,7 @@
             <div class="control-group">
               <div class="controls">
                 <div class="input-prepend input-group">
-                  <input type="text" style="width: 200px" name="waktu" id="reportrange" class="form-control pull-right" value="01/20/2018 - 01/25/2018" />
+                  <input type="text" onchange="reload()" style="width: 200px" name="waktu" id="reportrange" class="form-control pull-right" value="01/20/2018 - 01/25/2018" />
                   <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
                 </div>
               </div>
@@ -62,6 +62,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div id="app">
             {!! $chart->container() !!}
+            <!-- <div id="{!!$chart->id!!}" style="width:600px; height:400px;"></div> -->
 
           </div>
 
@@ -72,7 +73,65 @@
               });
           </script>
           <script src=https://cdnjs.cloudflare.com/ajax/libs/echarts/4.0.2/echarts-en.min.js charset=utf-8></script>
-          {!! $chart->script() !!}
+          <!-- <script src="{{ URL::asset('/gantela/vendors/jquery/dist/jquery.min.js') }}"></script> -->
+          <script>
+          id = "{!! $chart->id !!}";
+          var myChart = echarts.init(document.getElementById(id));
+
+          // specify chart configuration item and data
+            var option = {
+                  title: {
+                      text: ''
+                  },
+                  tooltip: {},
+                  legend: {
+                      data:['Panggilan Masuk','Panggilan Terjawab', 'Panggilan Tidak Terjawab']
+                  },
+                  xAxis: {
+                      data: ['DataBase Tidak Terhubung']
+                  },
+                  yAxis: {},
+                  series: [{
+                      name: 'DataBase Tidak Terhubung',
+                      type: 'bar',
+                      data: [0, 100, 20]
+                  }]
+              };
+            // use configuration item and data specified to show chart
+            myChart.setOption(option);
+
+
+            function reload() {
+              var tanggal=document.getElementById("reportrange").value;
+              var server="<?php echo Request::root(); ?>";
+              tanggal = tanggal.replace(" - ",",");
+              console.log(server+'/datadash?data='+tanggal);
+              var x = new Array();
+              var y = new Array();
+              $.ajax({
+                url: server+'/datadash?data='+tanggal, data: "", dataType: 'json', success: function(rows)
+                  {
+                    var datas = rows['angka'];
+                    for (var i = 0; i < datas.length; i++) {
+                      var data = datas[i];
+                      x.push(data);
+                    }
+
+                    datax = rows['label'];
+                    for (var i = 0; i < datax.length; i++) {
+                      var datl = datax[i];
+                      y.push(datl);
+                    }
+                    myChart.setOption({
+                			series : x,
+                      xAxis: {
+                          data: y
+                      },
+                		});
+                  }
+                });
+            }
+          </script>
 
           <!-- <div id="chart_plot_01" class="demo-placeholder"></div> -->
         </div>
@@ -86,7 +145,7 @@
     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
       <div class="tile-stats">
         <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-        <div class="count">179</div>
+        <div class="count">{{$banyakmax->angka}}</div>
         <h3>Telfon</h3>
         <p>Panggilan Terbanyak</p>
       </div>
@@ -94,7 +153,7 @@
     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
       <div class="tile-stats">
         <div class="icon"><i class="fa fa-comments-o"></i></div>
-        <div class="count">179</div>
+        <div class="count">{{$panggilanmax->angka}}</div>
         <h3>Telfon</h3>
         <p>Panggilan Terjawab Terbanyak</p>
       </div>
@@ -102,7 +161,7 @@
     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
       <div class="tile-stats">
         <div class="icon"><i class="fa fa-sort-amount-desc"></i></div>
-        <div class="count">179</div>
+        <div class="count">{{$panggilantidakmax->angka}}</div>
         <h3>Telfon</h3>
         <p>Panggilan Tidak Terjawab Terbanyak</p>
       </div>
