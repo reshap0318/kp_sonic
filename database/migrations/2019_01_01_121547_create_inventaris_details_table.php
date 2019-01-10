@@ -17,6 +17,7 @@ class CreateInventarisDetailsTable extends Migration
             $table->increments('id');
             $table->string('kode')->unique();
             $table->integer('kondisi');
+            $table->text('keterangan');
             $table->integer('inventaris_id')->unsigned();
 
             $table->foreign('inventaris_id')->references('id')->on('inventaris')->onDelete('cascade')->onUpdate('cascade');

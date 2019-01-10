@@ -6,7 +6,7 @@
 @section('content')
 <div class="x_panel">
   <div class="x_title">
-    <h2>Daftar Inventaris {{optional($details->polres)->nama}}</h2>
+    <h2>Daftar Inventaris {{$details->jenis}} {{optional($details->polres)->nama}}</h2>
     <ul class="nav navbar-right panel_toolbox">
       @if (Sentinel::getUser()->hasAccess(['inventaris_detail.create']))
         <a href="{{route('inventaris_detail.create',['inventarisId='.$details->id])}}" class="btn btn-success">New Inventaris {{$details->jenis}}</a>
@@ -19,7 +19,7 @@
       <thead>
         <tr class="headings">
           <th class="text-center">No</th>
-          <th>Serial Number</th>
+          <th>Koden Barang</th>
           <th>Kondisi</th>
           <th class="no-link last"><span class="nobr">Action</span></th>
           <th class="bulk-actions" colspan="7">
@@ -71,6 +71,9 @@
       </tbody>
     </table>
   </div>
+</div>
+<div class="text-center">
+    <a href="{{route('inventaris.index')}}" class="btn btn-primary">Kembali</a>
 </div>
 @endsection
 

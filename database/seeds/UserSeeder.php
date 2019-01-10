@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     {
           DB::table('polres')->insert([
             [
-                'nama'		     => 'POLDA PADANG',
+                'nama'		     => 'POLDA SUMBAR',
                 'email' 		   => '(0751) 8950779',
                 'alamat' 		 => 'PADANG'
             ],[
@@ -101,13 +101,13 @@ class UserSeeder extends Seeder
  			    		'username'		 => 'admin',
  			    		'password' 		 => bcrypt('admin'),
  			    		'permissions'  => '{"password.request":true,"password.email":true,"password.reset":true,"home.dashboard":true,"user.index":true,"user.create":true,"user.store":true,"user.show":true,"user.edit":true,"user.update":true,"user.destroy":true,"user.activate":true,"user.deactivate":true,"user.permissions":true,"user.simpan":true,"role.index":true,"role.create":true,"role.store":true,"role.show":true,"role.edit":true,"role.update":true,"role.destroy":true,"role.permissions":true,"role.simpan":true}',
-               'kode'         => 'Admin',
+               'nama'         => 'Admin',
  			    		'QRpassword'	 => 'Dammy-CODE-1S4u7lJzehk62xDm3DgYgXXYWtbHE6gSP'
  			    ],[
 			    		'username'		 => 'bidti',
 			    		'password' 		 => bcrypt('bidti'),
 			    		'permissions'  => '{"home.dashboard":true}',
-              'kode'         => 'Bidang IT Polda (ADMIN)',
+              'nama'         => 'Bidang IT Polda (ADMIN)',
 			    		'QRpassword'	 => 'Dammy-CODE-1S4u7lJzehk62xDm3DgYgXXYWtbHE6gSP'
 			    ]
         ]);
@@ -122,12 +122,13 @@ class UserSeeder extends Seeder
 			    		'slug' 		    => 'eos',
 			    		'name' 			  => 'EOS (Engenering On Site)',
 			    		'permissions' => '{"home.dashboard":true,"polres.index":true,"polres.show":true,"panggilan.index":true,"panggilan.create":true,"panggilan.store":true,"panggilan.show":true,"panggilan.edit":true,"panggilan.update":true,"panggilan.destroy":true,"inventaris.index":true,"inventaris.create":true,"inventaris.store":true,"inventaris.show":true,"inventaris.edit":true,"inventaris.update":true,"inventaris.destroy":true,"inventaris_detail.index":true,"inventaris_detail.create":true,"inventaris_detail.store":true,"inventaris_detail.show":true,"inventaris_detail.edit":true,"inventaris_detail.update":true,"inventaris_detail.destroy":true}',
-			    ],[
-			    		'id'=>'3',
-			    		'slug' 		    => 'kapolres',
-			    		'name' 			  => 'Kapolres',
-			    		'permissions' => '{"home.dashboard":true,"polres.index":true,"polres.show":true,"panggilan.index":true,"panggilan.show":true,"inventaris.index":true,"inventaris.show":true,"inventaris_detail.index":true,"inventaris_detail.show":true}',
 			    ]
+          // ,[
+			    // 		'id'=>'3',
+			    // 		'slug' 		    => 'kapolres',
+			    // 		'name' 			  => 'Kapolres',
+			    // 		'permissions' => '{"home.dashboard":true,"polres.index":true,"polres.show":true,"panggilan.index":true,"panggilan.show":true,"inventaris.index":true,"inventaris.show":true,"inventaris_detail.index":true,"inventaris_detail.show":true}',
+			    // ]
         ]);
 		 DB::table('role_users')->insert([
           [

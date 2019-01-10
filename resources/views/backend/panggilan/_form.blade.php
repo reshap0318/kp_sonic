@@ -28,13 +28,3 @@
     {!! Form::text('panggilan_tidak_terjawab', null, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12','onkeypress'=>'return hanyaAngka(event)']) !!}
   </div>
 </div>
-
-<script type="text/javascript">
-function hanyaAngka(evt) {
-  var charCode = (evt.which) ? evt.which : event.keyCode
-  if (charCode > 31 && (charCode < 48 || charCode > 57))
-
-  return false;
-  return true;
-}
-</script>

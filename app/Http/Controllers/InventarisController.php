@@ -20,7 +20,7 @@ class InventarisController extends Controller
       ->distinct()
       ->get();
 
-      if(Sentinel::getuser()->polres_id && Sentinel::getuser()->username!="Admin"){
+      if(Sentinel::getuser()->polres_id && !Sentinel::inRole('1')){
         $inventariss = inventaris::select('inventaris.id','jenis','polres_id',
         DB::raw('count(case when inventaris_details.kondisi=1 then 1 end) as baik,
         count(case when inventaris_details.kondisi=2 then 1 end) as rusak,

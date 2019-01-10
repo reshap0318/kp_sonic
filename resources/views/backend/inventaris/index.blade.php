@@ -9,7 +9,8 @@
     <h2>Daftar Inventaris {{optional(Sentinel::getUser()->polres)->nama}}</h2>
     <ul class="nav navbar-right panel_toolbox">
       @if (Sentinel::getUser()->hasAccess(['inventaris.create']))
-        <a href="{{route('inventaris.create')}}" class="btn btn-success">New Inventaris</a>
+        <a href="{{route('inventaris.create')}}" class="btn btn-success">New Kategori Inventaris</a>
+        <a href="{{route('inventaris_detail.create',['inventarisId=all'])}}" class="btn btn-success">New Inventaris</a>
       @endif
     </ul>
     <div class="clearfix"></div>

@@ -23,9 +23,23 @@
             </div>
 
             <div class="form-group">
-              {!! Form::label('kode', 'Kode Akun *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+              {!! Form::label('nama', 'Nama *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
               <div class="col-md-6 col-sm-6 col-xs-12">
-                {!! Form::text('kode', null, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12']) !!}
+                {!! Form::text('nama', null, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12']) !!}
+              </div>
+            </div>
+
+            <div class="form-group">
+              {!! Form::label('telpon', 'No Telpon', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {!! Form::text('telpon', null, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12','onkeypress'=>'return hanyaAngka(event)']) !!}
+              </div>
+            </div>
+
+            <div class="form-group">
+              {!! Form::label('alamat', 'Alamat', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {!! Form::textarea('alamat', null, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12']) !!}
               </div>
             </div>
 
@@ -46,9 +60,9 @@
       </div>
       <div class="x_content text-center">
         @if(!$user->avatar)
-          <img src="{{ asset('/img/lea.png') }}" alt="..." class="" style="height: 147px;width: 147px">
+          <img src="{{ asset('/img/lea.png') }}" alt="..." class="" style="height: 300px;width: 300px">
         @else
-          <img src="{{ url('avatar/profile-pict/'.$user->avatar) }}" alt="..." class="" style="height: 147px;width: 147px">
+          <img src="{{ url('avatar/profile-pict/'.$user->avatar) }}" alt="..." class="" style="height: 300px;width: 300px">
         @endif
         <div class="form-group">
           <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 col-sm-offset-3 col-xs-offset-3 text-center">

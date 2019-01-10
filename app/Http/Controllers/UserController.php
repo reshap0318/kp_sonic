@@ -17,7 +17,6 @@ class UserController extends Controller
     public function index()
     {
         $users = user::all();
-        //dd(Sentinel::getUser()->avatar);
         return view('backend.user.index',compact('users'));
     }
 
@@ -37,7 +36,7 @@ class UserController extends Controller
         // dd($request->all());
         $request->validate([
             'username' => 'required|min:3|unique:users',
-            'kode' => 'required|min:3',
+            'nama' => 'required|min:3',
             'polres_id' => 'required',
             'role' => 'required',
             'password' => 'required|same:password_confirm',
@@ -45,12 +44,24 @@ class UserController extends Controller
         ]);
         $user = new User;
         $user->username = $request->username;
-        $user->permissions = ['{"home.dashboard":true}'];
-        //dd([$request->role, $user->permissions]);
-        $user->kode = $request->kode;
-        $user->polres_id = $request->polres_id;
         $user->password = bcrypt($request->password);
         $qrLogin=bcrypt($user->personal_number.$user->polres_id.str_random(40));
+        $user->nama = $request->nama;
+
+        if($request->telpon){
+          $user->telpon = $request->telpon;
+        }
+
+        if($request->alamat){
+          $user->alamat = $request->alamat;
+        }
+
+
+        $user->polres_id = $request->polres_id;
+        if($request->role==1){
+          $user->polres_id = null;
+        }
+        $user->permissions = ['{"home.dashboard":true}'];
         $user->QRpassword= $qrLogin;
 
         if ($request->hasFile('avatar') && $request->avatar->isValid()) {
@@ -105,26 +116,53 @@ class UserController extends Controller
         //dd($request->all());
         $request->validate([
             'username' => 'required',
-            'kode' => 'required|min:3',
+            'nama' => 'required|min:3',
             'polres_id' => 'required',
             'role' => 'required',
+            'avatar' => 'image|mimes:jpg,png,jpeg,gif',
         ]);
 
         $user = User::find($id);
         $user->username = $request->username;
-        $user->kode = $request->kode;
-        $user->polres_id = $request->polres_id;
-        if($user->id==2){
+        $user->nama = $request->nama;
+
+        if($request->telpon){
+          $user->telpon = $request->telpon;
+        }
+
+        if($request->alamat){
+          $user->alamat = $request->alamat;
+        }
+
+        if($user->inRole('1')){
           $user->polres_id = null;
         }
+
+
         if($request->password){
           $user->password = bcrypt($request->password);
+        }
+
+        if ($request->hasFile('avatar') && $request->avatar->isValid()) {
+            $path = 'img/avatars';
+            $oldfile = $user->avatar;
+
+            $fileext = $request->avatar->extension();
+            $filename = uniqid("avatars-").'.'.$fileext;
+
+            //Real File
+            $filepath = $request->file('avatar')->storeAs($path, $filename, 'local');
+            //Avatar File
+            $realpath = storage_path('app/'.$filepath);
+            $user->avatar = $filename;
         }
 
         if($user->save()){
             if ($request->role) {
               $user->roles()->sync([$request->role]);
             }
+            File::delete(storage_path('app'.'/'. $path . '/' . $oldfile));
+            File::delete(public_path($path . '/' . $oldfile));
             return redirect()->route('user.index');
         }else{
 
@@ -163,13 +201,17 @@ class UserController extends Controller
     {
       $request->validate([
         'username' => 'required',
-        'kode' => 'required',
+        'nama' => 'required',
+        'telpon' => 'required',
+        'alamat' => 'required',
       ]);
 
       $user = User::find($id);
       // dd($user);
       $user->username=$request->username;
-      $user->kode=$request->kode;
+      $user->nama=$request->nama;
+      $user->telpon = $request->telpon;
+      $user->alamat = $request->alamat;
       try {
           $user->save();
           return redirect('profil');
@@ -200,7 +242,7 @@ class UserController extends Controller
               $user->update();
               File::delete(storage_path('app'.'/'. $path . '/' . $oldfile));
               File::delete(public_path($path . '/' . $oldfile));
-              return redirect('profil');
+                return redirect()->back();
             } catch (\Exception $e) {
               return redirect()->back();
             }

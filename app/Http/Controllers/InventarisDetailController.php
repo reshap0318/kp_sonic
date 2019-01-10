@@ -16,7 +16,8 @@ class InventarisDetailController extends Controller
           try {
             if($request->inventarisId){
               $details = inventaris::find($request->inventarisId);
-              if( $details->polres_id == Sentinel::getuser()->polres_id || Sentinel::getuser()->id == 1 || Sentinel::getuser()->id == 2){
+              // $request->session()->put('jenis', $details->jenis);
+              if( $details->polres_id == Sentinel::getuser()->polres_id || Sentinel::inRole('1')){
                 return view('backend.inventarisD.index',compact('details'));
               }
             }
@@ -30,9 +31,14 @@ class InventarisDetailController extends Controller
     public function create(Request $request)
     {
         $id = $request->inventarisId;
-        if( $id){
-          return view('backend.inventarisD.create',compact('id'));
-        }else{
+        // $jenis = $request->session()->get('jenis');
+        try {
+          $jenis = inventaris::where('polres_id',Sentinel::getuser()->polres_id)->pluck('jenis','id');
+          if($id!='all'){
+            $jenis = inventaris::where('id',$id)->where('polres_id',Sentinel::getuser()->polres_id)->pluck('jenis','id');
+          }
+          return view('backend.inventarisD.create',compact('id','jenis'));
+        } catch (\Exception $e) {
           return view('frontend.404');
         }
     }
@@ -43,12 +49,14 @@ class InventarisDetailController extends Controller
           'kode' => 'required|unique:inventaris_details',
           'kondisi' => 'required',
           'inventaris_id' => 'required',
+          'keterangan' => 'required',
         ]);
 
         $detail = new detail;
         $detail->kode = $request->kode;
         $detail->kondisi = $request->kondisi;
         $detail->inventaris_id = $request->inventaris_id;
+        $detail->keterangan = $request->keterangan;
         try {
           $detail->save();
           return redirect()->route('inventaris_detail.index',['inventarisId='.$request->inventaris_id]);
@@ -60,13 +68,18 @@ class InventarisDetailController extends Controller
 
     public function edit($id)
     {
-        $detail = detail::find($id);
-        $id= $detail->inventaris_id;
-        if($id){
-          return view('backend.inventarisD.edit',compact('id','detail'));
-        }else{
-          return view('frontend.404');
-        }
+      try {
+          $detail = detail::find($id);
+          $id= $detail->inventaris_id;
+          if($id){
+            $jenis = inventaris::where('id',$id)->where('polres_id',Sentinel::getuser()->polres_id)->pluck('jenis','id');
+            return view('backend.inventarisD.edit',compact('id','detail','jenis'));
+          }else{
+            return view('frontend.404');
+          }
+      } catch (\Exception $e) {
+        return redirect()->back();
+      }
     }
 
     public function update($id,Request $request)
@@ -74,13 +87,15 @@ class InventarisDetailController extends Controller
         $request->validate([
           'kode' => 'required',
           'kondisi' => 'required',
-          'inventaris_id' => 'required'
+          'inventaris_id' => 'required',
+          'jenis' => 'required',
         ]);
 
         $detail = detail::find($id);
         $detail->kode = $request->kode;
         $detail->kondisi = $request->kondisi;
         $detail->inventaris_id = $request->inventaris_id;
+        $detail->keterangan = $request->keterangan;
         try {
           $detail->update();
           return redirect()->route('inventaris_detail.index',['inventarisId='.$request->inventaris_id]);

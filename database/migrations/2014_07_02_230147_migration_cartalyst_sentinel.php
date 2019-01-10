@@ -107,7 +107,9 @@ class MigrationCartalystSentinel extends Migration
             $table->increments('id');
             $table->string('username')->unique();
             $table->string('password');
-            $table->string('kode');
+            $table->string('nama');
+            $table->string('telpon')->nullable();
+            $table->string('alamat')->nullable();
             $table->string('avatar')->nullable();
             $table->integer('polres_id')->unsigned()->nullable();
 

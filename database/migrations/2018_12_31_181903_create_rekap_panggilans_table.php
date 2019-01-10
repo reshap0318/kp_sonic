@@ -15,14 +15,15 @@ class CreateRekapPanggilansTable extends Migration
     {
         Schema::create('rekap_panggilans', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nama');
-            $table->string('pangkat');
-            $table->string('nrp');
-            $table->integer('panggilan_terjawab');
+            $table->date('tanggal');
+            $table->integer('panggilan_terselesaikan');
+            $table->integer('panggilan_prank');
             $table->integer('panggilan_tidak_terjawab');
             $table->integer('polres_id')->unsigned();
+            $table->integer('user_id')->unsigned();
 
             $table->foreign('polres_id')->references('id')->on('polres')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
