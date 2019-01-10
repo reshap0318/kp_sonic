@@ -45,8 +45,11 @@
         <div class="clearfix"></div>
       </div>
       <div class="x_content text-center">
-        <img src="{{ asset('/img/lea.png') }}" alt="..." class="" style="height: 147px;width: 147px">
-
+        @if(!$user->avatar)
+          <img src="{{ asset('/img/lea.png') }}" alt="..." class="" style="height: 147px;width: 147px">
+        @else
+          <img src="{{ url('avatar/profile-pict/'.$user->avatar) }}" alt="..." class="" style="height: 147px;width: 147px">
+        @endif
         <div class="form-group">
           <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 col-sm-offset-3 col-xs-offset-3 text-center">
             {{ Form::open(array('url' => 'user/ganti-profil/'.$user->id, 'class' => 'form-horizontal','files' => true,'style'=>'display:inline','id'=>'ffoto')) }}

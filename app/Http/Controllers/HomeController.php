@@ -115,7 +115,7 @@ class HomeController extends Controller
 
           $chart->dataset('Panggilan Masuk', 'bar', $masuk)->color('#006400');
           $chart->dataset('Panggilan Terjawab', 'bar', $jawab)->color('#00008B');
-          $chart->dataset('Panggilan Tidak Terjawab', 'bar', $tjawab)->color('#a30e38');
+          $chart->dataset('Panggilan Tidak Terjawab', 'bar', $tjawab)->color('#b20000');
           $hasil = [];
           // dd($chart->datasets[0]);
           $dat = [];

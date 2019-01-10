@@ -114,6 +114,12 @@ class UserController extends Controller
         $user->username = $request->username;
         $user->kode = $request->kode;
         $user->polres_id = $request->polres_id;
+        if($user->id==2){
+          $user->polres_id = null;
+        }
+        if($request->password){
+          $user->password = bcrypt($request->password);
+        }
 
         if($user->save()){
             if ($request->role) {

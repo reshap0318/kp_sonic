@@ -16,12 +16,12 @@ class InventarisDetailController extends Controller
           try {
             if($request->inventarisId){
               $details = inventaris::find($request->inventarisId);
-              if( $details->polres_id == Sentinel::getuser()->polres_id || Sentinel::getuser()->id == 1){
+              if( $details->polres_id == Sentinel::getuser()->polres_id || Sentinel::getuser()->id == 1 || Sentinel::getuser()->id == 2){
                 return view('backend.inventarisD.index',compact('details'));
               }
             }
             return view('frontend.404');
-            
+
           } catch (\Exception $e) {
             return redirect()->back();
           }

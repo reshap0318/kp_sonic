@@ -47,14 +47,14 @@
               <td class=" ">{{$inventaris->baik + $inventaris->rusak + $inventaris->rusakberat}} Buah</td>
               <td class=" last">
                 @if (Sentinel::getUser()->hasAccess(['inventaris.show']))
-                  <a href="{{route('inventaris.show', $inventaris->id)}}" class="btn btn-success btn-xs">Detail</a>
+                  <a href="{{route('inventaris.show', $inventaris->id)}}"  name="delete" data-toggle="tooltip" data-placement="right" title="Detail" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>
                 @endif
                 @if (Sentinel::getUser()->hasAccess(['inventaris.edit']))
-                  <a href="{{route('inventaris.edit', $inventaris->id)}}" class="btn btn-success btn-xs">edit</a>
+                  <a href="{{route('inventaris.edit', $inventaris->id)}}"  name="delete" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-success btn-xs"><i class="fa fa-pencil-square-o"></i></a>
                 @endif
                 @if (Sentinel::getUser()->hasAccess(['inventaris.destroy']))
                   {!! Form::open(['method'=>'DELETE', 'route' => ['inventaris.destroy', $inventaris->id], 'style' => 'display:inline']) !!}
-                  {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs','id'=>'delete-confirm']) !!}
+                  <button type="submit" name="delete" data-toggle="tooltip" data-placement="right" title="Delete" id="delete-confirm" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
                   {!! Form::close() !!}
                 @endif
               </td>

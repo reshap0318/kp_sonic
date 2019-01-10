@@ -29,7 +29,8 @@
     <div class="menu_section">
       <h3>General</h3>
       <ul class="nav side-menu">
-        @if (Sentinel::getUser()->hasAccess(['user.index','role.index']))
+        <li class=""><a href="{{url('dashboard')}}"><i class="fa fa-home"></i>Dashboard</a></li>
+        @if (Sentinel::getUser()->hasAnyAccess(['user.index','role.index']))
           <li class=""><a><i class="fa fa-users"></i>Users Management <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu" style="display:none;">
               @if (Sentinel::getUser()->hasAccess(['user.index']))

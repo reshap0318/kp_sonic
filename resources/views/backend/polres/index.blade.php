@@ -20,32 +20,37 @@
         <tr class="headings">
           <th class="text-center">No</th>
           <th>Nama Polres</th>
-          <th>Email Polres</th>
+          <th>Telepon</th>
           <th>Alamat</th>
-          <th class="no-link last"><span class="nobr">Action</span></th>
-          <th class="bulk-actions" colspan="7">
-            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-          </th>
+          @if(Sentinel::getUser()->hasAnyAccess(['polres.show','polres.edit','polres.destroy']))
+            <th class="no-link last" style="width:70px"><span class="nobr">Action</span></th>
+          @endif
         </tr>
       </thead>
         <?php $no=0?>
       <tbody>
         @foreach($polress as $polres)
-              <td class=" text-center">{{ ++$no }}</td>
-              <td class=" ">{{$polres->nama}}</td>
-              <td class=" ">{{$polres->email}}</td>
-              <td class=" ">{{$polres->alamat}}</td>
-              <td class=" last">
-                @if (Sentinel::getUser()->hasAccess(['polres.edit']))
-                  <a href="{{route('polres.edit', $polres->id)}}" class="btn btn-success btn-xs">edit</a>
+            <tr>
+              <td class="text-center">{{ ++$no }}</td>
+              <td class="">{{$polres->nama}}</td>
+              <td class="">{{$polres->email}}</td>
+              <td class="">{{$polres->alamat}}</td>
+              @if(Sentinel::getUser()->hasAnyAccess(['polres.show','polres.edit','polres.destroy']))
+                <td class="">
+                  @if (Sentinel::getUser()->hasAccess(['polres.show']))
+                    <a href="{{route('polres.edit', $polres->id)}}" data-toggle="tooltip" data-placement="left" title="Detail" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>
+                  @endif
+                  @if (Sentinel::getUser()->hasAccess(['polres.edit']))
+                    <a href="{{route('polres.edit', $polres->id)}}" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-success btn-xs"><i class="fa fa-pencil-square-o"></i></a>
+                  @endif
+                  @if (Sentinel::getUser()->hasAccess(['polres.destroy']))
+                    {!! Form::open(['method'=>'DELETE', 'route' => ['polres.destroy', $polres->id], 'style' => 'display:inline']) !!}
+                    <button type="submit" name="delete" data-toggle="tooltip" data-placement="right" title="Delete" id="delete-confirm" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
+                    {!! Form::close() !!}
+                  @endif
+                </td>
                 @endif
-                @if (Sentinel::getUser()->hasAccess(['polres.destroy']))
-                  {!! Form::open(['method'=>'DELETE', 'route' => ['polres.destroy', $polres->id], 'style' => 'display:inline']) !!}
-                  {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs','id'=>'delete-confirm']) !!}
-                  {!! Form::close() !!}
-                @endif
-              </td>
-              </tr>
+            </tr>
         @endforeach
       </tbody>
     </table>

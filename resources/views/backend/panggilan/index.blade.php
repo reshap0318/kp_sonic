@@ -25,10 +25,12 @@
           <th>Panggilan Tidak Terkawab</th>
           <th>Total Panggilan</th>
           <th>Tanggal</th>
-          <th class="no-link last"><span class="nobr">Action</span></th>
-          <th class="bulk-actions" colspan="7">
-            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-          </th>
+          @if(Sentinel::getUser()->hasAnyAccess(['panggilan.edit','panggilan.destroy']))
+            <th class="no-link last"><span class="nobr">Action</span></th>
+            <th class="bulk-actions" colspan="7">
+              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+            </th>
+          @endif
         </tr>
       </thead>
         <?php $no=0?>
@@ -41,15 +43,17 @@
               <td class=" ">{{$panggilan->panggilan_tidak_terjawab}} Buah</td>
               <td class=" ">{{$panggilan->panggilan_terjawab + $panggilan->panggilan_tidak_terjawab}} Buah</td>
               <td class=" ">{{$panggilan->updated_at}}</td>
-              <td class=" last">
+              @if(Sentinel::getUser()->hasAnyAccess(['panggilan.edit','panggilan.destroy']))
+                <td class=" last">
                 @if (Sentinel::getUser()->hasAccess(['panggilan.edit']))
-                  <a href="{{route('panggilan.edit', $panggilan->id)}}" class="btn btn-success btn-xs">edit</a>
+                  <a href="{{route('panggilan.edit', $panggilan->id)}}" data-toggle="tooltip" data-placement="right" title="Edit" class="btn btn-success btn-xs"><i class="fa fa-pencil-square-o"></i></a>
                 @endif
                 @if (Sentinel::getUser()->hasAccess(['panggilan.destroy']))
                   {!! Form::open(['method'=>'DELETE', 'route' => ['panggilan.destroy', $panggilan->id], 'style' => 'display:inline']) !!}
-                  {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs','id'=>'delete-confirm']) !!}
+                    <button type="submit" name="delete" data-toggle="tooltip" data-placement="left" title="Delete" id="delete-confirm" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
                   {!! Form::close() !!}
                 @endif
+              @endif
               </td>
               </tr>
         @endforeach

@@ -14,83 +14,83 @@ class UserSeeder extends Seeder
           DB::table('polres')->insert([
             [
                 'nama'		     => 'POLDA PADANG',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '(0751) 8950779',
                 'alamat' 		 => 'PADANG'
             ],[
                 'nama'		     => 'POLRESTA PADANG',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0751-22317',
                 'alamat' 		 => 'Jl. M.Yamin SH No 1 Padang'
             ],[
                 'nama'		     => 'POLRES PESISIR SELATAN',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0756-21110/21010',
                 'alamat' 		 => 'Jl. H Agus Salim'
             ],[
                 'nama'		     => 'POLRES PASAMAN TIMUR',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0753-20010',
                 'alamat' 		 => 'Jl. Jenderal Sudirman No. 25 Lubuk Sikaping'
             ],[
                 'nama'		     => 'POLRES SIJUNJUNG',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0754-20004',
                 'alamat' 		 => 'Jl. Jenderal Sudirman Muaro Sijunjung'
             ],[
                 'nama'		     => 'POLRES SOLOK KOTA',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0755-21110',
                 'alamat' 		 => 'Jl. KS. Tubun No.2 Solok'
             ],[
                 'nama'		     => 'POLRES AGAM',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0752–76135',
                 'alamat' 		 => 'Jl.Jend Sudirman Lubuk Basung'
             ],[
                 'nama'		     => 'POLRES Kep. MENTAWAI',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0759-320310',
                 'alamat' 		 => 'KM.9 Tua Pejat Kec.Sipora Utara Kab.Kep.Mentawai'
             ],[
                 'nama'		     => 'POLRES PASAMAN BARAT',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0753-7464151',
                 'alamat' 		 => 'jl. Soekarno Hatta No 60 Kec. Pasaman Kab. Pasaman'
             ],[
                 'nama'		     => 'POLRES LIMAPULUH KOTA',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0753-7464151',
                 'alamat' 		 => 'Jl. Raya Tanjung Pati KM. 8 Harau '
             ],[
                 'nama'		     => 'POLRESTA PAYAKUMBUH',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0752-92110',
                 'alamat' 		 => 'Jl Pahlawan No. 33 Payakumbuh'
             ],[
                 'nama'		     => 'POLRESTA BUKITTINGGI',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0752-22530',
                 'alamat' 		 => 'Jln Sudirman No. 23'
             ],[
                 'nama'		     => 'POLRES PADANG PARIAMAN',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0751-676100',
                 'alamat' 		 => 'Jalan Padang Baru 10 Parit Malintang'
             ],[
                 'nama'		     => 'POLRES TANAH DATAR',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0752-71310',
                 'alamat' 		 => 'Jl. Sutan Alam Bagagarsyah, Pagaruyung Kec. Tanjung Emas Kab. Tanah Datar'
             ],[
                 'nama'		     => 'POLRES PARIAMAN',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0751-93608/92619',
                 'alamat' 		 => ' Jl. Imam Bonjol Pariaman No. 37 Pariaman'
             ],[
                 'nama'		     => 'POLRES PADANG PANJANG',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0752-82110',
                 'alamat' 		 => 'Jl. Kaharuddin Dt. Rangkayo Basa 3 Padang Panjang'
             ],[
                 'nama'		     => 'POLRESTA SAWAH LUNTO',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0754-62423',
                 'alamat' 		 => 'Jalan Adam Malik Nomor 10 Sawahlunto'
             ],[
                 'nama'		     => 'POLRES DHARMAS RAYA',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0754-558110',
                 'alamat' 		 => 'Jl. Lintas Sumatra Km 200 Gunung Medan Kec. Sitiung'
             ],[
                 'nama'		     => 'POLRES SOLOK AROSUKA',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0755-7334062',
                 'alamat' 		 => 'Jl. Lintas Sumatra Lb. Selasih Kec. Gunung Talang'
             ],[
                 'nama'		     => 'POLRES SOLOK SELATAN',
-                'email' 		   => 'polres.email@padang.com',
+                'email' 		   => '0755-583353',
                 'alamat' 		 => 'Jl. Padang Aro-Kerinci Km2 Kec.Sangir Kab.Solsel'
             ]
          ]);
@@ -100,37 +100,39 @@ class UserSeeder extends Seeder
            [
  			    		'username'		 => 'admin',
  			    		'password' 		 => bcrypt('admin'),
- 			    		'permissions'  => '{"home.dashboard":true}',
+ 			    		'permissions'  => '{"password.request":true,"password.email":true,"password.reset":true,"home.dashboard":true,"user.index":true,"user.create":true,"user.store":true,"user.show":true,"user.edit":true,"user.update":true,"user.destroy":true,"user.activate":true,"user.deactivate":true,"user.permissions":true,"user.simpan":true,"role.index":true,"role.create":true,"role.store":true,"role.show":true,"role.edit":true,"role.update":true,"role.destroy":true,"role.permissions":true,"role.simpan":true}',
                'kode'         => 'Admin',
  			    		'QRpassword'	 => 'Dammy-CODE-1S4u7lJzehk62xDm3DgYgXXYWtbHE6gSP'
  			    ],[
-			    		'username'		 => 'bidit',
-			    		'password' 		 => bcrypt('bidit'),
+			    		'username'		 => 'bidti',
+			    		'password' 		 => bcrypt('bidti'),
 			    		'permissions'  => '{"home.dashboard":true}',
-              'kode'         => 'Bidang IT Polda',
+              'kode'         => 'Bidang IT Polda (ADMIN)',
 			    		'QRpassword'	 => 'Dammy-CODE-1S4u7lJzehk62xDm3DgYgXXYWtbHE6gSP'
 			    ]
         ]);
          DB::table('roles')->insert([
 			    [
 			    		'id'=>'1',
-			    		'slug' 		    => 'admin',
-			    		'name' 			  => 'Admin',
-			    		'permissions' => '{"password.request":true,"password.email":true,"password.reset":true,"home.dashboard":true,"user.index":true,"user.create":true,"user.store":true,"user.show":true,"user.edit":true,"user.update":true,"user.destroy":true,"user.activate":true,"user.deactivate":true,"user.permissions":true,"user.simpan":true,"role.index":true,"role.create":true,"role.store":true,"role.show":true,"role.edit":true,"role.update":true,"role.destroy":true,"role.permissions":true,"role.simpan":true}',
+			    		'slug' 		    => 'BID IT (ADMIN)',
+			    		'name' 			  => 'BID IT (ADMIN)',
+			    		'permissions' => '{"home.dashboard":true,"user.index":true,"user.create":true,"user.store":true,"user.show":true,"user.edit":true,"user.update":true,"user.destroy":true,"polres.index":true,"polres.create":true,"polres.store":true,"polres.show":true,"polres.edit":true,"polres.update":true,"polres.destroy":true,"panggilan.index":true,"panggilan.show":true,"panggilan.edit":true,"panggilan.update":true,"panggilan.destroy":true,"inventaris.index":true,"inventaris.create":true,"inventaris.store":true,"inventaris.show":true,"inventaris.edit":true,"inventaris.update":true,"inventaris.destroy":true,"inventaris_detail.index":true,"inventaris_detail.create":true,"inventaris_detail.store":true,"inventaris_detail.show":true,"inventaris_detail.edit":true,"inventaris_detail.update":true,"inventaris_detail.destroy":true}',
 			    ],[
 			    		'id'=>'2',
-			    		'slug' 		    => 'BID IT',
-			    		'name' 			  => 'BID IT',
-			    		'permissions' => '{"password.request":true,"password.email":true,"password.reset":true,"home.dashboard":true,"user.index":true,"user.create":true,"user.store":true,"user.show":true,"user.edit":true,"user.update":true,"user.destroy":true,"user.activate":true,"user.deactivate":true,"user.permissions":true,"user.simpan":true,"role.index":true,"role.create":true,"role.store":true,"role.show":true,"role.edit":true,"role.update":true,"role.destroy":true,"role.permissions":true,"role.simpan":true}',
+			    		'slug' 		    => 'eos',
+			    		'name' 			  => 'EOS (Engenering On Site)',
+			    		'permissions' => '{"home.dashboard":true,"polres.index":true,"polres.show":true,"panggilan.index":true,"panggilan.create":true,"panggilan.store":true,"panggilan.show":true,"panggilan.edit":true,"panggilan.update":true,"panggilan.destroy":true,"inventaris.index":true,"inventaris.create":true,"inventaris.store":true,"inventaris.show":true,"inventaris.edit":true,"inventaris.update":true,"inventaris.destroy":true,"inventaris_detail.index":true,"inventaris_detail.create":true,"inventaris_detail.store":true,"inventaris_detail.show":true,"inventaris_detail.edit":true,"inventaris_detail.update":true,"inventaris_detail.destroy":true}',
+			    ],[
+			    		'id'=>'3',
+			    		'slug' 		    => 'kapolres',
+			    		'name' 			  => 'Kapolres',
+			    		'permissions' => '{"home.dashboard":true,"polres.index":true,"polres.show":true,"panggilan.index":true,"panggilan.show":true,"inventaris.index":true,"inventaris.show":true,"inventaris_detail.index":true,"inventaris_detail.show":true}',
 			    ]
         ]);
 		 DB::table('role_users')->insert([
-			    [
-			    		'user_id' 		=> '1',
-			    		'role_id' 			=> '1',
-			    ],[
+          [
 			    		'user_id' 		=> '2',
-			    		'role_id' 			=> '2',
+			    		'role_id' 			=> '1',
 			    ]
         ]);
 		 DB::table('activations')->insert([

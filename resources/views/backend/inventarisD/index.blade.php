@@ -43,11 +43,11 @@
                   <a data-toggle="modal" data-target="#{{$detail->id}}" class="btn btn-success btn-xs">QR-Code</a>
 
                 @if (Sentinel::getUser()->hasAccess(['inventaris_detail.edit']))
-                  <a href="{{route('inventaris_detail.edit', $detail->id)}}" class="btn btn-success btn-xs">edit</a>
+                  <a href="{{route('inventaris_detail.edit', $detail->id)}}" data-toggle="tooltip" data-placement="right" title="Detail" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>
                 @endif
                 @if (Sentinel::getUser()->hasAccess(['inventaris_detail.destroy']))
                   {!! Form::open(['method'=>'DELETE', 'route' => ['inventaris_detail.destroy', $detail->id], 'style' => 'display:inline']) !!}
-                  {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs','id'=>'delete-confirm']) !!}
+                    <button type="submit" name="delete" data-toggle="tooltip" data-placement="left" title="Delete" id="delete-confirm" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
                   {!! Form::close() !!}
                 @endif
               </td>

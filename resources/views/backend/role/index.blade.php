@@ -34,30 +34,28 @@
   <?php $no=0?>
   <tbody>
     @foreach($roles as $role)
-      @if($role->id != 1)
-        <tr>
-            <td class=" text-center">{{ ++$no }}</td>
-            <td class=" ">{{$role->name}}</td>
-            <td class=" ">{{$role->slug}}</td>
-            <td class=" last">
-              @if (Sentinel::getUser()->hasAccess(['role.show']))
-                <a href="{{route('role.show', $role->slug)}}" class="btn btn-success btn-xs">View</a>
-              @endif
-              @if (Sentinel::getUser()->hasAccess(['role.edit']))
-                <a href="{{route('role.edit', $role->id)}}" class="btn btn-success btn-xs">edit</a>
-              @endif
+      <tr>
+          <td class=" text-center">{{ ++$no }}</td>
+          <td class=" ">{{$role->name}}</td>
+          <td class=" ">{{$role->slug}}</td>
+          <td class=" last">
+            @if (Sentinel::getUser()->hasAccess(['role.show']))
+              <a href="{{route('role.show', $role->slug)}}" class="btn btn-success btn-xs">View</a>
+            @endif
+            @if (Sentinel::getUser()->hasAccess(['role.edit']))
+              <a href="{{route('role.edit', $role->id)}}" class="btn btn-success btn-xs">edit</a>
+            @endif
 
-              @if (Sentinel::getUser()->hasAccess(['role.permissions']))
-                <a href="{{route('role.permissions', $role->id)}}" class="btn btn-warning btn-xs">Permissions</a>
-              @endif
-              @if (Sentinel::getUser()->hasAccess(['role.destroy']))
-                {!! Form::open(['method'=>'DELETE', 'route' => ['role.destroy', $role->id], 'style' => 'display:inline']) !!}
-                {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs','id'=>'delete-confirm']) !!}
-                {!! Form::close() !!}
-              @endif
-            </td>
-          </tr>
-        @endif
+            @if (Sentinel::getUser()->hasAccess(['role.permissions']))
+              <a href="{{route('role.permissions', $role->id)}}" class="btn btn-warning btn-xs">Permissions</a>
+            @endif
+            @if (Sentinel::getUser()->hasAccess(['role.destroy']))
+              {!! Form::open(['method'=>'DELETE', 'route' => ['role.destroy', $role->id], 'style' => 'display:inline']) !!}
+              {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs','id'=>'delete-confirm']) !!}
+              {!! Form::close() !!}
+            @endif
+          </td>
+        </tr>
     @endforeach
   </tbody>
 </table>
