@@ -17,7 +17,7 @@
     <h3 class="text-center">{{$user->username}}</h3>
     <div class="flex text-center">
         <div class="col-md-3">
-            {!! Form::label('kode','Kode :') !!}
+            {!! Form::label('nama','Nama :') !!}
             {{$user->nama}}
          </div>
          <div class="col-md-3">

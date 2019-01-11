@@ -11,29 +11,37 @@ class InventarisController extends Controller
 {
   public function index()
   {
-      $inventariss = inventaris::select('inventaris.id','jenis','polres_id',
-      DB::raw('count(case when inventaris_details.kondisi=1 then 1 end) as baik,
-      count(case when inventaris_details.kondisi=2 then 1 end) as rusak,
-      count(case when inventaris_details.kondisi=3 then 1 end) as rusakberat'))
-      ->leftjoin('inventaris_details','inventaris.id','=','inventaris_details.inventaris_id')
-      ->groupby('inventaris.id','jenis','polres_id')
-      ->distinct()
-      ->get();
+      try {
+          $inventariss = inventaris::select('inventaris.id','jenis','polres_id',
+          DB::raw('count(case when inventaris_details.kondisi=1 then 1 end) as baik,
+          count(case when inventaris_details.kondisi=2 then 1 end) as rusak,
+          count(case when inventaris_details.kondisi=3 then 1 end) as rusakberat'))
+          ->leftjoin('inventaris_details','inventaris.id','=','inventaris_details.inventaris_id')
+          ->groupby('inventaris.id','jenis','polres_id')
+          ->distinct()
+          ->get();
 
-      if(Sentinel::getuser()->polres_id && !Sentinel::inRole('1')){
-        $inventariss = inventaris::select('inventaris.id','jenis','polres_id',
-        DB::raw('count(case when inventaris_details.kondisi=1 then 1 end) as baik,
-        count(case when inventaris_details.kondisi=2 then 1 end) as rusak,
-        count(case when inventaris_details.kondisi=3 then 1 end) as rusakberat'))
-        ->leftjoin('inventaris_details','inventaris.id','=','inventaris_details.inventaris_id')
-        ->groupby('inventaris.id','jenis','polres_id')
-        ->distinct()
-        ->where('polres_id',Sentinel::getuser()->polres_id)->get();
+          if(Sentinel::getuser()->polres_id && !Sentinel::inRole('1')){
+            $inventariss = inventaris::select('inventaris.id','jenis','polres_id',
+            DB::raw('count(case when inventaris_details.kondisi=1 then 1 end) as baik,
+            count(case when inventaris_details.kondisi=2 then 1 end) as rusak,
+            count(case when inventaris_details.kondisi=3 then 1 end) as rusakberat'))
+            ->leftjoin('inventaris_details','inventaris.id','=','inventaris_details.inventaris_id')
+            ->groupby('inventaris.id','jenis','polres_id')
+            ->distinct()
+            ->where('polres_id',Sentinel::getuser()->polres_id)->get();
+          }
+
+          if(!$inventariss){
+            return redirect()->back();
+          }
+
+          return view('backend.inventaris.index',compact('inventariss'));
+      } catch (\Exception $e) {
+          toast()->error($e, 'Eror');
+          toast()->error('Terjadi Eror Saat Meng-load Data, Silakan Ulang Login kembali', 'Gagal Load Data');
+          return redirect()->back();
       }
-      if(!$inventariss){
-        return redirect()->back();
-      }
-      return view('backend.inventaris.index',compact('inventariss'));
   }
 
 
@@ -46,20 +54,24 @@ class InventarisController extends Controller
   {
       $request->validate([
         'jenis' => 'required',
-
       ]);
 
-      $inventaris = new inventaris;
-      $inventaris->jenis = $request->jenis;
+      try {
+          $inventaris = new inventaris;
+          $inventaris->jenis = $request->jenis;
 
-      if(Sentinel::getuser()->polres_id){
-        $inventaris->polres_id = Sentinel::getuser()->polres_id;
-      }
+          if(Sentinel::getuser()->polres_id){
+            $inventaris->polres_id = Sentinel::getuser()->polres_id;
+          }
 
-      if($inventaris->save()){
-        return redirect()->route('inventaris.index');
-      }else{
+          $inventaris->save();
+          toast()->success('Berhasil Me-nyimpan Inventaris', 'Berhasil');
+          return redirect()->route('inventaris.index');
 
+      } catch (\Exception $e) {
+          toast()->error($e, 'Eror');
+          toast()->error('Terjadi Eror Saat Meng-Nyimpan Data', 'Gagal Load Data');
+          return redirect()->back();
       }
   }
 
@@ -70,8 +82,14 @@ class InventarisController extends Controller
 
   public function edit($id)
   {
-    $inventaris = inventaris::find($id);
-    return view('backend.inventaris.edit',compact('inventaris'));
+      try {
+        $inventaris = inventaris::find($id);
+        return view('backend.inventaris.edit',compact('inventaris'));
+      } catch (\Exception $e) {
+          toast()->error($e, 'Eror');
+          toast()->error('Terjadi Eror Saat Meng-load Data, Silakan Ulang Login kembali', 'Gagal Load Data');
+          return redirect()->back();
+      }
   }
 
   public function update(Request $request, $id)
@@ -80,28 +98,36 @@ class InventarisController extends Controller
       'jenis' => 'required',
     ]);
 
-    $inventaris = inventaris::find($id);
-    $inventaris->jenis = $request->jenis;
+      try {
+        $inventaris = inventaris::find($id);
+        $inventaris->jenis = $request->jenis;
 
-    if(Sentinel::getuser()->polres_id){
-      $inventaris->polres_id = Sentinel::getuser()->polres_id;
-    }
+        if(Sentinel::getuser()->polres_id){
+          $inventaris->polres_id = Sentinel::getuser()->polres_id;
+        }
 
-    if($inventaris->update()){
-      return redirect()->route('inventaris.index');
-    }else{
+        $inventaris->update();
+        toast()->success('Berhasil Update Inventaris', 'Berhasil');
+        return redirect()->route('inventaris.index');
 
-    }
+      }
+      catch (\Exception $e) {
+        toast()->error($e);
+        toast()->error('Gagal Meng-Update Data', 'Gagal');
+        return redirect()->back();
+      }
   }
 
   public function destroy($id)
   {
-      $inventaris = inventaris::find($id);
       try {
+        $inventaris = inventaris::find($id);
         $inventaris->delete();
+        toast()->success('Berhasil Hapus Data Inventaris', 'Berhasil');
         return redirect()->route('inventaris.index');
       } catch (\Exception $e) {
         toast()->error($e);
+        toast()->error('Gagal Meng-hapus Data', 'Gagal');
         return redirect()->back();
       }
 

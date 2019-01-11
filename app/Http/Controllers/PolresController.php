@@ -9,8 +9,14 @@ class PolresController extends Controller
 {
   public function index()
   {
-      $polress = polres::all();
-      return view('backend.polres.index',compact('polress'));
+      try {
+          $polress = polres::all();
+          return view('backend.polres.index',compact('polress'));
+      } catch (\Exception $e) {
+          toast()->error($e, 'Eror');
+          toast()->error('Terjadi Eror Saat Meng-Load Data, Silakan Ulang Login kembali', 'Gagal Load Data');
+          return redirect()->back();
+      }
   }
 
 
@@ -27,14 +33,20 @@ class PolresController extends Controller
         'alamat' => 'required'
       ]);
 
-      $polres = new polres;
-      $polres->nama = $request->nama;
-      $polres->alamat = $request->alamat;
-      $polres->email = $request->email;
-      if($polres->save()){
-        return redirect()->route('polres.index');
-      }else{
+      try {
 
+        $polres = new polres;
+        $polres->nama = $request->nama;
+        $polres->alamat = $request->alamat;
+        $polres->email = $request->email;
+        $polres->save();
+          toast()->success('Berhasil Me-nyimpan Data Polres', 'Berhasil');
+          return redirect()->route('polres.index');
+
+      } catch (\Exception $e) {
+        toast()->error($e, 'Eror');
+        toast()->error('Terjadi Eror Saat Meng-Nyimpan Data', 'Gagal Load Data');
+        return redirect()->back();
       }
   }
 
@@ -45,37 +57,51 @@ class PolresController extends Controller
 
   public function edit($id)
   {
-    $polres = polres::find($id);
-    return view('backend.polres.edit',compact('polres'));
+    try {
+      $polres = polres::find($id);
+      return view('backend.polres.edit',compact('polres'));
+    } catch (\Exception $e) {
+        toast()->error($e, 'Eror');
+        toast()->error('Terjadi Eror Saat Meng-Load Data, Silakan Ulang Login kembali', 'Gagal Load Data');
+        return redirect()->back();
+    }
   }
 
   public function update(Request $request, $id)
   {
+
     $request->validate([
       'nama' => 'required',
       'alamat' => 'required',
       'email' => 'required'
     ]);
 
-    $polres = polres::find($id);
-    $polres->nama = $request->nama;
-    $polres->email = $request->email;
-    $polres->alamat = $request->alamat;
-    if($polres->update()){
+    try {
+      $polres = polres::find($id);
+      $polres->nama = $request->nama;
+      $polres->email = $request->email;
+      $polres->alamat = $request->alamat;
+      $polres->update();
+      toast()->success('Berhasil Update Data Polres', 'Berhasil');
       return redirect()->route('polres.index');
-    }else{
+    } catch (\Exception $e) {
+        toast()->error($e, 'Eror');
+        toast()->error('Terjadi Eror Saat Meng-update Data', 'Gagal Load Data');
+        return redirect()->back();
 
     }
   }
 
   public function destroy($id)
   {
-      $polres = polres::find($id);
       try {
+        $polres = polres::find($id);
         $polres->delete();
+        toast()->success('Hapus Data Polres', 'Berhasil');
         return redirect()->route('polres.index');
       } catch (\Exception $e) {
-        toast()->error($e);
+        toast()->error($e, 'Eror');
+        toast()->error('Terjadi Eror Saat Meng-Hapus Data', 'Gagal Load Data');
         return redirect()->back();
       }
 

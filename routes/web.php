@@ -31,6 +31,8 @@ Route::group(['middleware' => ['web', 'auth', 'permission'] ], function () {
 	Route::get('profil', ['uses' => 'UserController@showprofil']);
 	Route::get('edit-profil', ['uses' => 'UserController@editprofil']);
 	Route::patch('edit-profil/{id}', ['uses' => 'UserController@updateprofile']);
+	Route::get('edit-password', ['uses' => 'UserController@showpassword']);
+	Route::patch('edit-password/{id}', ['uses' => 'UserController@gantipassword']);
 	//user password
 	Route::get('password', ['uses' => 'UserController@showpassword']);
 	Route::post('password', ['uses' => 'UserController@gantipassword']);

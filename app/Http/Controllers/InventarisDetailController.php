@@ -12,7 +12,6 @@ class InventarisDetailController extends Controller
 
     public function index(Request $request)
     {
-
           try {
             if($request->inventarisId){
               $details = inventaris::find($request->inventarisId);
@@ -21,9 +20,12 @@ class InventarisDetailController extends Controller
                 return view('backend.inventarisD.index',compact('details'));
               }
             }
+            toast()->error('Link Tidak ditemukan', 'Eror');
             return view('frontend.404');
 
           } catch (\Exception $e) {
+            toast()->error($e, 'Eror');
+            toast()->error('Terjadi Eror Saat Meng-load Data, Silakan Ulang Login kembali', 'Gagal Load Data');
             return redirect()->back();
           }
     }
@@ -39,6 +41,8 @@ class InventarisDetailController extends Controller
           }
           return view('backend.inventarisD.create',compact('id','jenis'));
         } catch (\Exception $e) {
+          toast()->error($e, 'Eror');
+          toast()->error('Terjadi Eror Saat Meng-load Data, Silakan Ulang Login kembali', 'Gagal Load Data');
           return view('frontend.404');
         }
     }
@@ -59,9 +63,11 @@ class InventarisDetailController extends Controller
         $detail->keterangan = $request->keterangan;
         try {
           $detail->save();
+          toast()->success('Berhasil Menyimpan Inventaris', 'Berhasil');
           return redirect()->route('inventaris_detail.index',['inventarisId='.$request->inventaris_id]);
         } catch (\Exception $e) {
-          toast()->error($e);
+          toast()->error($e, 'Eror');
+          toast()->error('Terjadi Eror Saat Meng-Nyimpan Data', 'Gagal Load Data');
           return redirect()->back();
         }
     }
@@ -75,9 +81,12 @@ class InventarisDetailController extends Controller
             $jenis = inventaris::where('id',$id)->where('polres_id',Sentinel::getuser()->polres_id)->pluck('jenis','id');
             return view('backend.inventarisD.edit',compact('id','detail','jenis'));
           }else{
+            toast()->error('Data Tidak Ditemukan', 'Missing Data');
             return view('frontend.404');
           }
       } catch (\Exception $e) {
+        toast()->error($e, 'Eror');
+        toast()->error('Terjadi Eror Saat Meng-load Data, Silakan Ulang Login kembali', 'Gagal Load Data');
         return redirect()->back();
       }
     }
@@ -98,21 +107,25 @@ class InventarisDetailController extends Controller
         $detail->keterangan = $request->keterangan;
         try {
           $detail->update();
+          toast()->success('Berhasil Update Inventaris', 'Berhasil');
           return redirect()->route('inventaris_detail.index',['inventarisId='.$request->inventaris_id]);
         } catch (\Exception $e) {
-          toast()->error($e);
+          toast()->error($e, 'Eror');
+          toast()->error('Terjadi Eror Saat Meng-Update Data', 'Gagal Load Data');
           return redirect()->back();
         }
     }
 
     public function destroy($id)
     {
-        $detail = detail::find($id);
         try {
+          $detail = detail::find($id);
           $detail->delete();
+          toast()->success('Hapus Data Inventaris', 'Berhasil');
           return redirect()->route('inventaris_detail.index',['inventarisId='.$request->inventaris_id]);
         } catch (\Exception $e) {
-          toast()->error($e);
+          toast()->error($e, 'Eror');
+          toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal Load Data');
           return redirect()->back();
         }
     }
