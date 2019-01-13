@@ -12,25 +12,31 @@ class rekapPanggilan extends Model
   const UPDATED_AT = 'updated_at';
 
   protected $casts = [
-    'nama'    => 'string',
-    'pangkat'     => 'string',
-    'nrp'     => 'string',
-    'panggilan_terjawab'    => 'integer',
-    'panggilan_tidak_terjawab'     => 'integer',
-    'polres_id'     => 'integer',
+    'piket'                      => 'array',
+    'panggilan_terselesaikan'    => 'integer',
+    'panggilan_prank'            => 'integer',
+    'panggilan_tidak_terjawab'   => 'integer',
+    'polres_id'                  => 'integer',
+    'user_id'                  => 'integer',
   ];
 
   protected $fillable = [
-    'nama',
-    'pangkat',
-    'nrp',
-    'panggilan_terjawab',
+    'tanggal',
+    'piket',
+    'panggilan_terselesaikan',
+    'panggilan_prank',
     'panggilan_tidak_terjawab',
     'polres_id',
+    'user_id',
   ];
 
   public function polres($value='')
   {
       return $this->hasOne(polres::class,'id','polres_id');
+  }
+
+  public function user($value='')
+  {
+      return $this->hasOne(User::class,'id','user_id');
   }
 }

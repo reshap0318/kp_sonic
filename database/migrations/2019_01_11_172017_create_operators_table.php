@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRekapPanggilansTable extends Migration
+class CreateOperatorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,15 @@ class CreateRekapPanggilansTable extends Migration
      */
     public function up()
     {
-        Schema::create('rekap_panggilans', function (Blueprint $table) {
+        Schema::create('operators', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('piket');
-            $table->date('tanggal');
-            $table->integer('panggilan_terselesaikan');
-            $table->integer('panggilan_prank');
-            $table->integer('panggilan_tidak_terjawab');
+            $table->string('nama');
+            $table->string('no_sk');
+            $table->string('foto_sk');
+            $table->integer('aktivasi');
             $table->integer('polres_id')->unsigned();
-            $table->integer('user_id')->unsigned();
 
             $table->foreign('polres_id')->references('id')->on('polres')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -36,6 +33,6 @@ class CreateRekapPanggilansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rekap_panggilans');
+        Schema::dropIfExists('operators');
     }
 }

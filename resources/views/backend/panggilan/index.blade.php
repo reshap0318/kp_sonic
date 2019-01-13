@@ -19,12 +19,14 @@
       <thead>
         <tr class="headings">
           <th class="text-center">No</th>
-          <th>Nama Petugas</th>
-          <th>Polres</th>
-          <th>Panggilan Terjawab</th>
-          <th>Panggilan Tidak Terkawab</th>
-          <th>Total Panggilan</th>
           <th>Tanggal</th>
+          <th>Petugas</th>
+          <th>Operator</th>
+          <th>Polres</th>
+          <th>PT</th>
+          <th>PP</th>
+          <th>PTT</th>
+          <th>TP</th>
           @if(Sentinel::getUser()->hasAnyAccess(['panggilan.edit','panggilan.destroy']))
             <th class="no-link last"><span class="nobr">Action</span></th>
             <th class="bulk-actions" colspan="7">
@@ -37,12 +39,18 @@
       <tbody>
         @foreach($panggilans as $panggilan)
               <td class=" text-center">{{ ++$no }}</td>
-              <td class=" ">{{$panggilan->nama}}</td>
+              <td class=" ">{{$panggilan->tanggal}}</td>
+              <td class=" ">{{optional($panggilan->user)->nama}}</td>
+              <td class=" ">
+                @foreach($panggilan->piket as $piket)
+                  {{$piket}},
+                @endforeach
+              </td>
               <td class=" ">{{optional($panggilan->polres)->nama}}</td>
-              <td class=" ">{{$panggilan->panggilan_terjawab}} Buah</td>
+              <td class=" ">{{$panggilan->panggilan_terselesaikan}} Buah</td>
+              <td class=" ">{{$panggilan->panggilan_prank}} Buah</td>
               <td class=" ">{{$panggilan->panggilan_tidak_terjawab}} Buah</td>
               <td class=" ">{{$panggilan->panggilan_terjawab + $panggilan->panggilan_tidak_terjawab}} Buah</td>
-              <td class=" ">{{$panggilan->updated_at}}</td>
               @if(Sentinel::getUser()->hasAnyAccess(['panggilan.edit','panggilan.destroy']))
                 <td class=" last">
                 @if (Sentinel::getUser()->hasAccess(['panggilan.edit']))
@@ -59,6 +67,20 @@
         @endforeach
       </tbody>
     </table>
+  </div>
+  <div class="text-center">
+    <div class="col-md-3">
+      {!! Form::label('nama','*PT :') !!} Panggilan Terselesaikan
+    </div>
+    <div class="col-md-3">
+     {!! Form::label('nama','*PP :') !!} Panggilan Prank
+    </div>
+    <div class="col-md-3">
+      {!! Form::label('nama','*TP :') !!} Total Panggilan
+    </div>
+    <div class="col-md-3">
+      {!! Form::label('nama','*PTT :') !!} Panggilan Tidak Terjawab <br>
+    </div>
   </div>
 </div>
 @endsection

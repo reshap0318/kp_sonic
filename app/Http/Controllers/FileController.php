@@ -12,7 +12,7 @@ class FileController extends Controller
         if ($type == 'profile-pict') {
             $lokasi = 'img/avatars';
         }elseif ($type == 'bukti-pict') {
-            $lokasi = 'img/bukti';
+            $lokasi = 'img/foto_sks';
         }
 
         return response()->file(

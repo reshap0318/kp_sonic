@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\RekapPanggilan as panggilan;
 use App\polres;
 use Sentinel;
+use App\operator;
 
 class RekapPanggilanController extends Controller
 {
@@ -30,8 +31,9 @@ class RekapPanggilanController extends Controller
   public function create()
   {
       try {
-        $polres = polres::pluck('nama','id');
-        return view('backend.panggilan.create',compact('polres'));
+        $operator = operator::where('polres_id',Sentinel::getuser()->polres_id)->pluck('nama','nama');
+        $aksi = 'create';
+        return view('backend.panggilan.create',compact('operator','aksi'));
       } catch (\Exception $e) {
         toast()->error($e, 'Eror');
         toast()->error('Terjadi Eror Saat Mengload Data, Silakan Ulang Login kembali', 'Gagal Load Data');
@@ -42,24 +44,25 @@ class RekapPanggilanController extends Controller
   public function store(Request $request)
   {
       $request->validate([
-        'nama' => 'required',
-        'pangkat' => 'required',
-        'nrp' => 'required',
-        'panggilan_terjawab' => 'required',
+        'tanggal' => 'required',
+        'piket' => 'required',
+        'panggilan_terselesaikan' => 'required',
+        'panggilan_prank' => 'required',
         'panggilan_tidak_terjawab' => 'required'
       ]);
 
       try {
-          $panggilan = new panggilan;
-          $panggilan->nama = $request->nama;
-          $panggilan->pangkat = $request->pangkat;
-          $panggilan->nrp = $request->nrp;
-          $panggilan->panggilan_terjawab = $request->panggilan_terjawab;
-          $panggilan->panggilan_tidak_terjawab = $request->panggilan_tidak_terjawab;
-          $panggilan->polres_id = Sentinel::getuser()->polres_id;
-          $panggilan->save();
-          toast()->success('Berhasil Menyimpan Laporan', 'Berhasil');
-          return redirect()->route('panggilan.index');
+        $panggilan = new panggilan;
+        $panggilan->tanggal = date("Y-m-d", strtotime($request->tanggal));
+        $panggilan->piket = $request->piket;
+        $panggilan->panggilan_terselesaikan = $request->panggilan_terselesaikan;
+        $panggilan->panggilan_prank = $request->panggilan_prank;
+        $panggilan->panggilan_tidak_terjawab = $request->panggilan_tidak_terjawab;
+        $panggilan->polres_id = Sentinel::getuser()->polres_id;
+        $panggilan->user_id = Sentinel::getuser()->id;
+        $panggilan->save();
+        toast()->success('Berhasil Menyimpan Laporan', 'Berhasil');
+        return redirect()->route('panggilan.index');
       } catch (\Exception $e) {
           toast()->error($e, 'Eror');
           toast()->error('Terjadi Eror Saat Mengload Data', 'Gagal Load Data');
@@ -76,9 +79,10 @@ class RekapPanggilanController extends Controller
   {
 
     try {
-        $polres = polres::pluck('nama','id');
+        $operator = operator::where('polres_id',Sentinel::getuser()->polres_id)->pluck('nama','nama');
         $panggilan = panggilan::find($id);
-        return view('backend.panggilan.edit',compact('panggilan','polres'));
+        $aksi = 'edit';
+        return view('backend.panggilan.edit',compact('panggilan','operator','aksi'));
     } catch (\Exception $e) {
         toast()->error($e, 'Eror');
         toast()->error('Terjadi Eror Saat Mengload Data, Silakan Ulang Login kembali', 'Gagal Load Data');
@@ -89,23 +93,24 @@ class RekapPanggilanController extends Controller
   public function update(Request $request, $id)
   {
     $request->validate([
-      'nama' => 'required',
-      'pangkat' => 'required',
-      'nrp' => 'required',
-      'panggilan_terjawab' => 'required',
+      'tanggal' => 'required',
+      'piket' => 'required',
+      'panggilan_terselesaikan' => 'required',
+      'panggilan_prank' => 'required',
       'panggilan_tidak_terjawab' => 'required'
     ]);
 
     try {
-      $panggilan = panggilan::find($id);
-      $panggilan->nama = $request->nama;
-      $panggilan->pangkat = $request->pangkat;
-      $panggilan->nrp = $request->nrp;
-      $panggilan->panggilan_terjawab = $request->panggilan_terjawab;
-      $panggilan->panggilan_tidak_terjawab = $request->panggilan_tidak_terjawab;
-      $panggilan->polres_id = Sentinel::getuser()->polres_id;
-        toast()->success('Berhasil Update Laporan Panggilan', 'Berhasil');
+        $panggilan = panggilan::find($id);
+        $panggilan->tanggal = date("Y-m-d", strtotime($request->tanggal));
+        $panggilan->piket = $request->piket;
+        $panggilan->panggilan_terselesaikan = $request->panggilan_terselesaikan;
+        $panggilan->panggilan_prank = $request->panggilan_prank;
+        $panggilan->panggilan_tidak_terjawab = $request->panggilan_tidak_terjawab;
+        $panggilan->polres_id = Sentinel::getuser()->polres_id;
+        $panggilan->user_id = Sentinel::getuser()->id;
         $panggilan->update();
+        toast()->success('Berhasil Update Laporan Panggilan', 'Berhasil');
         return redirect()->route('panggilan.index');
 
     } catch (\Exception $e) {

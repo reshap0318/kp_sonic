@@ -98,6 +98,7 @@
     <script src="{{ URL::asset('/gantela/vendors/Flot/jquery.flot.time.js') }}"></script>
     <script src="{{ URL::asset('/gantela/vendors/Flot/jquery.flot.stack.js') }}"></script>
     <script src="{{ URL::asset('/gantela/vendors/Flot/jquery.flot.resize.js') }}"></script>
+
     <!-- Flot plugins -->
     <script src="{{ URL::asset('/gantela/vendors/flot.orderbars/js/jquery.flot.orderBars.js') }}"></script>
     <script src="{{ URL::asset('/gantela/vendors/flot-spline/js/jquery.flot.spline.min.js') }}"></script>
@@ -131,6 +132,13 @@
           return false;
           return true;
         }
+    </script>
+
+    <!-- select2 -->
+    <script src="{{ URL::asset('/gantela/vendors/select2/dist/js/select2.min.js') }}"></script>
+
+    <script>
+    $('.js-example-basic-single').select2();
     </script>
 
 

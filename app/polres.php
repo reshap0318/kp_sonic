@@ -32,4 +32,9 @@ class polres extends Model
   {
       return $this->hasOne(rekapPanggilan::class,'polres_id','id');
   }
+
+  public function operator($value='')
+  {
+      return $this->hasMany(operator::class,'polres_id','id');
+  }
 }

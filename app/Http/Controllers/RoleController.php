@@ -147,7 +147,6 @@ class RoleController extends Controller
           }
 
           $actions = array_filter($var);
-          toast()->success('Berhasil Penyimpanan Data', 'Berhasil');
           return View('backEnd.role.permission', compact('role', 'actions'));
         } catch (\Exception $e) {
           toast()->error($e, 'Eror');

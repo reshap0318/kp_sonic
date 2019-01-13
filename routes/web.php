@@ -66,4 +66,6 @@ Route::group(['middleware' => ['web', 'auth', 'permission'] ], function () {
     Route::get('cek inventaris','InventarisDetailController@cek');
     Route::get('datadash','HomeController@data');
 
+    route::resource('operator','OperatorController');
+
 });

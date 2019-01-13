@@ -56,6 +56,9 @@
             </ul>
           </li>
         @endif
+        @if(Sentinel::getUser()->hasAccess(['operator.index']))
+          <li class=""><a href="{{route('operator.index')}}"><i class="fa fa-child"></i>Operator</a></li>
+        @endif
           <li class=""><a href="{{ url('My-QrCode') }}"><i class="fa fa-qrcode"></i>My QR-Code</a></li>
       </ul>
     </div>

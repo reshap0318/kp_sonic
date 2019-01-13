@@ -28,14 +28,21 @@ class HomeController extends Controller
     public function dashboard(Request $request)
     {
 
-      $panggilanmax = panggilan::select('created_at',DB::raw('max(panggilan_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
+      $panggilanselesai = panggilan::select('created_at',DB::raw('max(panggilan_terselesaikan) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
+      $panggilanprank = panggilan::select('created_at',DB::raw('max(panggilan_prank) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
       $panggilantidakmax = panggilan::select('created_at',DB::raw('max(panggilan_tidak_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
-      $banyakmax = panggilan::select('created_at',DB::raw('max(panggilan_terjawab + panggilan_tidak_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
+      $banyakmax = panggilan::select('created_at',DB::raw('max(panggilan_prank + panggilan_tidak_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
 
-      if(!$panggilanmax){
-          $panggilanmax = 0;
+      if(!$panggilanselesai){
+          $panggilanselesai = 0;
       }else{
-          $panggilanmax = $panggilanmax->angka;
+          $panggilanselesai = $panggilanselesai->angka;
+      }
+
+      if(!$panggilanprank){
+          $panggilanprank = 0;
+      }else{
+          $panggilanprank = $panggilanprank->angka;
       }
 
       if(!$panggilantidakmax){
@@ -50,13 +57,13 @@ class HomeController extends Controller
         $banyakmax = $banyakmax->angka;
       }
 
-      $polress = polres::select('polres.nama','rekap_panggilans.panggilan_terjawab','rekap_panggilans.panggilan_tidak_terjawab')
+      $polress = polres::select('polres.nama','rekap_panggilans.panggilan_prank','rekap_panggilans.panggilan_tidak_terjawab')
       ->leftjoin('rekap_panggilans','polres.id','=','rekap_panggilans.polres_id')
       ->whereday('rekap_panggilans.created_at',now()->day)->get();
 
       if($request->data){
         $data = explode(",",$request->data);
-        $polress = polres::select('polres.nama','rekap_panggilans.panggilan_terjawab','rekap_panggilans.panggilan_tidak_terjawab')
+        $polress = polres::select('polres.nama','rekap_panggilans.panggilan_prank','rekap_panggilans.panggilan_tidak_terjawab')
         ->leftjoin('rekap_panggilans','polres.id','=','rekap_panggilans.polres_id')
         ->whereraw("DATE_FORMAT(rekap_panggilans.created_at, '%d/%m/%Y') BETWEEN '$data[0]' AND '$data[1]' ")->get();
       }
@@ -68,16 +75,21 @@ class HomeController extends Controller
       }
 
       $chart->labels($label)->load(url('datadash'));
-      return view('dashboard', compact('chart','panggilanmax','panggilantidakmax','banyakmax'));
+      return view('dashboard', compact('chart','panggilanselesai','panggilantidakmax','banyakmax'));
     }
+
+
+
+
+
 
     public function data(Request $request)
     {
-        $panggilanmax = panggilan::select(DB::raw('sum(panggilan_terjawab) as angka'))->orderby('angka','desc')->groupby('polres_id')->first();
+        $panggilanselesai = panggilan::select(DB::raw('sum(panggilan_prank) as angka'))->orderby('angka','desc')->groupby('polres_id')->first();
         $panggilantidakmax = panggilan::select(DB::raw('max(panggilan_tidak_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
-        $banyakmax = panggilan::select(DB::raw('max(panggilan_terjawab + panggilan_tidak_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
+        $banyakmax = panggilan::select(DB::raw('max(panggilan_prank + panggilan_tidak_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
 
-        $panggilans = panggilan::select(DB::RAW('polres.nama, sum(rekap_panggilans.panggilan_terjawab) as terjawab, SUM(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab, sum(rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_terjawab) as total'))
+        $panggilans = panggilan::select(DB::RAW('polres.nama, sum(rekap_panggilans.panggilan_prank) as terjawab, SUM(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab, sum(rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_prank) as total'))
         ->leftjoin('polres','rekap_panggilans.polres_id','=','polres.id')
         ->whereday('rekap_panggilans.created_at',now()->day)
         ->groupby('polres.nama')->get();
@@ -87,12 +99,12 @@ class HomeController extends Controller
             $mulai = date('Ymd', strtotime($data[0]));
             $akhir = date('Ymd', strtotime($data[1]));
 
-            $panggilanmax = panggilan::select(DB::raw('sum(panggilan_terjawab) as angka'))->whereRAW("DATE_FORMAT(rekap_panggilans.created_at, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'")->orderby('angka','desc')->groupby('polres_id')->first();
+            $panggilanselesai = panggilan::select(DB::raw('sum(panggilan_prank) as angka'))->whereRAW("DATE_FORMAT(rekap_panggilans.created_at, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'")->orderby('angka','desc')->groupby('polres_id')->first();
             $panggilantidakmax = panggilan::select(DB::raw('sum(panggilan_tidak_terjawab) as angka'))->whereRAW("DATE_FORMAT(rekap_panggilans.created_at, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'")->orderby('angka','desc')->groupby('created_at')->first();
-            $banyakmax = panggilan::select(DB::raw('sum(panggilan_terjawab + panggilan_tidak_terjawab) as angka'))->whereRAW("DATE_FORMAT(rekap_panggilans.created_at, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'")->orderby('angka','desc')->groupby('created_at')->first();
+            $banyakmax = panggilan::select(DB::raw('sum(panggilan_prank + panggilan_tidak_terjawab) as angka'))->whereRAW("DATE_FORMAT(rekap_panggilans.created_at, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'")->orderby('angka','desc')->groupby('created_at')->first();
 
 
-            $panggilans = panggilan::select(DB::RAW('polres.nama, sum(rekap_panggilans.panggilan_terjawab) as terjawab, SUM(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab, sum(rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_terjawab) as total'))
+            $panggilans = panggilan::select(DB::RAW('polres.nama, sum(rekap_panggilans.panggilan_prank) as terjawab, SUM(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab, sum(rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_prank) as total'))
             ->leftjoin('polres','rekap_panggilans.polres_id','=','polres.id')
             ->whereRAW("DATE_FORMAT(rekap_panggilans.created_at, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'")
             ->groupby('polres.nama')->get();
@@ -114,7 +126,7 @@ class HomeController extends Controller
 
 
           $chart->dataset('Panggilan Masuk', 'bar', $masuk)->color('#006400');
-          $chart->dataset('Panggilan Terjawab', 'bar', $jawab)->color('#00008B');
+          $chart->dataset('Panggilan Terselesaikan', 'bar', $jawab)->color('#00008B');
           $chart->dataset('Panggilan Tidak Terjawab', 'bar', $tjawab)->color('#b20000');
           $hasil = [];
           // dd($chart->datasets[0]);
@@ -126,10 +138,10 @@ class HomeController extends Controller
               array_push($dat,array("data"=>$data->values,"name"=>$data->name,"type"=>$data->type,"color"=>$color));
           }
 
-          if(!$panggilanmax){
-              $panggilanmax = 0;
+          if(!$panggilanselesai){
+              $panggilanselesai = 0;
           }else{
-              $panggilanmax = $panggilanmax->angka;
+              $panggilanselesai = $panggilanselesai->angka;
           }
 
           if(!$panggilantidakmax){
@@ -144,7 +156,7 @@ class HomeController extends Controller
             $banyakmax = $banyakmax->angka;
           }
 
-          $hasil = ['angka'=>$dat,'label'=>$label,'pmax'=>$panggilanmax,'pbanyak'=>$banyakmax,'ptmax'=>$panggilantidakmax];
+          $hasil = ['angka'=>$dat,'label'=>$label,'pmax'=>$panggilanselesai,'pbanyak'=>$banyakmax,'ptmax'=>$panggilantidakmax];
           return $hasil;
           // return $chart->api();
     }
