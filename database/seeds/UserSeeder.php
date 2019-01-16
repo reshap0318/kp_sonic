@@ -100,7 +100,7 @@ class UserSeeder extends Seeder
            [
  			    		'username'		 => 'admin',
  			    		'password' 		 => bcrypt('admin'),
- 			    		'permissions'  => '{"password.request":true,"password.email":true,"password.reset":true,"home.dashboard":true,"user.index":true,"user.create":true,"user.store":true,"user.show":true,"user.edit":true,"user.update":true,"user.destroy":true,"user.activate":true,"user.deactivate":true,"user.permissions":true,"user.simpan":true,"role.index":true,"role.create":true,"role.store":true,"role.show":true,"role.edit":true,"role.update":true,"role.destroy":true,"role.permissions":true,"role.simpan":true}',
+ 			    		'permissions'  => '{"password.request":true,"password.email":true,"password.reset":true,"home.dashboard":true,"user.index":true,"user.create":true,"user.store":true,"user.show":true,"user.edit":true,"user.update":true,"user.destroy":true,"user.activate":true,"user.deactivate":true,"user.permissions":true,"user.simpan":true,"role.index":true,"role.create":true,"role.store":true,"role.show":true,"role.edit":true,"role.update":true,"role.destroy":true,"role.permissions":true,"role.simpan":true,"polres.index":true,"polres.show":true,"panggilan.index":true,"panggilan.show":true,"inventaris.index":true,"inventaris.show":true,"inventaris_detail.index":true,"inventaris_detail.show":true,"operator.index":true,"operator.show":true}',
                'nama'         => 'Admin',
  			    		'QRpassword'	 => 'Dammy-CODE-1S4u7lJzehk62xDm3DgYgXXYWtbHE6gSP'
  			    ],[
@@ -112,16 +112,17 @@ class UserSeeder extends Seeder
 			    ]
         ]);
          DB::table('roles')->insert([
+           [
+ 			    		'id'=>'1',
+ 			    		'slug' 		    => 'eos',
+ 			    		'name' 			  => 'EOS (Engenering On Site)',
+ 			    		'permissions' => '{"password.request":true,"password.email":true,"password.reset":true,"home.dashboard":true,"user.index":true,"user.create":true,"user.store":true,"user.show":true,"user.edit":true,"user.update":true,"user.destroy":true,"polres.index":true,"polres.create":true,"polres.store":true,"polres.show":true,"polres.edit":true,"polres.update":true,"polres.destroy":true,"panggilan.index":true,"panggilan.create":true,"panggilan.store":true,"panggilan.show":true,"panggilan.edit":true,"panggilan.update":true,"panggilan.destroy":true,"inventaris.index":true,"inventaris.create":true,"inventaris.store":true,"inventaris.show":true,"inventaris.edit":true,"inventaris.update":true,"inventaris.destroy":true,"inventaris_detail.index":true,"inventaris_detail.create":true,"inventaris_detail.store":true,"inventaris_detail.show":true,"inventaris_detail.edit":true,"inventaris_detail.update":true,"inventaris_detail.destroy":true,"operator.index":true,"operator.create":true,"operator.store":true,"operator.show":true,"operator.edit":true,"operator.update":true,"operator.destroy":true,"operator.aktiv":true}',
+ 			    ],
 			    [
-			    		'id'=>'1',
+			    		'id'=>'2',
 			    		'slug' 		    => 'BID IT (ADMIN)',
 			    		'name' 			  => 'BID IT (ADMIN)',
-			    		'permissions' => '{"home.dashboard":true,"user.index":true,"user.create":true,"user.store":true,"user.show":true,"user.edit":true,"user.update":true,"user.destroy":true,"polres.index":true,"polres.create":true,"polres.store":true,"polres.show":true,"polres.edit":true,"polres.update":true,"polres.destroy":true,"panggilan.index":true,"panggilan.show":true,"panggilan.edit":true,"panggilan.update":true,"panggilan.destroy":true,"inventaris.index":true,"inventaris.create":true,"inventaris.store":true,"inventaris.show":true,"inventaris.edit":true,"inventaris.update":true,"inventaris.destroy":true,"inventaris_detail.index":true,"inventaris_detail.create":true,"inventaris_detail.store":true,"inventaris_detail.show":true,"inventaris_detail.edit":true,"inventaris_detail.update":true,"inventaris_detail.destroy":true}',
-			    ],[
-			    		'id'=>'2',
-			    		'slug' 		    => 'eos',
-			    		'name' 			  => 'EOS (Engenering On Site)',
-			    		'permissions' => '{"home.dashboard":true,"polres.index":true,"polres.show":true,"panggilan.index":true,"panggilan.create":true,"panggilan.store":true,"panggilan.show":true,"panggilan.edit":true,"panggilan.update":true,"panggilan.destroy":true,"inventaris.index":true,"inventaris.create":true,"inventaris.store":true,"inventaris.show":true,"inventaris.edit":true,"inventaris.update":true,"inventaris.destroy":true,"inventaris_detail.index":true,"inventaris_detail.create":true,"inventaris_detail.store":true,"inventaris_detail.show":true,"inventaris_detail.edit":true,"inventaris_detail.update":true,"inventaris_detail.destroy":true}',
+			    		'permissions' => '{"home.dashboard":true,"polres.index":true,"polres.show":true,"panggilan.index":true,"panggilan.create":true,"panggilan.store":true,"panggilan.show":true,"panggilan.edit":true,"panggilan.update":true,"panggilan.destroy":true,"inventaris.index":true,"inventaris.create":true,"inventaris.store":true,"inventaris.show":true,"inventaris.edit":true,"inventaris.update":true,"inventaris.destroy":true,"inventaris_detail.index":true,"inventaris_detail.create":true,"inventaris_detail.store":true,"inventaris_detail.show":true,"inventaris_detail.edit":true,"inventaris_detail.update":true,"inventaris_detail.destroy":true,"operator.index":true,"operator.create":true,"operator.store":true,"operator.show":true,"operator.edit":true,"operator.update":true,"operator.destroy":true,"operator.aktiv":true}',
 			    ]
           // ,[
 			    // 		'id'=>'3',
@@ -133,7 +134,7 @@ class UserSeeder extends Seeder
 		 DB::table('role_users')->insert([
           [
 			    		'user_id' 		=> '2',
-			    		'role_id' 			=> '1',
+			    		'role_id' 			=> '2',
 			    ]
         ]);
 		 DB::table('activations')->insert([

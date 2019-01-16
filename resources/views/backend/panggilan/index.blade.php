@@ -8,7 +8,7 @@
   <div class="x_title">
     <h2>Laporan Panggilan {{optional(Sentinel::getuser()->polres)->nama}}</h2>
     <ul class="nav navbar-right panel_toolbox">
-      @if (Sentinel::getUser()->hasAccess(['panggilan.create']) && $ada==null )
+      @if (Sentinel::getUser()->hasAccess(['panggilan.create']) )
         <a href="{{route('panggilan.create')}}" class="btn btn-success">New Laporan Panggilan</a>
       @endif
     </ul>
@@ -50,7 +50,7 @@
               <td class=" ">{{$panggilan->panggilan_terselesaikan}} Buah</td>
               <td class=" ">{{$panggilan->panggilan_prank}} Buah</td>
               <td class=" ">{{$panggilan->panggilan_tidak_terjawab}} Buah</td>
-              <td class=" ">{{$panggilan->panggilan_terjawab + $panggilan->panggilan_tidak_terjawab}} Buah</td>
+              <td class=" ">{{$panggilan->panggilan_terselesaikan + $panggilan->panggilan_tidak_terjawab + $panggilan->panggilan_prank}} Buah</td>
               @if(Sentinel::getUser()->hasAnyAccess(['panggilan.edit','panggilan.destroy']))
                 <td class=" last">
                 @if (Sentinel::getUser()->hasAccess(['panggilan.edit']))

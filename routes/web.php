@@ -67,5 +67,7 @@ Route::group(['middleware' => ['web', 'auth', 'permission'] ], function () {
     Route::get('datadash','HomeController@data');
 
     route::resource('operator','OperatorController');
+    route::get('operator/aktiv/{id}','OperatorController@aktiv')->name('operator.aktiv');
+    Route::get('datapolres/{id}','PolresController@data');
 
 });

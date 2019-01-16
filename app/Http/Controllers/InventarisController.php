@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\inventaris;
 use Sentinel;
+use App\polres;
 use DB;
 
 class InventarisController extends Controller
@@ -21,7 +22,7 @@ class InventarisController extends Controller
           ->distinct()
           ->get();
 
-          if(Sentinel::getuser()->polres_id && !Sentinel::inRole('1')){
+          if(Sentinel::getuser()->polres_id && !Sentinel::inRole('2')){
             $inventariss = inventaris::select('inventaris.id','jenis','polres_id',
             DB::raw('count(case when inventaris_details.kondisi=1 then 1 end) as baik,
             count(case when inventaris_details.kondisi=2 then 1 end) as rusak,
@@ -47,7 +48,9 @@ class InventarisController extends Controller
 
   public function create()
   {
-      return view('backend.inventaris.create');
+
+      $polres = polres::orderby('nama','asc')->pluck('nama','id');
+      return view('backend.inventaris.create',compact('polres'));
   }
 
   public function store(Request $request)
@@ -59,8 +62,9 @@ class InventarisController extends Controller
       try {
           $inventaris = new inventaris;
           $inventaris->jenis = $request->jenis;
-
-          if(Sentinel::getuser()->polres_id){
+          if($request->polres_id){
+            $inventaris->polres_id = $request->polres_id;
+          }else{
             $inventaris->polres_id = Sentinel::getuser()->polres_id;
           }
 
@@ -84,7 +88,8 @@ class InventarisController extends Controller
   {
       try {
         $inventaris = inventaris::find($id);
-        return view('backend.inventaris.edit',compact('inventaris'));
+        $polres = polres::orderby('nama','asc')->pluck('nama','id');
+        return view('backend.inventaris.edit',compact('inventaris','polres'));
       } catch (\Exception $e) {
           toast()->error($e, 'Eror');
           toast()->error('Terjadi Eror Saat Meng-load Data, Silakan Ulang Login kembali', 'Gagal Load Data');
@@ -102,7 +107,9 @@ class InventarisController extends Controller
         $inventaris = inventaris::find($id);
         $inventaris->jenis = $request->jenis;
 
-        if(Sentinel::getuser()->polres_id){
+        if($request->polres_id){
+          $inventaris->polres_id = $request->polres_id;
+        }else{
           $inventaris->polres_id = Sentinel::getuser()->polres_id;
         }
 

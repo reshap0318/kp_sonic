@@ -15,7 +15,7 @@ class operator extends Model
      'nama'    => 'string',
      'no_sk'     => 'string',
      'foto_sk'    => 'string',
-     'aktivasi'     => 'string',
+     'aktivasi'     => 'integer',
      'polres_id'     => 'integer',
   ];
 

@@ -16,7 +16,7 @@ class InventarisDetailController extends Controller
             if($request->inventarisId){
               $details = inventaris::find($request->inventarisId);
               // $request->session()->put('jenis', $details->jenis);
-              if( $details->polres_id == Sentinel::getuser()->polres_id || Sentinel::inRole('1')){
+              if( $details->polres_id == Sentinel::getuser()->polres_id || Sentinel::inRole('2')){
                 return view('backend.inventarisD.index',compact('details'));
               }
             }

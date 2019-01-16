@@ -71,7 +71,7 @@ class UserController extends Controller
 
 
           $user->polres_id = $request->polres_id;
-          if($request->role==1){
+          if($request->role==2){
             $user->polres_id = null;
           }else{
             $user->polres_id = $request->polres_id;
@@ -171,7 +171,7 @@ class UserController extends Controller
             $user->alamat = $request->alamat;
           }
 
-          if($request->role==1){
+          if($request->role==2){
             $user->polres_id = null;
           }else{
             $user->polres_id = $request->polres_id;
@@ -243,8 +243,9 @@ class UserController extends Controller
 
     public function editprofil()
     {
+      $polres = polres::pluck('nama','id');
       $user = Sentinel::getuser();
-      return view('backend.user.editprofil',compact('user'));
+      return view('backend.user.editprofil',compact('user','polres'));
     }
 
     public function updateprofile($id, Request $request)

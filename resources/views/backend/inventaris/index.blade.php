@@ -10,7 +10,9 @@
     <ul class="nav navbar-right panel_toolbox">
       @if (Sentinel::getUser()->hasAccess(['inventaris.create']))
         <a href="{{route('inventaris.create')}}" class="btn btn-success">New Kategori Inventaris</a>
-        <a href="{{route('inventaris_detail.create',['inventarisId=all'])}}" class="btn btn-success">New Inventaris</a>
+        @if(Sentinel::getuser()->polres_id)
+          <a href="{{route('inventaris_detail.create',['inventarisId=all'])}}" class="btn btn-success">New Inventaris</a>
+        @endif
       @endif
     </ul>
     <div class="clearfix"></div>
@@ -20,7 +22,7 @@
       <thead>
         <tr class="headings">
           <th class="text-center">No</th>
-          @if(Sentinel::getuser()->id==1)
+          @if(Sentinel::inRole('2'))
           <th>Polres</th>
           @endif
           <th>Jenis</th>
@@ -38,7 +40,7 @@
       <tbody>
         @foreach($inventariss as $inventaris)
               <td class=" text-center">{{ ++$no }}</td>
-              @if(Sentinel::getuser()->id==1)
+              @if(Sentinel::inRole('2'))
               <td class=" ">{{optional($inventaris->polres)->nama}}</td>
               @endif
               <td class=" ">{{$inventaris->jenis}}</td>

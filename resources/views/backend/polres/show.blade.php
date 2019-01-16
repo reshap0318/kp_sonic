@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
 @section('title')
-  dashboard
+  Detail Panggilan {{$polres->nama}}
 @stop
 
 @section('content')
@@ -15,7 +15,7 @@
       <div class="dashboard_graph">
           <div class="row x_title">
             <div class="col-md-6">
-              <h3>Grafik Laporan Panggilan<small></small></h3>
+              <h3>Grafik Laporan Panggilan {{$polres->nama}}<small></small></h3>
             </div>
             <div class="col-md-6">
               <div class="control-group">
@@ -120,12 +120,13 @@
                   function reload() {
                     var tanggal=document.getElementById("reportrange").value;
                     var server="<?php echo Request::root(); ?>";
+                    var id = {{$polres->id}};
                     tanggal = tanggal.replace(" - ",",");
-                    console.log(server+'/datadash?data='+tanggal);
+                    console.log(server+'/datapolres/'+id+'?data='+tanggal);
                     var x = new Array();
                     var y = new Array();
                     $.ajax({
-                      url: server+'/datadash?data='+tanggal, data: "", dataType: 'json', success: function(rows)
+                      url: server+'/datapolres/'+id+'?data='+tanggal, data: "", dataType: 'json', success: function(rows)
                         {
                           var datas = rows['angka'];
                           for (var i = 0; i < datas.length; i++) {
@@ -147,66 +148,52 @@
                             },
                       		});
 
-                          datass = rows['pselesai'];
-                          for (var i = 0; i < datass.length; i++) {
-                            var da =  datass[i];
-                            document.getElementById("aselesai").innerHTML = da.terselesaikan;
-                            document.getElementById("pselesai").innerHTML = da.nama;
+                          datat = rows['pselesai'];
+                          for (var i = 0; i < datat.length; i++) {
+                            var data = datat[i];
+                            document.getElementById("aselesai").innerHTML = data.panggilan_terselesaikan;
+                            document.getElementById("pselesai").innerHTML = data.tanggal;
                           }
 
                           datat = rows['ptotal'];
                           for (var i = 0; i < datat.length; i++) {
-                            var d = datat[i];
-                            document.getElementById("atotal").innerHTML = d.total;
-                            document.getElementById("ptotal").innerHTML = d.nama;
+                            var data = datat[i];
+                            document.getElementById("atotal").innerHTML = data.total;
+                            document.getElementById("ptotal").innerHTML = data.tanggal;
                           }
 
-                          datatt = rows['ptidak'];
-                          for (var i = 0; i < datatt.length; i++) {
-                            var ds = datatt[i];
-                            document.getElementById("atidak").innerHTML = ds.tidak_terjawab;
-                            document.getElementById("ptidak").innerHTML = ds.nama;
+                          datat = rows['ptidak'];
+                          for (var i = 0; i < datat.length; i++) {
+                            var data = datat[i];
+                            document.getElementById("atidak").innerHTML = data.panggilan_tidak_terjawab;
+                            document.getElementById("ptidak").innerHTML = data.tanggal;
                           }
 
-                          datap = rows['pprank'];
-                          for (var i = 0; i < datap.length; i++) {
-                            var dp = datap[i];
-                            document.getElementById("aprank").innerHTML = dp.prank;
-                            document.getElementById("pprank").innerHTML = dp.nama;
+                          datat = rows['pprank'];
+                          for (var i = 0; i < datat.length; i++) {
+                            var data = datat[i];
+                            document.getElementById("aprank").innerHTML = data.panggilan_prank;
+                            document.getElementById("pprank").innerHTML = data.tanggal;
                           }
 
                           datai = rows['nilais'];
                           var rataktiv = null;
                           for (var i = 0; i < datai.length; i++) {
                             var ni = datai[i];
+                            var warna = "progress-bar-danger";
+
+                              if(parseInt(ni.nilai)>0 && parseInt(ni.nilai)<40){
+                                warna = "progress-bar-success";
+                              }else if(parseInt(ni.nilai)>=40 && parseInt(ni.nilai)<75){
+                                warna = "progress-bar-warning";
+                              }
+
                             if(i==0){
                               rataktiv = '<div>'+
-                                '<p>'+ni.nama+'</p>'+
+                                '<p>'+ni.hari+'</p>'+
                                 '<div>'+
                                   '<div class="progress progress_sm" style="width:76%;">'+
-                                    '<div class="progress-bar progress-bar-warning" runat="server" role="progressbar" data-transitiongoal='+parseInt(ni.nilai)+' style="width: '+parseInt(ni.nilai)+'%;"></div>'+
-                                  '</div>'+
-                                '</div>'+
-                              '</div>'
-                            }
-                            else if(i==1){
-                              rataktiv = rataktiv +
-                              '<div>'+
-                                '<p>'+ni.nama+'</p>'+
-                                '<div>'+
-                                  '<div class="progress progress_sm" style="width: 76%;">'+
-                                    '<div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="'+ni.nilai+'" style="width: '+parseInt(ni.nilai)+'%;"></div>'+
-                                  '</div>'+
-                                '</div>'+
-                              '</div>'
-                            }
-                            else if(i>=2 && i<4){
-                              rataktiv = rataktiv +
-                              '<div>'+
-                                '<p>'+ni.nama+'</p>'+
-                                '<div>'+
-                                  '<div class="progress progress_sm" style="width: 76%;">'+
-                                    '<div class="progress-bar progress-bar-info" role="progressbar" data-transitiongoal="'+ni.nilai+'" style="width: '+parseInt(ni.nilai)+'%;"></div>'+
+                                    '<div class="progress-bar '+warna+'" runat="server" role="progressbar" data-transitiongoal='+parseInt(ni.nilai)+' style="width: '+parseInt(ni.nilai)+'%;"></div>'+
                                   '</div>'+
                                 '</div>'+
                               '</div>'
@@ -214,10 +201,10 @@
                             else{
                                 rataktiv = rataktiv +
                                 '<div>'+
-                                  '<p>'+ni.nama+'</p>'+
+                                  '<p>'+ni.hari+'</p>'+
                                   '<div>'+
                                     '<div class="progress progress_sm" style="width: 76%;">'+
-                                      '<div class="progress-bar progress-bar-danger" role="progressbar" data-transitiongoal="'+ni.nilai+'" style="width: '+parseInt(ni.nilai)+'%;"></div>'+
+                                      '<div class="progress-bar '+warna+'" role="progressbar" data-transitiongoal="'+ni.nilai+'" style="width: '+parseInt(ni.nilai)+'%;"></div>'+
                                     '</div>'+
                                   '</div>'+
                                 '</div>'
@@ -230,8 +217,8 @@
                 </script>
             </div>
           <div class="col-md-3 col-sm-3 col-xs-12 bg-white">
-              <div class="x_title">
-                <h2>Top 6 Polres Aktif</h2>
+              <div class="x_title text-center">
+                <h2>Rekap Rangkuman Hari</h2>
                 <div class="clearfix"></div>
               </div>
               <div id="rataktiv" class="col-md-12 col-sm-12 col-xs-6">

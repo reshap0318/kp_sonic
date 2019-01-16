@@ -38,7 +38,7 @@
               @if(Sentinel::getUser()->hasAnyAccess(['polres.show','polres.edit','polres.destroy']))
                 <td class="">
                   @if (Sentinel::getUser()->hasAccess(['polres.show']))
-                    <a href="{{route('polres.edit', $polres->id)}}" data-toggle="tooltip" data-placement="left" title="Detail" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>
+                    <a href="{{route('polres.show', $polres->id)}}" data-toggle="tooltip" data-placement="left" title="Detail" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>
                   @endif
                   @if (Sentinel::getUser()->hasAccess(['polres.edit']))
                     <a href="{{route('polres.edit', $polres->id)}}" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-success btn-xs"><i class="fa fa-pencil-square-o"></i></a>

@@ -28,45 +28,16 @@ class HomeController extends Controller
     public function dashboard(Request $request)
     {
 
-      $panggilanselesai = panggilan::select('created_at',DB::raw('max(panggilan_terselesaikan) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
-      $panggilanprank = panggilan::select('created_at',DB::raw('max(panggilan_prank) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
-      $panggilantidakmax = panggilan::select('created_at',DB::raw('max(panggilan_tidak_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
-      $banyakmax = panggilan::select('created_at',DB::raw('max(panggilan_prank + panggilan_tidak_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
+      $panggilanselesai = DB::SELECT(DB::RAW('select polres.nama, sum(rekap_panggilans.panggilan_terselesaikan) as terselesaikan from rekap_panggilans JOIN polres on rekap_panggilans.polres_id = polres.id GROUP by polres.nama order by terselesaikan desc limit 1'));
+      $panggilanprank = DB::SELECT(DB::RAW('select polres.nama, sum(rekap_panggilans.panggilan_prank) as prank from rekap_panggilans JOIN polres on rekap_panggilans.polres_id = polres.id GROUP by polres.nama order by prank desc limit 1'));
+      $panggilantidakmax = DB::SELECT(DB::RAW('select polres.nama, sum(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab from rekap_panggilans JOIN polres on rekap_panggilans.polres_id = polres.id GROUP by polres.nama order by tidak_terjawab desc limit 1'));
+      $banyakmax = DB::SELECT(DB::RAW('select polres.nama, sum(rekap_panggilans.panggilan_prank+rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_terselesaikan) as total from rekap_panggilans JOIN polres on rekap_panggilans.polres_id = polres.id GROUP by polres.nama order by total desc limit 1'));
+      $nilais = DB::SELECT(DB::RAW("select polres.nama, sum(rekap_panggilans.panggilan_terselesaikan+rekap_panggilans.panggilan_prank)/sum(rekap_panggilans.panggilan_terselesaikan+rekap_panggilans.panggilan_prank+rekap_panggilans.panggilan_tidak_terjawab)*100 as nilai from polres join rekap_panggilans on polres.id = rekap_panggilans.polres_id GROUP BY polres.nama ORDER BY nilai desc limit 6"));
 
-      if(!$panggilanselesai){
-          $panggilanselesai = 0;
-      }else{
-          $panggilanselesai = $panggilanselesai->angka;
-      }
-
-      if(!$panggilanprank){
-          $panggilanprank = 0;
-      }else{
-          $panggilanprank = $panggilanprank->angka;
-      }
-
-      if(!$panggilantidakmax){
-          $panggilantidakmax = 0;
-      }else{
-          $panggilantidakmax = $panggilantidakmax->angka;
-      }
-
-      if(!$banyakmax){
-        $banyakmax = 0;
-      }else {
-        $banyakmax = $banyakmax->angka;
-      }
-
-      $polress = polres::select('polres.nama','rekap_panggilans.panggilan_prank','rekap_panggilans.panggilan_tidak_terjawab')
-      ->leftjoin('rekap_panggilans','polres.id','=','rekap_panggilans.polres_id')
-      ->whereday('rekap_panggilans.created_at',now()->day)->get();
-
-      if($request->data){
-        $data = explode(",",$request->data);
-        $polress = polres::select('polres.nama','rekap_panggilans.panggilan_prank','rekap_panggilans.panggilan_tidak_terjawab')
-        ->leftjoin('rekap_panggilans','polres.id','=','rekap_panggilans.polres_id')
-        ->whereraw("DATE_FORMAT(rekap_panggilans.created_at, '%d/%m/%Y') BETWEEN '$data[0]' AND '$data[1]' ")->get();
-      }
+      $polress = panggilan::select(DB::RAW('polres.nama, sum(rekap_panggilans.panggilan_terselesaikan) as terjawab, SUM(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab,sum(rekap_panggilans.panggilan_prank) as prank, sum(rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_prank+rekap_panggilans.panggilan_terselesaikan) as total'))
+      ->leftjoin('polres','rekap_panggilans.polres_id','=','polres.id')
+      ->whereday('rekap_panggilans.tanggal',now()->day)
+      ->groupby('polres.nama')->get();
 
       $chart = new Echarts;
       $label = [];
@@ -74,8 +45,9 @@ class HomeController extends Controller
         Array_push($label,$polres->nama);
       }
 
+
       $chart->labels($label)->load(url('datadash'));
-      return view('dashboard', compact('chart','panggilanselesai','panggilantidakmax','banyakmax'));
+      return view('dashboard', compact('chart','panggilanselesai','panggilanprank','panggilantidakmax','banyakmax','nilais'));
     }
 
 
@@ -85,41 +57,48 @@ class HomeController extends Controller
 
     public function data(Request $request)
     {
-        $panggilanselesai = panggilan::select(DB::raw('sum(panggilan_prank) as angka'))->orderby('angka','desc')->groupby('polres_id')->first();
-        $panggilantidakmax = panggilan::select(DB::raw('max(panggilan_tidak_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
-        $banyakmax = panggilan::select(DB::raw('max(panggilan_prank + panggilan_tidak_terjawab) as angka'))->orderby('angka','desc')->groupby('created_at')->first();
+        $panggilanselesai = DB::SELECT(DB::RAW('select polres.nama, sum(rekap_panggilans.panggilan_terselesaikan) as terselesaikan from rekap_panggilans JOIN polres on rekap_panggilans.polres_id = polres.id GROUP by polres.nama order by terselesaikan desc limit 1'));
+        $panggilanprank = DB::SELECT(DB::RAW('select polres.nama, sum(rekap_panggilans.panggilan_prank) as prank from rekap_panggilans JOIN polres on rekap_panggilans.polres_id = polres.id GROUP by polres.nama order by prank desc limit 1'));
+        $panggilantidakmax = DB::SELECT(DB::RAW('select polres.nama, sum(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab from rekap_panggilans JOIN polres on rekap_panggilans.polres_id = polres.id GROUP by polres.nama order by tidak_terjawab desc limit 1'));
+        $banyakmax = DB::SELECT(DB::RAW('select polres.nama, sum(rekap_panggilans.panggilan_prank+rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_terselesaikan) as total from rekap_panggilans JOIN polres on rekap_panggilans.polres_id = polres.id GROUP by polres.nama order by total desc limit 1'));
+        $nilais = DB::SELECT(DB::RAW("select polres.nama, sum(rekap_panggilans.panggilan_terselesaikan+rekap_panggilans.panggilan_prank)/sum(rekap_panggilans.panggilan_terselesaikan+rekap_panggilans.panggilan_prank+rekap_panggilans.panggilan_tidak_terjawab)*100 as nilai from polres join rekap_panggilans on polres.id = rekap_panggilans.polres_id GROUP BY polres.nama ORDER BY nilai desc limit 6"));
 
-        $panggilans = panggilan::select(DB::RAW('polres.nama, sum(rekap_panggilans.panggilan_prank) as terjawab, SUM(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab, sum(rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_prank) as total'))
+        $panggilans = panggilan::select(DB::RAW('polres.nama, sum(rekap_panggilans.panggilan_terselesaikan) as terjawab, SUM(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab,sum(rekap_panggilans.panggilan_prank) as prank, sum(rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_prank+rekap_panggilans.panggilan_prank) as total'))
         ->leftjoin('polres','rekap_panggilans.polres_id','=','polres.id')
-        ->whereday('rekap_panggilans.created_at',now()->day)
+        ->whereday('rekap_panggilans.tanggal',now()->day)
         ->groupby('polres.nama')->get();
-
         if($request->data){
             $data = explode(",",$request->data);
             $mulai = date('Ymd', strtotime($data[0]));
             $akhir = date('Ymd', strtotime($data[1]));
-
-            $panggilanselesai = panggilan::select(DB::raw('sum(panggilan_prank) as angka'))->whereRAW("DATE_FORMAT(rekap_panggilans.created_at, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'")->orderby('angka','desc')->groupby('polres_id')->first();
-            $panggilantidakmax = panggilan::select(DB::raw('sum(panggilan_tidak_terjawab) as angka'))->whereRAW("DATE_FORMAT(rekap_panggilans.created_at, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'")->orderby('angka','desc')->groupby('created_at')->first();
-            $banyakmax = panggilan::select(DB::raw('sum(panggilan_prank + panggilan_tidak_terjawab) as angka'))->whereRAW("DATE_FORMAT(rekap_panggilans.created_at, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'")->orderby('angka','desc')->groupby('created_at')->first();
-
-
-            $panggilans = panggilan::select(DB::RAW('polres.nama, sum(rekap_panggilans.panggilan_prank) as terjawab, SUM(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab, sum(rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_prank) as total'))
+            $pembagi = DB::SELECT(DB::RAW('select datediff("'.date('Y-m-d', strtotime($data[1])).'","'.date('Y-m-d', strtotime($data[0])).'")+1 as bagi'));
+            // dd($pembagi[0]->bagi);
+            $panggilanselesai = DB::SELECT(DB::RAW("select polres.nama, sum(rekap_panggilans.panggilan_terselesaikan) as terselesaikan from rekap_panggilans JOIN polres on rekap_panggilans.polres_id = polres.id where DATE_FORMAT(rekap_panggilans.tanggal, '%Y%m%d') BETWEEN '$mulai' AND '$akhir' GROUP by polres.nama order by terselesaikan desc limit 1"));
+            $panggilanprank = DB::SELECT(DB::RAW("select polres.nama, sum(rekap_panggilans.panggilan_prank) as prank from rekap_panggilans JOIN polres on rekap_panggilans.polres_id = polres.id where DATE_FORMAT(rekap_panggilans.tanggal, '%Y%m%d') BETWEEN '$mulai' AND '$akhir' GROUP by polres.nama order by prank desc limit 1"));
+            $panggilantidakmax = DB::SELECT(DB::RAW("select polres.nama, sum(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab from rekap_panggilans JOIN polres on rekap_panggilans.polres_id = polres.id where DATE_FORMAT(rekap_panggilans.tanggal, '%Y%m%d') BETWEEN '$mulai' AND '$akhir' GROUP by polres.nama order by tidak_terjawab desc limit 1"));
+            $banyakmax = DB::SELECT(DB::RAW("select polres.nama, sum(rekap_panggilans.panggilan_prank+rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_terselesaikan) as total from rekap_panggilans JOIN polres on rekap_panggilans.polres_id = polres.id where DATE_FORMAT(rekap_panggilans.tanggal, '%Y%m%d') BETWEEN '$mulai' AND '$akhir' GROUP by polres.nama order by total desc limit 1"));
+            $nilais = DB::SELECT(DB::RAW("select polres.nama, sum(rekap_panggilans.panggilan_terselesaikan+rekap_panggilans.panggilan_prank)/sum(rekap_panggilans.panggilan_terselesaikan+rekap_panggilans.panggilan_prank+rekap_panggilans.panggilan_tidak_terjawab)*100*count(rekap_panggilans.panggilan_terselesaikan)/".$pembagi[0]->bagi." as nilai from polres join rekap_panggilans on polres.id = rekap_panggilans.polres_id where DATE_FORMAT(rekap_panggilans.tanggal, '%Y%m%d') BETWEEN '$mulai' AND '$akhir' GROUP BY polres.nama ORDER BY nilai desc limit 6"));
+            $panggilans = panggilan::select(DB::RAW('polres.nama, sum(rekap_panggilans.panggilan_terselesaikan) as terjawab, SUM(rekap_panggilans.panggilan_tidak_terjawab) as tidak_terjawab,sum(rekap_panggilans.panggilan_prank) as prank, sum(rekap_panggilans.panggilan_tidak_terjawab+rekap_panggilans.panggilan_prank+rekap_panggilans.panggilan_terselesaikan) as total'))
             ->leftjoin('polres','rekap_panggilans.polres_id','=','polres.id')
-            ->whereRAW("DATE_FORMAT(rekap_panggilans.created_at, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'")
+            ->whereRAW("DATE_FORMAT(rekap_panggilans.tanggal, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'")
             ->groupby('polres.nama')->get();
           }
+
+
+          // dd([$panggilans]);
 
           $chart = new Echarts;
           $label = [];
           $masuk = [];
           $jawab = [];
           $tjawab = [];
+          $prank = [];
           foreach ($panggilans as $panggilan) {
             Array_push($label,$panggilan->nama);
             Array_push($masuk,$panggilan->total);
             Array_push($jawab,$panggilan->terjawab);
             Array_push($tjawab,$panggilan->tidak_terjawab);
+            Array_push($prank,$panggilan->prank);
           }
 
           $chart->labels($label);
@@ -127,6 +106,7 @@ class HomeController extends Controller
 
           $chart->dataset('Panggilan Masuk', 'bar', $masuk)->color('#006400');
           $chart->dataset('Panggilan Terselesaikan', 'bar', $jawab)->color('#00008B');
+          $chart->dataset('Panggilan Prank', 'bar', $prank)->color('#a54d00');
           $chart->dataset('Panggilan Tidak Terjawab', 'bar', $tjawab)->color('#b20000');
           $hasil = [];
           // dd($chart->datasets[0]);
@@ -137,26 +117,7 @@ class HomeController extends Controller
                }
               array_push($dat,array("data"=>$data->values,"name"=>$data->name,"type"=>$data->type,"color"=>$color));
           }
-
-          if(!$panggilanselesai){
-              $panggilanselesai = 0;
-          }else{
-              $panggilanselesai = $panggilanselesai->angka;
-          }
-
-          if(!$panggilantidakmax){
-              $panggilantidakmax = 0;
-          }else{
-              $panggilantidakmax = $panggilantidakmax->angka;
-          }
-
-          if(!$banyakmax){
-            $banyakmax = 0;
-          }else {
-            $banyakmax = $banyakmax->angka;
-          }
-
-          $hasil = ['angka'=>$dat,'label'=>$label,'pmax'=>$panggilanselesai,'pbanyak'=>$banyakmax,'ptmax'=>$panggilantidakmax];
+          $hasil = ['angka'=>$dat,'label'=>$label,'pselesai'=>$panggilanselesai,'ptotal'=>$banyakmax,'ptidak'=>$panggilantidakmax,'pprank'=>$panggilanprank,'nilais'=>$nilais];
           return $hasil;
           // return $chart->api();
     }
