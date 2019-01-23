@@ -29,6 +29,7 @@
           <th>Baik</th>
           <th>Rusak</th>
           <th>Rusak Berat</th>
+          <th>Dihapuskan</th>
           <th>Total</th>
           <th class="no-link last"><span class="nobr">Action</span></th>
           <th class="bulk-actions" colspan="7">
@@ -47,6 +48,7 @@
               <td class=" ">{{$inventaris->baik}} Buah</td>
               <td class=" ">{{$inventaris->rusak}} Buah</td>
               <td class=" ">{{$inventaris->rusakberat}} Buah</td>
+              <td class=" ">{{$inventaris->dihapuskan}} Buah</td>
               <td class=" ">{{$inventaris->baik + $inventaris->rusak + $inventaris->rusakberat}} Buah</td>
               <td class=" last">
                 @if (Sentinel::getUser()->hasAccess(['inventaris.show']))

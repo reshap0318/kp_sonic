@@ -90,10 +90,7 @@
                             show : true,
                             feature : {
                                 saveAsImage : {show: true},
-                                restore : {show: true},
-                                dataView : {show: true, readOnly: false},
                                 magicType: {show: true, type: ['line', 'bar']},
-                                mark : {show: true},
                             }
                         },
                         calculable : true,

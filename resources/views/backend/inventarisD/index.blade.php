@@ -38,12 +38,16 @@
                 Rusak
               @elseif($detail->kondisi==3)
                 Rusak Berat
+              @elseif($detail->kondisi==4)
+                Dihapuskan
               @endif</td>
               <td class=" last">
                   <a data-toggle="modal" data-target="#{{$detail->id}}" class="btn btn-success btn-xs">QR-Code</a>
-
+                @if(Sentinel::getUser()->hasAccess(['inventaris_detail.show']))
+                <a href="{{route('inventaris_detail.show', $detail->id)}}" data-toggle="tooltip" data-placement="right" title="detail" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>
+                @endif
                 @if (Sentinel::getUser()->hasAccess(['inventaris_detail.edit']))
-                  <a href="{{route('inventaris_detail.edit', $detail->id)}}" data-toggle="tooltip" data-placement="right" title="Detail" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>
+                  <a href="{{route('inventaris_detail.edit', $detail->id)}}" data-toggle="tooltip" data-placement="right" title="Edit" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i></a>
                 @endif
                 @if (Sentinel::getUser()->hasAccess(['inventaris_detail.destroy']))
                   {!! Form::open(['method'=>'DELETE', 'route' => ['inventaris_detail.destroy', $detail->id], 'style' => 'display:inline']) !!}

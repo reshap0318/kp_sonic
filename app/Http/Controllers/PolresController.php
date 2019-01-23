@@ -181,4 +181,30 @@ class PolresController extends Controller
     return $hasil;
 
   }
+
+  public function cetak(Request $request)
+  {
+    // try {
+      $waktu = str_replace(" - ", ",", $request->waktu);
+      $waktu = explode(",",$waktu);
+      $mulai = date('Ymd', strtotime($waktu[0]));
+      $akhir = date('Ymd', strtotime($waktu[1]));
+
+      $panggilans = polres::Select(DB::RAW('sum(panggilan_terselesaikan) as panggilan_terselesaikan, sum(panggilan_prank) as panggilan_prank, sum(panggilan_tidak_terjawab) as panggilan_tidak_terjawab, polres.nama'))
+      ->leftjoin('rekap_panggilans','polres.id','=','rekap_panggilans.polres_id');
+
+      $panggilans = $panggilans->whereRAW("DATE_FORMAT(rekap_panggilans.tanggal, '%Y%m%d') BETWEEN '$mulai' AND '$akhir' or polres.id not in (select polres_id rekap_panggilans where DATE_FORMAT(rekap_panggilans.tanggal, '%Y%m%d') BETWEEN '$mulai' AND '$akhir')");
+
+      if($request->kategori){
+        $panggilans = $panggilans->orderby($request->kategori,'asc');
+      }
+
+      $panggilans = $panggilans->groupby('polres.nama')->get();
+      return view('backend.polres.cetak',compact('panggilans'));
+    // } catch (\Exception $e) {
+    //     toast()->error($e, 'Eror');
+    //     toast()->error('Terjadi Eror Saat Meng-hapus Data', 'Gagal Load Data');
+    //     return redirect()->route('panggilan.index');
+    // }
+  }
 }

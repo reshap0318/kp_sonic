@@ -16,7 +16,8 @@
   <div class="col-md-6 col-sm-6 col-xs-12">
       {{ Form::radio('kondisi', '1', false,['class'=>'flat']) }} Baik &emsp;&emsp;&emsp;
       {{ Form::radio('kondisi', '2', false,['class'=>'flat']) }} Rusak &emsp;&emsp;&emsp;
-      {{ Form::radio('kondisi', '3', false,['class'=>'flat']) }} Rusak Berat
+      {{ Form::radio('kondisi', '3', false,['class'=>'flat']) }} Rusak Berat &emsp;&emsp;&emsp;
+      {{ Form::radio('kondisi', '4', false,['class'=>'flat']) }} Dihapuskan
   </div>
 </div>
 

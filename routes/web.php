@@ -55,8 +55,10 @@ Route::group(['middleware' => ['web', 'auth', 'permission'] ], function () {
 
     //polres
   	Route::resource('polres','PolresController');
-    //polres
+    Route::get('cetak-polres','PolresController@cetak');
+    //laporan
   	Route::resource('panggilan','RekapPanggilanController');
+    Route::get('cetak-panggilan','RekapPanggilanController@cetak');
     //inventaris
   	Route::resource('inventaris','InventarisController');
 

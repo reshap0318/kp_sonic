@@ -25,7 +25,7 @@ class polres extends Model
 
   public function user($value='')
   {
-      return $this->belongsTo(App\User);
+      return $this->belongsTo(User::class);
   }
 
   public function laporan($value='')

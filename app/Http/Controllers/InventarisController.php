@@ -16,7 +16,8 @@ class InventarisController extends Controller
           $inventariss = inventaris::select('inventaris.id','jenis','polres_id',
           DB::raw('count(case when inventaris_details.kondisi=1 then 1 end) as baik,
           count(case when inventaris_details.kondisi=2 then 1 end) as rusak,
-          count(case when inventaris_details.kondisi=3 then 1 end) as rusakberat'))
+          count(case when inventaris_details.kondisi=3 then 1 end) as rusakberat,
+          count(case when inventaris_details.kondisi=4 then 1 end) as dihapuskan'))
           ->leftjoin('inventaris_details','inventaris.id','=','inventaris_details.inventaris_id')
           ->groupby('inventaris.id','jenis','polres_id')
           ->distinct()
@@ -48,9 +49,9 @@ class InventarisController extends Controller
 
   public function create()
   {
-
+      $kategori = inventaris::select('jenis')->distinct()->pluck('jenis','jenis');
       $polres = polres::orderby('nama','asc')->pluck('nama','id');
-      return view('backend.inventaris.create',compact('polres'));
+      return view('backend.inventaris.create',compact('polres','kategori'));
   }
 
   public function store(Request $request)

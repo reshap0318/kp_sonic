@@ -13,11 +13,12 @@ class RekapPanggilanController extends Controller
   public function index()
   {
     try {
-      $panggilans = panggilan::all();
-      if(Sentinel::getuser()->polres_id && Sentinel::getuser()->username!="Admin"){
-          $panggilans = panggilan::where('polres_id',Sentinel::getuser()->polres_id)->get();
+      $panggilans = panggilan::orderby('tanggal','desc')->get();
+      $polres = polres::pluck('nama','id');
+      if(Sentinel::getuser()->polres_id && !Sentinel::inRole('2')){
+          $panggilans = panggilan::where('polres_id',Sentinel::getuser()->polres_id)->orderby('tanggal','desc')->get();
       }
-      return view('backend.panggilan.index',compact('panggilans','ada'));
+      return view('backend.panggilan.index',compact('panggilans','polres'));
 
     } catch (\Exception $e) {
       toast()->error($e, 'Eror');
@@ -164,5 +165,38 @@ class RekapPanggilanController extends Controller
         return redirect()->back();
       }
 
+  }
+
+  public function cetak(Request $request)
+  {
+    // dd($request->all());
+    try {
+      $waktu = str_replace(" - ", ",", $request->waktu);
+      $waktu = explode(",",$waktu);
+      $mulai = date('Ymd', strtotime($waktu[0]));
+      $akhir = date('Ymd', strtotime($waktu[1]));
+
+      $panggilans = panggilan::whereRAW("DATE_FORMAT(rekap_panggilans.tanggal, '%Y%m%d') BETWEEN '$mulai' AND '$akhir'");
+
+      if($request->polres_id){
+        $panggilans = $panggilans->where('polres_id',$request->polres_id);
+      }
+
+      if($request->kategori=="tanggal" || $request->kategori=="panggilan_terselesaikan"){
+        $panggilans = $panggilans->orderby($request->kategori,'asc');
+      }else if($request->kategori=="polres_id"){
+        $panggilans = $panggilans->orderby($request->kategori,'asc');
+      }
+
+      $panggilans = $panggilans->get();
+      if(Sentinel::getuser()->polres_id && !Sentinel::inRole('2')){
+          $panggilans = panggilan::where('polres_id',Sentinel::getuser()->polres_id)->orderby('tanggal','asc')->get();
+      }
+      return view('backend.panggilan.cetak',compact('panggilans'));
+    } catch (\Exception $e) {
+        toast()->error($e, 'Eror');
+        toast()->error('Terjadi Eror Saat Meng-hapus Data', 'Gagal Load Data');
+        return redirect()->route('panggilan.index');
+    }
   }
 }

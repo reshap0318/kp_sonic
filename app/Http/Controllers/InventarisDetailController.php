@@ -72,13 +72,27 @@ class InventarisDetailController extends Controller
         }
     }
 
+    public function show($id)
+    {
+      try {
+        $detail = detail::find($id);
+        $id= $detail->inventaris_id;
+        $jenis = inventaris::where('id',$id)->pluck('jenis','id');
+        return view('backend.inventarisD.show',compact('detail','jenis'));
+      } catch (\Exception $e) {
+        toast()->error('Data Tidak Ditemukan', 'Missing Data');
+        return view('frontend.404');
+      }
+
+    }
+
     public function edit($id)
     {
       try {
           $detail = detail::find($id);
           $id= $detail->inventaris_id;
           if($id){
-            $jenis = inventaris::where('id',$id)->where('polres_id',Sentinel::getuser()->polres_id)->pluck('jenis','id');
+            $jenis = inventaris::where('id',$id)->pluck('jenis','id');
             return view('backend.inventarisD.edit',compact('id','detail','jenis'));
           }else{
             toast()->error('Data Tidak Ditemukan', 'Missing Data');
@@ -97,7 +111,7 @@ class InventarisDetailController extends Controller
           'kode' => 'required',
           'kondisi' => 'required',
           'inventaris_id' => 'required',
-          'jenis' => 'required',
+          'keterangan' => 'required',
         ]);
 
         $detail = detail::find($id);

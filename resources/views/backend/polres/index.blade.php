@@ -4,6 +4,10 @@
 @stop
 
 @section('content')
+<script type="text/javascript" src="{{ URL::asset('/gantela/vendors/daterangepick/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('/gantela/vendors/daterangepick/moment.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('/gantela/vendors/daterangepick/daterangepicker.min.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('/gantela/vendors/daterangepick/daterangepicker.css') }}" />
 <div class="x_panel">
   <div class="x_title">
     <h2>Daftar Polres</h2>
@@ -55,6 +59,58 @@
       </tbody>
     </table>
   </div>
+  <div id="cetak-setting" class="modal fade bs-example-modal-lg text-center" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel2">Pengaturan Cetak</h4><div class="modal-body">
+          <div class="modal-body text-center">
+            <form class="form-horizontal form-label-left" action="{{url('cetak-polres')}}" method="get">
+              <script type="text/javascript">
+                $(function() {
+
+                    var start = moment().startOf('month');
+                    var end = moment().endOf('month');
+
+                    function cb(start, end) {
+                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    }
+
+                    $('#reportrange').daterangepicker({
+                        startDate: start,
+                        endDate: end,
+                        ranges: {
+                           'Harian': [moment(), moment()],
+                           'Bulanan': [moment().startOf('month'), moment().endOf('month')],
+                           'Tahunan': [moment().startOf('year'), moment().endOf('year')]
+                        }
+                    }, cb);
+
+                    cb(start, end);
+
+                });
+              </script>
+              <div class="form-group">
+                {!! Form::label('waktu', 'Waktu *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {!! Form::text('waktu', 01/20/2018 - 01/25/2018, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12','id'=>'reportrange']) !!}
+                </div>
+              </div>
+              <div class="form-group">
+                  {!! Form::label('kategori', 'Urutkan Berdasarkan *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {!! Form::select('kategori', ['tanggal'=>'Tanggal','polres_id'=>'Polres','panggilan_terselesaikan'=>'Panggilan Terselesaikan'], null, ['class' => 'foselect2_single form-control']) !!}
+                </div>
+              </div>
+              <button type="submit" class="btn btn-success">Cetak</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 @endsection
 
@@ -70,14 +126,18 @@
             }],
             dom: 'Bfrtip',
             buttons: [
+              @if(Sentinel::inRole('2'))
               {
-                  extend: 'copy',
-                  exportOptions: {
-                      columns: [0, 1, 2, 3]
+                  text: 'Cetak Laporan',
+                  className: 'btn-success',
+                  action: function(e, dt, node, config)
+                  {
+                    $('#cetak-setting').modal('show');
                   }
               },
+              @endif
               {
-                  extend: 'print',
+                  extend: 'copy',
                   exportOptions: {
                       columns: [0, 1, 2, 3]
                   }
