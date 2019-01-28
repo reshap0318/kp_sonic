@@ -146,7 +146,9 @@ class MigrationCartalystSentinel extends Migration
         Schema::drop('roles');
         Schema::drop('role_users');
         Schema::drop('throttle');
-        Schema::drop('polres');
+        Schema::drop('satker');
+        Schema::drop('pangkat');
+        Schema::drop('jabatan');
         Schema::drop('users');
     }
 }

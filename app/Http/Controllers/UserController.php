@@ -16,10 +16,20 @@ use Route;
 class UserController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
       try {
         $users = user::all();
+        if($request->jabatan){
+          $jabatan = jabatan::where('nama',$request->jabatan)->first();
+          $users = user::where('jabatan_id',$jabatan->id)->get();
+        }else if($request->satker){
+          $satker = satker::where('nama',$request->satker)->first();
+          $users = user::where('satker_id',$satker->id)->get();
+        }else if($request->pangkat){
+          $pangkat = pangkat::where('nama',$request->pangkat)->first();
+          $users = user::where('pangkat_id',$pangkat->id)->get();
+        }
         return view('backend.user.index',compact('users'));
       } catch (\Exception $e) {
         toast()->error($e->getMessage(), 'Eror');

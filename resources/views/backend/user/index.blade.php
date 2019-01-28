@@ -6,7 +6,7 @@ Users
 @section('content')
 <div class="x_panel">
   <div class="x_title">
-    <h2>List User 110 <small></small></h2>
+    <h2>List User<small></small></h2>
     <ul class="nav navbar-right panel_toolbox">
       @if (Sentinel::getUser()->hasAccess(['user.create']))
         <a href="{{route('user.create')}}" class="btn btn-success">New User</a>

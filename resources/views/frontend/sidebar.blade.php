@@ -42,6 +42,21 @@
             </ul>
           </li>
         @endif
+        @if (Sentinel::getUser()->hasAccess(['jabatan.index']))
+          <li><a href="{{ route('jabatan.index') }}"><i class="fa fa-cubes"></i>Jabatan</a></li>
+        @endif
+        @if (Sentinel::getUser()->hasAccess(['satuan-kerja.index']))
+          <li><a href="{{ route('satuan-kerja.index') }}"><i class="fa fa-cubes"></i>Satuan Kerja</a></li>
+        @endif
+        @if (Sentinel::getUser()->hasAccess(['pangkat.index']))
+          <li><a href="{{ route('pangkat.index') }}"><i class="fa fa-cubes"></i>Pangkat</a></li>
+        @endif
+        @if (Sentinel::getUser()->hasAccess(['kondisi.index']))
+          <li><a href="{{ route('kondisi.index') }}"><i class="fa fa-cubes"></i>Kondisi</a></li>
+        @endif
+        @if (Sentinel::getUser()->hasAccess(['jenis-barang.index']))
+          <li><a href="{{ route('jenis-barang.index') }}"><i class="fa fa-cubes"></i>Jenis Barang</a></li>
+        @endif
       </ul>
     </div>
 

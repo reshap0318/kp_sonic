@@ -12,9 +12,6 @@
 */
 
 Auth::routes();
-Route::get('qrLogin', ['uses' => 'QrLoginController@qr1']);
-Route::get('qrLogin2', ['uses' => 'QrLoginController@qr2']);
-Route::post('qrLogin', ['uses' => 'QrLoginController@checkUser']);
 //image
 Route::get('avatar/{type}/{file_id}','FileController@image');
 
@@ -42,15 +39,31 @@ Route::group(['middleware' => ['web', 'auth', 'permission'] ], function () {
 	//user permission
 	Route::get('user/{id}/permission', 'UserController@permissions')->name('user.permissions');
 	Route::post('user/{id}/permission', 'UserController@simpan')->name('user.simpan');
-	//qrcode
-	Route::get('user/qr-code/{id}','QrLoginController@UserQrCode');
-	Route::get('My-QrCode','QrLoginController@MyQrCode');
-	Route::post('autogenerateqrcode','QrLoginController@QrAutoGenerate');
 
 	//role
 	Route::resource('role','RoleController');
 	//role permission
 	Route::get('role/{id}/permission','RoleController@permissions')->name('role.permissions');
 	Route::post('role/{id}/permission', 'RoleController@simpan')->name('role.simpan');
+
+  //jabatan mulai
+  Route::resource('jabatan','jabatanController');
+  //jabatan akhir
+
+  //satker mulai
+  Route::resource('satuan-kerja','satkerController');
+  //satker akhir
+
+  //pangkat mulai
+  Route::resource('pangkat','pangkatController');
+  //pangkat akhir
+
+  //kondisi mulai
+  Route::resource('kondisi','kondisiController');
+  //kondisi akhir
+
+  //jenis-barang mulai
+  Route::resource('jenis-barang','jenisController');
+  //jenis-barang akhir
 
 });
