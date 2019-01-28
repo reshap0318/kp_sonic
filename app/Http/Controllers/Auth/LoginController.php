@@ -21,9 +21,9 @@ class LoginController extends Controller
 
     protected $redirectTo = 'dashboard';
 
-    public function username()
+    public function nrp_nip()
     {
-        return 'username';
+        return 'nrp_nip';
     }
 
     public function showLoginForm()
@@ -40,7 +40,7 @@ class LoginController extends Controller
     protected function login(Request $request)
     {
         $request->validate([
-            'username' => 'required',
+            'nrp_nip' => 'required',
             'password' => 'required',
         ]);
         if ($user = Sentinel::authenticate($request->all()))

@@ -22,8 +22,8 @@ Users
         <input type="checkbox" name="select_all" value="1" id="example-select-all">
       </th>
       <th>nama </th>
-      <th>Polres </th>
-      <th>Telpon</th>
+      <th>Satker </th>
+      <th>Jabatan</th>
       <th class="no-link last"><span class="nobr">Action</span>
       </th>
       <th class="bulk-actions" colspan="7">
@@ -33,85 +33,40 @@ Users
   </thead>
 
   <tbody>
-    @if(Sentinel::getuser()->id==1)
-        @foreach($users as $user)
-              <td class="text-center">{{ Form::checkbox('sel', $user->id, null, ['class' => ''])}}</td>
-              <td class=" ">{{$user->nama}}</td>
-              <td class=" ">{{optional($user->polres)->nama}}</td>
-              <td class="">{{$user->telpon}}</td>
-              <td class=" last">
-                @if (Sentinel::getUser()->hasAccess(['user.show']))
-                  <a href="{{route('user.show', $user->id)}}" class="btn btn-success btn-xs">View</a>
-                @endif
-                @if (Sentinel::getUser()->hasAccess(['user.edit']))
-                  <a href="{{route('user.edit', $user->id)}}" class="btn btn-success btn-xs">edit</a>
-                @endif
+    @foreach($users as $user)
+    <tr>
+      <td class="text-center">{{ Form::checkbox('sel', $user->id, null, ['class' => ''])}}</td>
+      <td class=" ">{{$user->nama}}</td>
+      <td class=" ">{{$user->satker->nama}}</td>
+      <td class="">{{$user->jabatan->nama}}</td>
+      <td class=" last">
+      @if (Sentinel::getUser()->hasAccess(['user.show']))
+        <a href="{{route('user.show', $user->id)}}" class="btn btn-success btn-xs">View</a>
+      @endif
+      @if (Sentinel::getUser()->hasAccess(['user.edit']))
+        <a href="{{route('user.edit', $user->id)}}" class="btn btn-success btn-xs">edit</a>
+      @endif
 
-                @if (Sentinel::getUser()->hasAccess(['user.permissions']))
-                  <a href="{{route('user.permissions', $user->id)}}" class="btn btn-warning btn-xs">Permissions</a>
-                @endif
-                @if (Sentinel::getUser()->hasAccess(['user.create']))
-                  <a href="{{ url("user/qr-code/$user->id") }}" class="btn btn-warning btn-xs">Qr-Code</a>
-                @endif
-
-                @if(sizeof($user->activations) == 0)
-                  @if (Sentinel::getUser()->hasAccess(['user.activate']))
-                    <a href="{{route('user.activate', $user->id)}}" class="btn btn-primary btn-xs">Activate</a>
-                  @endif
-                @else
-                  @if (Sentinel::getUser()->hasAccess(['user.deactivate']))
-                    <a href="{{route('user.deactivate', $user->id)}}" class="btn btn-danger btn-xs">Deactivate</a>
-                  @endif
-                @endif
-                @if (Sentinel::getUser()->hasAccess(['user.destroy']))
-                  {!! Form::open(['method'=>'DELETE', 'route' => ['user.destroy', $user->id], 'style' => 'display:inline']) !!}
-                  {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs','id'=>'delete-confirm']) !!}
-                  {!! Form::close() !!}
-                @endif
-              </td>
-              </tr>
-        @endforeach
-    @else
-      @foreach($users as $user)
-        @if($user->id != 1)
-          <td class="text-center">{{ Form::checkbox('sel', $user->id, null, ['class' => ''])}}</td>
-          <td class=" ">{{$user->nama}}</td>
-          <td class=" ">{{optional($user->polres)->nama}}</td>
-          <td class="">{{$user->telpon}}</td>
-          <td class=" last">
-            @if (Sentinel::getUser()->hasAccess(['user.show']))
-              <a href="{{route('user.show', $user->id)}}" class="btn btn-success btn-xs">View</a>
-            @endif
-            @if (Sentinel::getUser()->hasAccess(['user.edit']))
-              <a href="{{route('user.edit', $user->id)}}" class="btn btn-success btn-xs">edit</a>
-            @endif
-
-            @if (Sentinel::getUser()->hasAccess(['user.permissions']))
-              <a href="{{route('user.permissions', $user->id)}}" class="btn btn-warning btn-xs">Permissions</a>
-            @endif
-            @if (Sentinel::getUser()->hasAccess(['user.create']))
-              <a href="{{ url("user/qr-code/$user->id") }}" class="btn btn-warning btn-xs">Qr-Code</a>
-            @endif
-
-            @if(sizeof($user->activations) == 0)
-              @if (Sentinel::getUser()->hasAccess(['user.activate']))
-                <a href="{{route('user.activate', $user->id)}}" class="btn btn-primary btn-xs">Activate</a>
-              @endif
-            @else
-              @if (Sentinel::getUser()->hasAccess(['user.deactivate']))
-                <a href="{{route('user.deactivate', $user->id)}}" class="btn btn-danger btn-xs">Deactivate</a>
-              @endif
-            @endif
-            @if (Sentinel::getUser()->hasAccess(['user.destroy']))
-              {!! Form::open(['method'=>'DELETE', 'route' => ['user.destroy', $user->id], 'style' => 'display:inline']) !!}
-              {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs','id'=>'delete-confirm']) !!}
-              {!! Form::close() !!}
-            @endif
-          </td>
-          </tr>
+      @if (Sentinel::getUser()->hasAccess(['user.permissions']))
+        <a href="{{route('user.permissions', $user->id)}}" class="btn btn-warning btn-xs">Permissions</a>
+      @endif
+      @if(sizeof($user->activations) == 0)
+        @if (Sentinel::getUser()->hasAccess(['user.activate']))
+          <a href="{{route('user.activate', $user->id)}}" class="btn btn-primary btn-xs">Activate</a>
         @endif
-      @endforeach
-    @endif
+      @else
+        @if (Sentinel::getUser()->hasAccess(['user.deactivate']))
+          <a href="{{route('user.deactivate', $user->id)}}" class="btn btn-danger btn-xs">Deactivate</a>
+        @endif
+      @endif
+      @if (Sentinel::getUser()->hasAccess(['user.destroy']))
+        {!! Form::open(['method'=>'DELETE', 'route' => ['user.destroy', $user->id], 'style' => 'display:inline']) !!}
+        {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs','id'=>'delete-confirm']) !!}
+        {!! Form::close() !!}
+      @endif
+      </td>
+    </tr>
+    @endforeach
   </tbody>
 </table>
 @if (Sentinel::getUser()->hasAccess(['user.destroy']))

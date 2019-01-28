@@ -14,31 +14,31 @@
     <div class="clearfix"></div>
   </div>
 
-    <h3 class="text-center">{{$user->username}}</h3>
+    <h3 class="text-center">{{$user->nrp_nip}}</h3>
     <div class="flex text-center">
         <div class="col-md-3">
             {!! Form::label('nama','Nama :') !!}
             {{$user->nama}}
          </div>
          <div class="col-md-3">
-            {!! Form::label('polres', 'Polres :') !!}
-            {{optional($user->polres)->nama}}
+            {!! Form::label('satker', 'Satuan Kerja :') !!}
+            {{optional($user->satker)->nama}}
          </div>
          <div class="col-md-3">
-            {!! Form::label('telpon', 'telpon :') !!}
-            {{$user->telpon}}
+            {!! Form::label('jabatan', 'Jabatan :') !!}
+            {{optional($user->jabatan)->nama}}
          </div>
          <div class="col-md-3">
-            {!! Form::label('last_login', 'Last Login :') !!}
-            {{$user->last_login}}
+            {!! Form::label('pangkat', 'Pangkat :') !!}
+            {{optional($user->pangkat)->nama}}
          </div>
     </div>
     <br>
     <br>
     <div class="flex text-center">
       <div class="col-md-12">
-         {!! Form::label('alamat', 'Alamat :') !!}
-         {{$user->alamat}}
+         {!! Form::label('last_login', 'Login Terakhir :') !!}
+         {{$user->last_login}}
       </div>
     </div>
 </div>

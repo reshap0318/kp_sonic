@@ -27,18 +27,30 @@ class User extends SentinelUser implements RoleableInterface, PermissibleInterfa
      * @var array
      */
     protected $fillable = [
-        'username',
-        'kode',
+        'nrp_nip',
+        'nama',
+        'satker_id',
+        'pangkat_id',
+        'jenis_kelamin',
+        'jabatan_id',
         'avatar',
-        'last_login',
-        'polres_id',
         'permissions',
         'remember_token',
     ];
 
-    public function polres($value='')
+    public function satker($value='')
     {
-          return $this->hasOne(polres::class,'id','polres_id');
+          return $this->hasOne(satker::class,'id','satker_id');
+    }
+
+    public function jabatan($value='')
+    {
+          return $this->hasOne(jabatan::class,'id','jabatan_id');
+    }
+
+    public function pangkat($value='')
+    {
+          return $this->hasOne(pangkat::class,'id','pangkat_id');
     }
 
     /**
@@ -50,7 +62,7 @@ class User extends SentinelUser implements RoleableInterface, PermissibleInterfa
         'password','remember_token','QRpassword',
     ];
 
-    protected $loginNames = ['email','username'];
+    protected $loginNames = ['nrp_nip'];
 
     //Change Password
     public function getRememberToken()

@@ -16,37 +16,44 @@
 
 
             <div class="form-group">
-              {!! Form::label('username', 'Username *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+              {!! Form::label('nrp_nip', 'NRP / NIP *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
               <div class="col-md-6 col-sm-6 col-xs-12">
-                {!! Form::text('username', null, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12','readonly'=>'readonly']) !!}
-              </div>
-            </div>
-
-            <div class="form-group">
-              {!! Form::label('polres_id', 'Polres *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                {!! Form::select('polres_id', $polres, null, ['class' => 'foselect2_single form-control','disabled'=>'disabled']) !!}
+                {!! Form::text('nrp_nip', null, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12','onkeypress'=>'return hanyaAngka(event)']) !!}
               </div>
             </div>
 
             <div class="form-group">
               {!! Form::label('nama', 'Nama *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
               <div class="col-md-6 col-sm-6 col-xs-12">
-                {!! Form::text('nama', null, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12']) !!}
+                {!! Form::text('nama', null, ['class' => 'form-control col-md-7 col-xs-12']) !!}
               </div>
             </div>
 
             <div class="form-group">
-              {!! Form::label('telpon', 'No Telpon', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+              {!! Form::label('satker_id', 'Satuan Kerja *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
               <div class="col-md-6 col-sm-6 col-xs-12">
-                {!! Form::text('telpon', null, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12','onkeypress'=>'return hanyaAngka(event)']) !!}
+                {!! Form::select('satker_id', $satker, null, ['class' => 'foselect2_single form-control']) !!}
               </div>
             </div>
 
             <div class="form-group">
-              {!! Form::label('alamat', 'Alamat', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+              {!! Form::label('jabatan_id', 'Jabatan *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
               <div class="col-md-6 col-sm-6 col-xs-12">
-                {!! Form::textarea('alamat', null, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12']) !!}
+                {!! Form::select('jabatan_id', $jabatan, null, ['class' => 'foselect2_single form-control']) !!}
+              </div>
+            </div>
+
+            <div class="form-group">
+              {!! Form::label('pangkat_id', 'Pangkat *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {!! Form::select('pangkat_id', $satker, null, ['class' => 'foselect2_single form-control']) !!}
+              </div>
+            </div>
+
+            <div class="form-group">
+              {!! Form::label('jenis_kelamin', 'Jenis Kelamin *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {!! Form::select('jenis_kelamin', [1=>'Laki - Laki',0=>'Perempuan'], null, ['class' => 'foselect2_single form-control']) !!}
               </div>
             </div>
 

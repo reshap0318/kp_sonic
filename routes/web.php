@@ -53,23 +53,4 @@ Route::group(['middleware' => ['web', 'auth', 'permission'] ], function () {
 	Route::get('role/{id}/permission','RoleController@permissions')->name('role.permissions');
 	Route::post('role/{id}/permission', 'RoleController@simpan')->name('role.simpan');
 
-    //polres
-  	Route::resource('polres','PolresController');
-    Route::get('cetak-polres','PolresController@cetak');
-    //laporan
-  	Route::resource('panggilan','RekapPanggilanController');
-    Route::get('cetak-panggilan','RekapPanggilanController@cetak');
-    //inventaris
-  	Route::resource('inventaris','InventarisController');
-
-    //InventarisDetailController
-    Route::resource('inventaris_detail','InventarisDetailController');
-    Route::post('ceks','InventarisDetailController@ceking');
-    Route::get('cek inventaris','InventarisDetailController@cek');
-    Route::get('datadash','HomeController@data');
-
-    route::resource('operator','OperatorController');
-    route::get('operator/aktiv/{id}','OperatorController@aktiv')->name('operator.aktiv');
-    Route::get('datapolres/{id}','PolresController@data');
-
 });

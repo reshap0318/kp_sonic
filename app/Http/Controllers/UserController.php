@@ -6,7 +6,9 @@ use App\user;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Role;
-use App\polres;
+use App\satker;
+use App\jabatan;
+use App\pangkat;
 use Sentinel;
 use Activation;
 use Route;
@@ -20,7 +22,7 @@ class UserController extends Controller
         $users = user::all();
         return view('backend.user.index',compact('users'));
       } catch (\Exception $e) {
-        toast()->error($e, 'Eror');
+        toast()->error($e->getMessage(), 'Eror');
         toast()->error('Terjadi Eror Saat Meng-Nyimpan Permission, Silakan Ulang Login kembali', 'Gagal');
         return redirect()->back();
       }
@@ -30,13 +32,13 @@ class UserController extends Controller
     public function create()
     {
         try {
-          $action = 'create';
           $role = Role::get()->pluck('name', 'id');
-          $polres = polres::orderby('nama','asc')->pluck('nama','id');
-          //dd($role);
-          return view('backend.user.create',compact('role','action', 'polres'));
+          $pangkat = pangkat::pluck('nama','id');
+          $jabatan = jabatan::pluck('nama','id');
+          $satker = satker::pluck('nama','id');
+          return view('backend.user.create',compact('role','pangkat','jabatan','satker'));
         } catch (\Exception $e) {
-          toast()->error($e, 'Eror');
+          toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Nyimpan Permission, Silakan Ulang Login kembali', 'Gagal');
           return redirect()->back();
         }
@@ -47,37 +49,26 @@ class UserController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'username' => 'required|min:3|unique:users',
+            'nrp_nip' => 'required|min:3|unique:users',
             'nama' => 'required|min:3',
-            'polres_id' => 'required',
+            'satker_id' => 'required',
+            'pangkat_id' => 'required',
+            'jenis_kelamin' => 'required',
+            'jabatan_id' => 'required',
             'role' => 'required',
             'password' => 'required|same:password_confirm',
             'avatar' => 'image|mimes:jpg,png,jpeg,gif',
         ]);
         try {
           $user = new User;
-          $user->username = $request->username;
-          $user->password = bcrypt($request->password);
-          $qrLogin=bcrypt($user->personal_number.$user->polres_id.str_random(40));
+          $user->nrp_nip = $request->nrp_nip;
           $user->nama = $request->nama;
-
-          if($request->telpon){
-            $user->telpon = $request->telpon;
-          }
-
-          if($request->alamat){
-            $user->alamat = $request->alamat;
-          }
-
-
-          $user->polres_id = $request->polres_id;
-          if($request->role==2){
-            $user->polres_id = null;
-          }else{
-            $user->polres_id = $request->polres_id;
-          }
+          $user->password = bcrypt($request->password);
+          $user->satker_id = $request->satker_id;
+          $user->pangkat_id = $request->pangkat_id;
+          $user->jenis_kelamin = $request->jenis_kelamin;
+          $user->jabatan_id = $request->jabatan_id;
           $user->permissions = ['{"home.dashboard":true}'];
-          $user->QRpassword= $qrLogin;
 
           if ($request->hasFile('avatar') && $request->avatar->isValid()) {
               $path = 'img/avatars';
@@ -111,7 +102,7 @@ class UserController extends Controller
 
           }
         } catch (\Exception $e) {
-          toast()->error($e, 'Eror');
+          toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Nyimpan Data', 'Gagal');
           return redirect()->back();
         }
@@ -134,11 +125,12 @@ class UserController extends Controller
     public function edit($id)
     {
         try {
-          $action = 'edit';
           $role = Role::get()->pluck('name', 'id');
           $user = User::find($id);
-          $polres = polres::pluck('nama','id');
-          return view('backend.user.edit',compact('role','user','action','polres'));
+          $pangkat = pangkat::pluck('nama','id');
+          $jabatan = jabatan::pluck('nama','id');
+          $satker = satker::pluck('nama','id');
+          return view('backend.user.edit',compact('role','pangkat','jabatan','satker','user'));
         } catch (\Exception $e) {
           toast()->error($e, 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data, Silakan Ulang Login kembali', 'Gagal');
@@ -151,36 +143,24 @@ class UserController extends Controller
     {
         //dd($request->all());
         $request->validate([
-            'username' => 'required',
+            'nrp_nip' => 'required|min:3|unique:users,nrp_nip,'.$id,
             'nama' => 'required|min:3',
-            'polres_id' => 'required',
-            'role' => 'required',
+            'satker_id' => 'required',
+            'pangkat_id' => 'required',
+            'jenis_kelamin' => 'required',
+            'jabatan_id' => 'required',
+            'password' => 'same:password_confirm',
             'avatar' => 'image|mimes:jpg,png,jpeg,gif',
         ]);
-
         try {
           $user = User::find($id);
-          $user->username = $request->username;
+          $user->nrp_nip = $request->nrp_nip;
           $user->nama = $request->nama;
-
-          if($request->telpon){
-            $user->telpon = $request->telpon;
-          }
-
-          if($request->alamat){
-            $user->alamat = $request->alamat;
-          }
-
-          if($request->role==2){
-            $user->polres_id = null;
-          }else{
-            $user->polres_id = $request->polres_id;
-          }
-
-
-          if($request->password){
-            $user->password = bcrypt($request->password);
-          }
+          $user->password = bcrypt($request->password);
+          $user->satker_id = $request->satker_id;
+          $user->pangkat_id = $request->pangkat_id;
+          $user->jenis_kelamin = $request->jenis_kelamin;
+          $user->jabatan_id = $request->jabatan_id;
 
           if ($request->hasFile('avatar') && $request->avatar->isValid()) {
               $path = 'img/avatars';
@@ -196,7 +176,7 @@ class UserController extends Controller
               $user->avatar = $filename;
           }
 
-          if($user->save()){
+          if($user->update()){
               if ($request->role) {
                 $user->roles()->sync([$request->role]);
               }
@@ -206,12 +186,11 @@ class UserController extends Controller
                         File::delete(public_path($path . '/' . $oldfile));
                       }
                   }
-
-              toast()->success('Berhasil Update Data User', 'Berhasil');
-              return redirect()->route('user.index');
           }
+          toast()->success('Berhasil Update Data User', 'Berhasil');
+          return redirect()->route('user.index');
         } catch (\Exception $e) {
-          toast()->error($e, 'Eror');
+          toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Update User, Silakan Ulang Login kembali', 'Gagal');
           return redirect()->back();
         }
@@ -243,33 +222,38 @@ class UserController extends Controller
 
     public function editprofil()
     {
-      $polres = polres::pluck('nama','id');
       $user = Sentinel::getuser();
-      return view('backend.user.editprofil',compact('user','polres'));
+      $pangkat = pangkat::pluck('nama','id');
+      $jabatan = jabatan::pluck('nama','id');
+      $satker = satker::pluck('nama','id');
+      return view('backend.user.editprofil',compact('user','pangkat','satker','jabatan'));
     }
 
     public function updateprofile($id, Request $request)
     {
 
       $request->validate([
-        'username' => 'required',
-        'nama' => 'required',
-        'telpon' => 'required',
-        'alamat' => 'required',
+          'nrp_nip' => 'required|min:3|unique:users,nrp_nip,'.$id,
+          'nama' => 'required|min:3',
+          'satker_id' => 'required',
+          'pangkat_id' => 'required',
+          'jenis_kelamin' => 'required',
+          'jabatan_id' => 'required',
+          'avatar' => 'image|mimes:jpg,png,jpeg,gif',
       ]);
-
       try {
-          $user = User::find($id);
-          // dd($user);
-          $user->username=$request->username;
-          $user->nama=$request->nama;
-          $user->telpon = $request->telpon;
-          $user->alamat = $request->alamat;
-          $user->save();
-          toast()->success('Berhasil Update Profile', 'Berhasil');
-          return redirect('profil');
+        $user = Sentinel::getuser();
+        $user->nrp_nip = $request->nrp_nip;
+        $user->nama = $request->nama;
+        $user->satker_id = $request->satker_id;
+        $user->pangkat_id = $request->pangkat_id;
+        $user->jenis_kelamin = $request->jenis_kelamin;
+        $user->jabatan_id = $request->jabatan_id;
+        $user->save();
+        toast()->success('Berhasil Update Profile', 'Berhasil');
+        return redirect('profil');
       } catch (\Exception $e) {
-        toast()->error($e, 'Eror');
+        toast()->error($e->getMessage(), 'Eror');
         toast()->error('Terjadi Eror Saat Meng-Update Profil', 'Gagal');
         return redirect()->back();
       }
@@ -299,7 +283,7 @@ class UserController extends Controller
                 return redirect()->back();
               }
         } catch (\Exception $e) {
-              toast()->error($e, 'Eror');
+              toast()->error($e->getMessage(), 'Eror');
               toast()->error('Terjadi Eror Saat Meng-Ganti Profil', 'Gagal');
               return redirect()->back();
         }
@@ -328,7 +312,7 @@ class UserController extends Controller
         ]);
         try {
           $user = [
-            "username"=>Sentinel::getuser()->username,
+            "nrp_nip"=>Sentinel::getuser()->nrp_nip,
             "password"=>$request->old_password,
           ];
           if(Sentinel::stateless($user)){
@@ -336,14 +320,14 @@ class UserController extends Controller
             $user->password = bcrypt($request->new_password);
 
             toast()->success('Ganti Password', 'Berhasil');
-            $user->save();
+            $user->update();
             return redirect('dashboard');
           }else{
             toast()->error('password Lama Salah', 'Gagal');
             return redirect()->back();
           }
         } catch (\Exception $e) {
-          toast()->error($e, 'Eror');
+          toast()->error($e->getMessage(), 'Eror');
         }
     }
 

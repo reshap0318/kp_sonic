@@ -93,29 +93,39 @@ class MigrationCartalystSentinel extends Migration
             $table->index('user_id');
         });
 
-        Schema::create('polres', function (Blueprint $table) {
+        Schema::create('satker', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nama');
-            $table->string('email');
-            $table->text('alamat');
             $table->timestamps();
+        });
 
-            $table->engine = 'InnoDB';
+        Schema::create('pangkat', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nama');
+            $table->timestamps();
+        });
+
+        Schema::create('jabatan', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nama');
+            $table->timestamps();
         });
 
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('username')->unique();
-            $table->string('password');
+            $table->string('nrp_nip')->unique();
             $table->string('nama');
-            $table->string('telpon')->nullable();
-            $table->string('alamat')->nullable();
+            $table->integer('satker_id')->unsigned()->nullable();
+            $table->integer('pangkat_id')->unsigned()->nullable();
+            $table->integer('jenis_kelamin')->nullable();
+            $table->integer('jabatan_id')->unsigned()->nullable();
             $table->string('avatar')->nullable();
-            $table->integer('polres_id')->unsigned()->nullable();
+            $table->string('password');
 
-            $table->foreign('polres_id')->references('id')->on('polres')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('satker_id')->references('id')->on('satker')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('pangkat_id')->references('id')->on('pangkat')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('jabatan_id')->references('id')->on('jabatan')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->string('QRpassword')->default(str_random(40));
             $table->text('permissions')->nullable();
             $table->timestamp('last_login')->nullable();
             $table->timestamps();
