@@ -58,12 +58,16 @@ Route::group(['middleware' => ['web', 'auth', 'permission'] ], function () {
   Route::resource('pangkat','pangkatController');
   //pangkat akhir
 
-  //kondisi mulai
-  Route::resource('kondisi','kondisiController');
-  //kondisi akhir
+  //merek mulai
+  Route::resource('merek','merekController');
+  //merek akhir
 
   //jenis-barang mulai
   Route::resource('jenis-barang','jenisController');
   //jenis-barang akhir
+
+  //barang mulai
+  Route::resource('barang','barangController');
+  //barang akhir
 
 });

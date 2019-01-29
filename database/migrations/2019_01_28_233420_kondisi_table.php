@@ -13,7 +13,7 @@ class KondisiTable extends Migration
      */
     public function up()
     {
-      Schema::create('kondisi', function (Blueprint $table) {
+      Schema::create('merek', function (Blueprint $table) {
           $table->increments('id');
           $table->string('nama');
           $table->timestamps();
@@ -27,6 +27,6 @@ class KondisiTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kondisi');
+        Schema::dropIfExists('merek');
     }
 }

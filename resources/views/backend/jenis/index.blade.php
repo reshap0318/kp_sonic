@@ -11,6 +11,7 @@
     <ul class="nav navbar-right panel_toolbox">
       @if (Sentinel::getUser()->hasAccess(['jenis-barang.create']))
         <a href="{{route('jenis-barang.create')}}" class="btn btn-success">New Jenis Barang</a>
+        <a href="{{route('barang.create')}}" class="btn btn-success">New Barang</a>
       @endif
     </ul>
     <div class="clearfix"></div>
@@ -19,16 +20,19 @@
 <table class="table table-bordered table-striped table-hover" id="tbljenis">
   <thead>
     <tr class="headings">
-      <th class="text-center">
+      <th rowspan="2" class="text-center">
         No
       </th>
-      <th>Nama </th>
-      <th>Total</th>
-      <th class="no-link last"><span class="nobr">Action</span>
-      </th>
-      <th class="bulk-actions" colspan="7">
-        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-      </th>
+      <th rowspan="2" class="text-center">Nama </th>
+      <th colspan="4" class="text-center">Kodisi</th>
+      <th rowspan="2" class="text-center">Total</th>
+      <th rowspan="2" class="no-link last text-center"><span class="nobr">Action</span></th>
+    </tr>
+    <tr>
+      <th class="text-center">Baik</th>
+      <th class="text-center">Rusak Ringan</th>
+      <th class="text-center">Rusak Berat</th>
+      <th class="text-center">Dihapuskan</th>
     </tr>
   </thead>
   <?php $no=0?>
@@ -36,8 +40,12 @@
     @foreach($jeniss as $jenis)
       <tr>
           <td class=" text-center">{{ ++$no }}</td>
-          <td class=" ">{{$jenis->nama}}</td>
-          <td class=" "></td>
+          <td class="">{{$jenis->nama}}</td>
+          <td class=" text-center">{{$jenis->baik}} Buah</td>
+          <td class=" text-center">{{$jenis->rusak}} Buah</td>
+          <td class=" text-center">{{$jenis->rusakberat}} Buah</td>
+          <td class=" text-center">{{$jenis->dihapuskan}} Buah</td>
+          <td class=" text-center">{{$jenis->baik+$jenis->rusak+$jenis->rusakberat+$jenis->dihapuskan}} Buah</td>
           <td class=" last">
             @if (Sentinel::getUser()->hasAccess(['jenis-barang.show']))
               <a href="{{route('jenis-barang.show', $jenis->nama)}}" class="btn btn-success btn-xs">View</a>

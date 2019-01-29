@@ -3,28 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\jenis;
+use App\merek;
 use DB;
 
-class jenisController extends Controller
+class merekController extends Controller
 {
     public function index(Request $request)
     {
         try {
-          $jeniss = jenis::select('barang_jenis.id','barang_jenis.nama',
-          DB::raw('count(case when barang.kondisi=1 then 1 end) as baik,
-          count(case when barang.kondisi=2 then 1 end) as rusak,
-          count(case when barang.kondisi=3 then 1 end) as rusakberat,
-          count(case when barang.kondisi=4 then 1 end) as dihapuskan'))
-          ->leftjoin('barang','barang_jenis.id','=','barang.id_jenis')
-          ->groupby('barang_jenis.id','barang_jenis.nama')
-          ->distinct()
-          ->get();
-          return view('backend.jenis.index',compact('jeniss'));
+          $mereks = merek::select('merek.id','merek.nama',DB::raw('count(barang.id) as total'))
+          ->leftjoin('barang','merek.id','barang.id_merek')
+          ->groupby('merek.nama','merek.id')->get();
+          return view('backend.merek.index',compact('mereks'));
         } catch (\Exception $e) {
-          dd($e);
-          toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
           toast()->error($e->getMessage(), 'Eror');
+          toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
           return redirect()->back();
         }
 
@@ -33,7 +26,7 @@ class jenisController extends Controller
     public function create(Request $request)
     {
         try {
-          return view('backend.jenis.create');
+          return view('backend.merek.create');
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
@@ -44,14 +37,14 @@ class jenisController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-          'nama' => 'required|min:1|unique:barang_jenis,nama',
+          'nama' => 'required|min:1|unique:merek,nama',
         ]);
         try {
-          $jenis = new jenis;
-          $jenis->nama = $request->nama;
-          $jenis->save();
-          return redirect()->route('jenis-barang.index');
-         toast()->success('Berhasil Menyimpan Jenis Barang', 'Berhasil');
+          $merek = new merek;
+          $merek->nama = $request->nama;
+          $merek->save();
+          return redirect()->route('merek.index');
+         toast()->success('Berhasil Menyimpan Kondisi', 'Berhasil');
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
@@ -62,7 +55,7 @@ class jenisController extends Controller
     public function show($id,Request $request)
     {
         try {
-          return redirect()->route('barang.index',['jenis='.$id]);
+          return redirect()->route('barang.index',['merek='.$id]);
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
@@ -73,8 +66,8 @@ class jenisController extends Controller
     public function edit($id,Request $request)
     {
         try {
-          $jenis = jenis::find($id);
-          return view('backend.jenis.edit',compact('jenis'));
+          $merek = merek::find($id);
+          return view('backend.merek.edit',compact('merek'));
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
@@ -85,14 +78,14 @@ class jenisController extends Controller
     public function update($id,Request $request)
     {
         $request->validate([
-          'nama' => 'required|min:1|unique:barang_jenis,nama,'.$id,
+          'nama' => 'required|min:1|unique:merek,nama,'.$id,
         ]);
         try {
-          $jenis = jenis::find($id);
-          $jenis->nama = $request->nama;
-          $jenis->update();
-          toast()->success('Berhasil Mengupdate Jenis Barang', 'Berhasil');
-          return redirect()->route('jenis-barang.index');
+          $merek = merek::find($id);
+          $merek->nama = $request->nama;
+          $merek->update();
+          toast()->success('Berhasil Mengupdate Kondisi', 'Berhasil');
+          return redirect()->route('merek.index');
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
@@ -103,10 +96,10 @@ class jenisController extends Controller
     public function destroy($id,Request $request)
     {
         try {
-          $jenis = jenis::find($id);
-          $jenis->delete();
-          return redirect()->route('jenis-barang.index');
-          toast()->success('Berhasil Menghapus Jenis Barang', 'Berhasil');
+          $merek = merek::find($id);
+          $merek->delete();
+          return redirect()->route('merek.index');
+          toast()->success('Berhasil Menghapus Kondisi', 'Berhasil');
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');

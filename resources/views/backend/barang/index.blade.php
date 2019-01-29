@@ -1,29 +1,28 @@
 @extends('layouts.frontend')
 
 @section('title')
-  Kondisi
+  Barang
 @stop
 
 @section('content')
 <div class="x_panel">
   <div class="x_title">
-    <h2>List Kondisi</h2>
+    <h2>List Barang</h2>
     <ul class="nav navbar-right panel_toolbox">
-      @if (Sentinel::getUser()->hasAccess(['kondisi.create']))
-        <a href="{{route('kondisi.create')}}" class="btn btn-success">New Kondisi</a>
-      @endif
     </ul>
     <div class="clearfix"></div>
   </div>
   <div class="x_content">
-<table class="table table-bordered table-striped table-hover" id="tblkondisi">
+<table class="table table-bordered table-striped table-hover" id="tblbarang">
   <thead>
     <tr class="headings">
       <th class="text-center">
         No
       </th>
-      <th>Nama </th>
-      <th>Total</th>
+      <th>Nomor Serial</th>
+      <th>Jenis</th>
+      <th>Merek</th>
+      <th>Type</th>
       <th class="no-link last"><span class="nobr">Action</span>
       </th>
       <th class="bulk-actions" colspan="7">
@@ -33,20 +32,22 @@
   </thead>
   <?php $no=0?>
   <tbody>
-    @foreach($kondisis as $kondisi)
+    @foreach($barangs as $barang)
       <tr>
           <td class=" text-center">{{ ++$no }}</td>
-          <td class=" ">{{$kondisi->nama}}</td>
-          <td class=" "></td>
+          <td class=" ">{{$barang->no_serial}}</td>
+          <td class=" ">{{$barang->jenis->nama}}</td>
+          <td class=" ">{{$barang->merek->nama}}</td>
+          <td class=" ">{{$barang->type}}</td>
           <td class=" last">
-            @if (Sentinel::getUser()->hasAccess(['kondisi.show']))
-              <a href="{{route('kondisi.show', $kondisi->nama)}}" class="btn btn-success btn-xs">View</a>
+            @if (Sentinel::getUser()->hasAccess(['barang.show']))
+              <a href="{{route('barang.show', $barang->id)}}" class="btn btn-success btn-xs">View</a>
             @endif
-            @if (Sentinel::getUser()->hasAccess(['kondisi.edit']))
-              <a href="{{route('kondisi.edit', $kondisi->id)}}" class="btn btn-success btn-xs">edit</a>
+            @if (Sentinel::getUser()->hasAccess(['barang.edit']))
+              <a href="{{route('barang.edit', $barang->id)}}" class="btn btn-success btn-xs">edit</a>
             @endif
-            @if (Sentinel::getUser()->hasAccess(['kondisi.destroy']))
-              {!! Form::open(['method'=>'DELETE', 'route' => ['kondisi.destroy', $kondisi->id], 'style' => 'display:inline']) !!}
+            @if (Sentinel::getUser()->hasAccess(['barang.destroy']))
+              {!! Form::open(['method'=>'DELETE', 'route' => ['barang.destroy', $barang->id], 'style' => 'display:inline']) !!}
               {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs','id'=>'delete-confirm']) !!}
               {!! Form::close() !!}
             @endif
@@ -62,7 +63,7 @@
 @section('scripts')
 <script type="text/javascript">
     $(document).ready(function(){
-        table = $('#tblkondisi').DataTable({
+        table = $('#tblbarang').DataTable({
             'columnDefs': [{
                'targets': 0,
                'searchable':false,
@@ -106,7 +107,7 @@
     });
 
   $("input#delete-confirm").on("click", function(){
-        return confirm("yakin Akan Menghapus Kondisi Ini?");
+        return confirm("yakin Akan Menghapus Barang Ini?");
     });
 
 </script>
