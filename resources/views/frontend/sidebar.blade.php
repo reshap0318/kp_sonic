@@ -55,7 +55,10 @@
           <li><a href="{{ route('jenis-barang.index') }}"><i class="fa fa-cubes"></i>Barang</a></li>
         @endif
         @if (Sentinel::getUser()->hasAccess(['serah-terima.index']))
-          <li><a href="{{ route('serah-terima.index') }}"><i class="fa fa-cubes"></i>Serah Terima</a></li>
+          <li><a href="{{ route('serah-terima.index') }}"><i class="fa fa-tasks"></i>Serah Terima</a></li>
+        @endif
+        @if (Sentinel::getUser()->hasAccess(['pengembalian.index']))
+          <li><a href="{{ route('pengembalian.index') }}"><i class="fa fa-check"></i>Pengembalian Barang</a></li>
         @endif
       </ul>
     </div>

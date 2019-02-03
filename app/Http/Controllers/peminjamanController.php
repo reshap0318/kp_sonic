@@ -84,7 +84,8 @@ class peminjamanController extends Controller
     public function show($id,Request $request)
     {
         try {
-          return redirect()->route('user.index',['peminjaman='.$id]);
+          $peminjaman = peminjaman::find($id);
+          return view('backend.peminjaman.show',compact('peminjaman'));
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');

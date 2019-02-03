@@ -20,6 +20,10 @@ class barangController extends Controller
           }else if($request->merek){
             $merek = merek::where('nama',$request->merek)->first();
             $barangs = barang::where('id_merek',$merek->id);
+          }else if($request->kondisi){
+            $barangs = barang::where('kondisi',$request->kondisi);
+          }else{
+            $barangs = barang::select('*');
           }
 
           if(!Sentinel::getUser()->inrole(1)){

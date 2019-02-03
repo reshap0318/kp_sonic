@@ -34,4 +34,9 @@ class barang extends Model
   {
       return $this->hasOne(satker::class,'id','id_satker');
   }
+
+  public function peminjaman($value='')
+  {
+      return $this->hasMany(peminjaman::class,'barang_id','id');
+  }
 }

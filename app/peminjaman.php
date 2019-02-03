@@ -32,4 +32,9 @@ class peminjaman extends Model
         return $this->hasOne(User::class,'id','pemberi_id');
     }
 
+    public function pengembalian($value='')
+    {
+        return $this->hasOne(pengembalian::class,'peminjaman_id','id');
+    }
+
 }
