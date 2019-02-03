@@ -15,17 +15,20 @@ class BarangTable extends Migration
     {
         Schema::create('barang', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('no_serial');
-            $table->string('th_perolehan');
-            $table->integer('id_jenis')->unsigned();
-            $table->integer('id_merek')->unsigned();
-            $table->string('type');
+            $table->string('no_serial')->unique()->nullable();
+            $table->string('th_perolehan')->nullable();
+            $table->integer('id_jenis')->unsigned()->nullable();
+            $table->integer('id_merek')->unsigned()->nullable();
+            $table->integer('id_satker')->unsigned()->nullable();
+            $table->string('type')->nullable();
             $table->integer('kondisi');
+            $table->integer('status')->default(1);
             $table->text('keterangan');
             $table->timestamps();
 
-            $table->foreign('id_jenis')->references('id')->on('barang_jenis')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('id_merek')->references('id')->on('merek')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_jenis')->references('id')->on('barang_jenis')->onUpdate('cascade');
+            $table->foreign('id_merek')->references('id')->on('merek')->onUpdate('cascade');
+            $table->foreign('id_satker')->references('id')->on('satker')->onUpdate('cascade');
         });
     }
 

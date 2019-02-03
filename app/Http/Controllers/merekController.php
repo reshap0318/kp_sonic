@@ -43,8 +43,8 @@ class merekController extends Controller
           $merek = new merek;
           $merek->nama = $request->nama;
           $merek->save();
-          return redirect()->route('merek.index');
-         toast()->success('Berhasil Menyimpan Kondisi', 'Berhasil');
+          toast()->success('Berhasil Menyimpan Kondisi', 'Berhasil');
+          return redirect()->route('jenis-barang.index');
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
@@ -85,7 +85,7 @@ class merekController extends Controller
           $merek->nama = $request->nama;
           $merek->update();
           toast()->success('Berhasil Mengupdate Kondisi', 'Berhasil');
-          return redirect()->route('merek.index');
+          return redirect()->route('jenis-barang.index');
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
@@ -98,9 +98,10 @@ class merekController extends Controller
         try {
           $merek = merek::find($id);
           $merek->delete();
-          return redirect()->route('merek.index');
+          return redirect()->route('jenis-barang.index');
           toast()->success('Berhasil Menghapus Kondisi', 'Berhasil');
         } catch (\Exception $e) {
+          // dd($e);
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
           return redirect()->back();

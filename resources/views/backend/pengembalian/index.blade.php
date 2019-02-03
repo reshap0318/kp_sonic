@@ -1,29 +1,33 @@
 @extends('layouts.frontend')
 
 @section('title')
-  Barang
+  Pengembalian Barang
 @stop
 
 @section('content')
 <div class="x_panel">
   <div class="x_title">
-    <h2>List Barang</h2>
+    <h2>List Pengembalian Barang</h2>
     <ul class="nav navbar-right panel_toolbox">
+      @if (Sentinel::getUser()->hasAccess(['pengembalian.create']))
+        <a href="{{route('pengembalian.create')}}" class="btn btn-success">Pengembalian Barang</a>
+      @endif
     </ul>
     <div class="clearfix"></div>
   </div>
   <div class="x_content">
-<table class="table table-bordered table-striped table-hover" id="tblbarang">
+<table class="table table-bordered table-striped table-hover" id="tblpengembalian">
   <thead>
     <tr class="headings">
       <th class="text-center">
         No
       </th>
-      <th>Nomor Serial</th>
-      <th>Satker</th>
-      <th>Jenis</th>
+      <th>Pengembalian</th>
+      <th>No Serial</th>
+      <th>Jenis </th>
       <th>Merek</th>
       <th>Kondisi</th>
+      <th>Peminjaman</th>
       <th class="no-link last"><span class="nobr">Action</span>
       </th>
       <th class="bulk-actions" colspan="7">
@@ -33,35 +37,26 @@
   </thead>
   <?php $no=0?>
   <tbody>
-    @foreach($barangs as $barang)
+    @foreach($pengembalians as $pengembalian)
       <tr>
           <td class=" text-center">{{ ++$no }}</td>
-          <td class=" ">{{$barang->no_serial}}</td>
-          <td class=" ">{{optional($barang->satker)->nama}}</td>
-          <td class=" ">{{optional($barang->jenis)->nama}}</td>
-          <td class=" ">{{optional($barang->merek)->nama}}</td>
-          <td>@if($barang->kondisi==1)
-            Baik
-            @elseif($barang->kondisi==2)
-            Rusak Ringan
-            @elseif($barang->kondisi==3)
-            Rusak Berat
-            @elseif($barang->kondisi==4)
-            Dihapuskan
-            @else
-            Kesalahan
-          @endif</td>
+          <td class=" ">{{$pengembalian->tanggal}}</td>
+          <td class=" ">{{optional(optional($pengembalian->peminjaman)->barang)->no_serial}}</td>
+          <td class=" ">{{optional(optional(optional($pengembalian->peminjaman)->barang)->jenis)->nama}}</td>
+          <td class=" ">{{optional(optional(optional($pengembalian->peminjaman)->barang)->merek)->nama}}</td>
+          <td class=" ">{{$pengembalian->kondisi}}</td>
+          <td class=" ">{{optional($pengembalian->peminjaman)->tanggal}}</td>
           <td class=" last">
-            @if (Sentinel::getUser()->hasAccess(['barang.show']))
-              <a href="{{route('barang.show', $barang->id)}}" class="btn btn-success btn-xs">View</a>
+            @if (Sentinel::getUser()->hasAccess(['pengembalian.show']))
+              <a href="{{route('pengembalian.show', $pengembalian->id)}}" class="btn btn-success btn-xs">View</a>
             @endif
-            @if (Sentinel::getUser()->hasAccess(['barang.edit']))
-              <a href="{{route('barang.edit', $barang->id)}}" class="btn btn-success btn-xs">edit</a>
+            @if (Sentinel::getUser()->hasAccess(['pengembalian.edit']))
+              <a href="{{route('pengembalian.edit', $pengembalian->id)}}" class="btn btn-success btn-xs">edit</a>
             @endif
-            @if (Sentinel::getUser()->hasAccess(['barang.destroy']))
-              {!! Form::open(['method'=>'DELETE', 'route' => ['barang.destroy', $barang->id], 'style' => 'display:inline']) !!}
+            @if (Sentinel::getUser()->hasAccess(['pengembalian.destroy']))
+              <!-- {!! Form::open(['method'=>'DELETE', 'route' => ['pengembalian.destroy', $pengembalian->id], 'style' => 'display:inline']) !!}
               {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs','id'=>'delete-confirm']) !!}
-              {!! Form::close() !!}
+              {!! Form::close() !!} -->
             @endif
           </td>
         </tr>
@@ -70,15 +65,12 @@
 </table>
 </div>
 </div>
-<div class="col-md-12 text-center">
-  <a href="{{route('jenis-barang.index')}}" class="btn btn-success">Kembali</a>
-</div>
 @endsection
 
 @section('scripts')
 <script type="text/javascript">
     $(document).ready(function(){
-        table = $('#tblbarang').DataTable({
+        table = $('#tblpengembalian').DataTable({
             'columnDefs': [{
                'targets': 0,
                'searchable':false,
@@ -122,7 +114,7 @@
     });
 
   $("input#delete-confirm").on("click", function(){
-        return confirm("yakin Akan Menghapus Barang Ini?");
+        return confirm("yakin Akan Menghapus Pengembalian Barang Ini?");
     });
 
 </script>

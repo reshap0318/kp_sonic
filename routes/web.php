@@ -68,6 +68,16 @@ Route::group(['middleware' => ['web', 'auth', 'permission'] ], function () {
 
   //barang mulai
   Route::resource('barang','barangController');
+  Route::get('barangcek/{id}','barangController@barangcek');
   //barang akhir
+
+  //serah-terima mulai
+  Route::resource('serah-terima','peminjamanController');
+  Route::get('barangnama/{id}','peminjamanController@peminjamnama');
+  //serah-terima akhir
+
+  //pengembalian
+  Route::resource('pengembalian','pengembalianController');
+  //akhir pengembalian
 
 });

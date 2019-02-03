@@ -145,8 +145,8 @@ class RoleController extends Controller
               $actions = array_values(array_diff($actions, $var[$i]));
               $i += 1;
           }
-
           $actions = array_filter($var);
+          // dd([$actions,$var]);
           return View('backEnd.role.permission', compact('role', 'actions'));
         } catch (\Exception $e) {
           toast()->error($e, 'Eror');
@@ -158,6 +158,7 @@ class RoleController extends Controller
     public function simpan($id, Request $request)
     {
         try {
+          // dd($request->all());
           $role = Sentinel::findRoleById($id);
           $role->permissions = [];
           if($request->permissions){

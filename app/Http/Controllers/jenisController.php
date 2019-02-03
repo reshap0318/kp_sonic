@@ -4,25 +4,45 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\jenis;
+use App\barang;
+use App\merek;
 use DB;
+use Sentinel;
 
 class jenisController extends Controller
 {
     public function index(Request $request)
     {
         try {
-          $jeniss = jenis::select('barang_jenis.id','barang_jenis.nama',
+          $barangs = barang::select('barang_jenis.id','barang_jenis.nama','satker.nama as satker','satker.id as satker_id',
           DB::raw('count(case when barang.kondisi=1 then 1 end) as baik,
           count(case when barang.kondisi=2 then 1 end) as rusak,
           count(case when barang.kondisi=3 then 1 end) as rusakberat,
           count(case when barang.kondisi=4 then 1 end) as dihapuskan'))
-          ->leftjoin('barang','barang_jenis.id','=','barang.id_jenis')
-          ->groupby('barang_jenis.id','barang_jenis.nama')
-          ->distinct()
-          ->get();
-          return view('backend.jenis.index',compact('jeniss'));
+          ->leftjoin('barang_jenis','barang.id_jenis','=','barang_jenis.id')
+          ->leftjoin('satker','barang.id_satker','=','satker.id');
+
+          $mereks = merek::select('merek.id','merek.nama',DB::raw('count(barang.id) as total'))
+          ->leftjoin('barang','merek.id','barang.id_merek');
+
+          $jeniss = jenis::select('barang_jenis.id','barang_jenis.nama',DB::raw('count(barang.id) as total'))
+          ->leftjoin('barang','barang_jenis.id','barang.id_jenis');
+
+
+          if(!Sentinel::getUser()->inrole(1)){
+            $barangs = $barangs->where('barang.id_satker',Sentinel::getuser()->satker_id);
+            $mereks = merek::select('merek.id','merek.nama',DB::raw('count(case when barang.id='.Sentinel::getuser()->satker_id.' then 1 end) as total'))
+            ->leftjoin('barang','merek.id','barang.id_merek');
+            $jeniss = jenis::select('barang_jenis.id','barang_jenis.nama',DB::raw('count(case when barang.id='.Sentinel::getuser()->satker_id.' then 1 end) as total'))
+            ->leftjoin('barang','barang_jenis.id','barang.id_jenis');
+          }
+
+          $jeniss = $jeniss->groupby('barang_jenis.nama','barang_jenis.id')->get();
+          $mereks = $mereks->groupby('merek.nama','merek.id')->get();
+          $barangs = $barangs->groupby('barang_jenis.id','barang_jenis.nama','satker.nama','satker_id')->distinct()->get();
+          return view('backend.jenis.index',compact('barangs','mereks','jeniss'));
         } catch (\Exception $e) {
-          dd($e);
+          // dd($e);
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
           toast()->error($e->getMessage(), 'Eror');
           return redirect()->back();
@@ -62,7 +82,12 @@ class jenisController extends Controller
     public function show($id,Request $request)
     {
         try {
-          return redirect()->route('barang.index',['jenis='.$id]);
+          // dd([$request->id,$id]);
+          if(!$request->id || !Sentinel::getUser()->inrole(1)){
+            return redirect()->route('barang.index',['jenis='.$id]);
+          }else{
+            return redirect()->route('barang.index',['jenis='.$id,'satker_id='.$request->id]);
+          }
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');

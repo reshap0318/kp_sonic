@@ -151,5 +151,6 @@
     </script>
 
     @yield('scripts')
+    @yield('select')
   </body>
 </html>

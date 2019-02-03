@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
 @section('title')
-	Edit Barang {{$barang->nama}}
+	Serah Terima Barang {{$peminjaman->barang->no_serial}}
 @stop
 
 
@@ -10,19 +10,20 @@
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2>Form Edit Barang {{$barang->nama}}<small>isi data * dengan benar</small></h2>
+        <h2>Form Peminjaman Barang<small>isi data * dengan benar</small></h2>
         <div class="clearfix"></div>
       </div>
       <div class="x_content">
         <br />
-{{ Form::model($barang, array('method' => 'PATCH', 'url' => route('barang.update', $barang->id), 'class' => 'form-horizontal form-label-left', 'files' => true,'data-parsley-validate','id'=>'demo-form2')) }}
+{{ Form::model($peminjaman, array('method' => 'PATCH', 'url' => route('serah-terima.update', $peminjaman->id), 'class' => 'form-horizontal form-label-left', 'files' => true,'data-parsley-validate','id'=>'demo-form2')) }}
 
-          @include('backend.barang._form')
+          @include('backend.peminjaman._form')
+					@include('backend.peminjaman.table')
 
           <div class="ln_solid"></div>
           <div class="form-group">
             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 col-sm-offset-3 col-xs-offset-3 text-center">
-              <a class="btn btn-primary" href="{{route('jenis-barang.index')}}">Cancel</a>
+              <a class="btn btn-primary" href="{{route('serah-terima.index')}}">Cancel</a>
 			  			<button class="btn btn-primary" type="reset">Reset</button>
               <button type="submit" class="btn btn-success">Submit</button>
             </div>
@@ -32,4 +33,12 @@
     </div>
   </div>
 </div>
+@stop
+
+@section('select')
+	<script type="text/javascript">
+		$(".js-example-basic-single").select2({
+			maximumSelectionLength: 1
+		});
+	</script>
 @stop

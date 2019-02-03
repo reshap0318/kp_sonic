@@ -30,7 +30,7 @@
       <h3>General</h3>
       <ul class="nav side-menu">
         <li class=""><a href="{{url('dashboard')}}"><i class="fa fa-home"></i>Dashboard</a></li>
-        @if (Sentinel::getUser()->hasAnyAccess(['user.index','role.index']))
+        @if (Sentinel::getUser()->hasAnyAccess(['user.index','role.index','satuan-kerja.index','jabatan.index','pangkat.index']))
           <li class=""><a><i class="fa fa-users"></i>Users Management <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu" style="display:none;">
               @if (Sentinel::getUser()->hasAccess(['user.index']))
@@ -39,23 +39,23 @@
               @if(Sentinel::getUser()->hasAccess(['role.index']))
               <li><a href="{{route('role.index')}}">Role</a></li>
               @endif
+              @if (Sentinel::getUser()->hasAccess(['jabatan.index']))
+                <li><a href="{{ route('jabatan.index') }}">Jabatan</a></li>
+              @endif
+              @if (Sentinel::getUser()->hasAccess(['satuan-kerja.index']))
+                <li><a href="{{ route('satuan-kerja.index') }}">Satuan Kerja</a></li>
+              @endif
+              @if (Sentinel::getUser()->hasAccess(['pangkat.index']))
+                <li><a href="{{ route('pangkat.index') }}">Pangkat</a></li>
+              @endif
             </ul>
           </li>
         @endif
-        @if (Sentinel::getUser()->hasAccess(['jabatan.index']))
-          <li><a href="{{ route('jabatan.index') }}"><i class="fa fa-university"></i>Jabatan</a></li>
-        @endif
-        @if (Sentinel::getUser()->hasAccess(['satuan-kerja.index']))
-          <li><a href="{{ route('satuan-kerja.index') }}"><i class="fa fa-newspaper-o"></i>Satuan Kerja</a></li>
-        @endif
-        @if (Sentinel::getUser()->hasAccess(['pangkat.index']))
-          <li><a href="{{ route('pangkat.index') }}"><i class="fa fa-thumbs-o-up"></i>Pangkat</a></li>
-        @endif
-        @if (Sentinel::getUser()->hasAccess(['merek.index']))
-          <li><a href="{{ route('merek.index') }}"><i class="fa fa-umbrella"></i>Merek</a></li>
-        @endif
         @if (Sentinel::getUser()->hasAccess(['jenis-barang.index']))
           <li><a href="{{ route('jenis-barang.index') }}"><i class="fa fa-cubes"></i>Barang</a></li>
+        @endif
+        @if (Sentinel::getUser()->hasAccess(['serah-terima.index']))
+          <li><a href="{{ route('serah-terima.index') }}"><i class="fa fa-cubes"></i>Serah Terima</a></li>
         @endif
       </ul>
     </div>

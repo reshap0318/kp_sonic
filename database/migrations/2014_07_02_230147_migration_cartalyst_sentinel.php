@@ -122,9 +122,9 @@ class MigrationCartalystSentinel extends Migration
             $table->string('avatar')->nullable();
             $table->string('password');
 
-            $table->foreign('satker_id')->references('id')->on('satker')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('pangkat_id')->references('id')->on('pangkat')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('jabatan_id')->references('id')->on('jabatan')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('satker_id')->references('id')->on('satker')->onUpdate('cascade');
+            $table->foreign('pangkat_id')->references('id')->on('pangkat')->onUpdate('cascade');
+            $table->foreign('jabatan_id')->references('id')->on('jabatan')->onUpdate('cascade');
 
             $table->text('permissions')->nullable();
             $table->timestamp('last_login')->nullable();

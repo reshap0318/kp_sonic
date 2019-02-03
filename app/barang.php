@@ -12,11 +12,12 @@ class barang extends Model
     'no_serial',
     'th_perolehan',
     'id_jenis',
+    'id_satker',
     'id_merek',
     'type',
     'kondisi',
     'keterangan',
-    'id_user',
+    'status',
   ];
 
   public function jenis($value='')
@@ -29,8 +30,8 @@ class barang extends Model
       return $this->hasOne(merek::class,'id','id_merek');
   }
 
-  public function user($value='')
+  public function satker($value='')
   {
-      return $this->hasOne(user::class,'id','id_user');
+      return $this->hasOne(satker::class,'id','id_satker');
   }
 }

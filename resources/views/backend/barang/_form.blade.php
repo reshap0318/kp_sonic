@@ -1,31 +1,31 @@
 <div class="form-group">
-  {!! Form::label('no_serial', 'Nomor Serial*', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+  {!! Form::label('no_serial', 'Nomor Serial', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
   <div class="col-md-6 col-sm-6 col-xs-12">
     {!! Form::text('no_serial', null, ['class'=>'form-control col-md-7 col-xs-12','placeholder'=>'1611522012']) !!}
   </div>
 </div>
 <div class="form-group">
-  {!! Form::label('th_perolehan', 'Tahun Perolehan *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+  {!! Form::label('th_perolehan', 'Tahun Perolehan', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
   <div class="col-md-6 col-sm-6 col-xs-12">
     {!! Form::text('th_perolehan', null, ['class'=>'form-control col-md-7 col-xs-12','placeholder'=>'2019']) !!}
   </div>
 </div>
 <div class="form-group">
-  {!! Form::label('id_jenis', 'Jenis *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+  {!! Form::label('id_jenis', 'Jenis', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
   <div class="col-md-6 col-sm-6 col-xs-12">
     {!! Form::select('id_jenis', $jenis,null, ['class'=>'form-control col-md-7 col-xs-12','placeholder'=>'---Pilihan Jenis---']) !!}
   </div>
 </div>
 
 <div class="form-group">
-  {!! Form::label('merek', 'Merek *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+  {!! Form::label('merek', 'Merek', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
   <div class="col-md-6 col-sm-6 col-xs-12">
     {!! Form::select('id_merek', $merek,null, ['class'=>'form-control col-md-7 col-xs-12','id'=>'cmerek','placeholder'=>'---Pilihan Merek---']) !!}
   </div>
 </div>
 
 <div class="form-group">
-  {!! Form::label('type', 'Type *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+  {!! Form::label('type', 'Type', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
   <div class="col-md-6 col-sm-6 col-xs-12">
     {!! Form::select('type', $type,null, ['class'=>'form-control col-md-7 col-xs-12','id'=>'ctype','placeholder'=>'---Pilihan Type---']) !!}
     {!! Form::text('type',null, ['class'=>'form-control col-md-7 col-xs-12','id'=>'ttype','placeholder'=>'Laptop Geming']) !!}
