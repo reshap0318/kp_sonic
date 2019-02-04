@@ -21,7 +21,7 @@
           <tbody>
             @foreach($peminjamans as $peminjaman)
               <tr>
-                  <td class=" text-center">{{ ++$no }}</td>
+                  <td class=" text-center">{{ $peminjaman->id }}</td>
                   <td class=" ">{{$peminjaman->user->nama}}</td>
                   <td class=" ">{{$peminjaman->barang->no_serial}}</td>
                   <td class=" ">{{optional(optional($peminjaman->barang)->jenis)->nama}}</td>
@@ -56,15 +56,8 @@
 @section('scripts')
 <script type="text/javascript">
 
-  function bukamodal() {
-    var combo = document.getElementById('barang_id').value;
-    if(combo != ""){
-      alert('cuman bisa masukan 1 barang');
-    }else {
-      $('#cari_barang').modal('show');
-    }
-  }
-
+  $("#barang_id").select2("enable", true);
+  
   $(document).ready(function() {
     // Setup - add a text input to each footer cell
     $('#tblpeminjaman tfoot th').each(function(){
@@ -93,40 +86,33 @@
     });
 
 
-    var status_modal = 0;
+    var pilih = [];
     $('#tblpeminjaman tbody').on( 'click', 'button', function () {
-        $(this).toggleClass('btn-success btn-danger');
-        if($(this).hasClass('btn-success')){
-          $(this).closest("tr").removeClass('selected');
-          $(this).html('Select');
+        var data = $(this).closest("tr")[0].children[0].innerHTML;
+        if(table.rows('.selected').data().length==0 || $(this).hasClass('btn-danger')){
+            $(this).toggleClass('btn-success btn-danger');
+            if($(this).hasClass('btn-success')){
+              $(this).closest("tr").removeClass('selected');
+              $(this).html('Select');
+
+              var index = pilih.indexOf(data);
+              if (index > -1) {
+                pilih.splice(index, 1);
+              }
+
+            }else{
+              $(this).html('UnSelect');
+              $(this).closest("tr").addClass('selected');
+              pilih.push(data);
+            }
+
+            console.log(pilih);
+            $('#barang_id').val(pilih).trigger('change');
+            document.getElementById('hiden').value = $('#barang_id').val();
         }else{
-          $(this).html('UnSelect');
-          $(this).closest("tr").addClass('selected');
+          alert('hanya bisa Memilih Barang');
         }
-
-        if(table.rows('.selected').data().length>=1){
-          $('#cari_barang').modal('hide');
-        }
-
-        status_modal = 1;
-        closemodal();
     });
-
-    function closemodal() {
-      if(confirm("yakin Akan Memilih Barang Ini?")==true){
-        var pilih = [];
-        for (var i = 0; i < table.rows('.selected').data().length; i++) {
-          pilih.push(table.rows('.selected').data()[i][0]);
-        }
-        pilih.push($('#barang_id').val());
-        $("tr").removeClass('selected');
-
-        //masukan ke combobox
-        $('#barang_id').val(pilih).trigger('change');
-        status_modal = 0;
-      }
-    }
-
   });
 </script>
 @stop

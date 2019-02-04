@@ -17,6 +17,13 @@
         <br />
 {{ Form::model($peminjaman, array('method' => 'PATCH', 'url' => route('serah-terima.update', $peminjaman->id), 'class' => 'form-horizontal form-label-left', 'files' => true,'data-parsley-validate','id'=>'demo-form2')) }}
 
+					<div class="form-group">
+						{!! Form::label('tanggal', 'Tanggal *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+						<div class="col-md-6 col-sm-6 col-xs-12">
+								{!! Form::text('tanggal', null, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12','readonly'=>'readonly']) !!}
+						</div>
+					</div>
+
           @include('backend.peminjaman._form')
 					@include('backend.peminjaman.table')
 

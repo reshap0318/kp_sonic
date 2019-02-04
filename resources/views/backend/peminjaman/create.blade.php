@@ -17,6 +17,16 @@
         <br />
 {{ Form::open(array('url' => route('serah-terima.store'), 'class' => 'form-horizontal','files' => true,'class'=>'form-horizontal form-label-left','data-parsley-validate','id'=>'demo-form2')) }}
 
+
+					<div class="form-group">
+						{!! Form::label('tanggal', 'Tanggal *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
+						<div class="col-md-6 col-sm-6 col-xs-12 xdisplay_inputx form-group has-feedback">
+								{!! Form::text('tanggal', null, ['class'=>'form-control has-feedback-left col-md-7 col-xs-12','id'=>'single_cal1','aria-describedby'=>'inputSuccess2Status']) !!}
+								<span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+								<span id="inputSuccess2Status" class="sr-only">(success)</span>
+						</div>
+					</div>
+
           @include('backend.peminjaman._form')
 					@include('backend.peminjaman.table')
 

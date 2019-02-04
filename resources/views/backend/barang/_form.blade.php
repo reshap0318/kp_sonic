@@ -30,7 +30,7 @@
     {!! Form::select('type', $type,null, ['class'=>'form-control col-md-7 col-xs-12','id'=>'ctype','placeholder'=>'---Pilihan Type---']) !!}
     {!! Form::text('type',null, ['class'=>'form-control col-md-7 col-xs-12','id'=>'ttype','placeholder'=>'Laptop Geming']) !!}
   </div>
-  <button type="button" onclick="gantitype()" name="button" class="btn btn-round btn-primary"><i class="fa fa-plus-circle"></i></button>
+  <button type="button" onclick="gantitype()" name="button" class="btn btn-round btn-primary"><i class="fa fa-exchange"></i></button>
 </div>
 
 <div class="form-group">

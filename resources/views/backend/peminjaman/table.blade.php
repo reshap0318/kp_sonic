@@ -55,6 +55,11 @@
 
 @section('scripts')
 <script type="text/javascript">
+
+
+
+  $("#barang_id").select2("enable", true);
+
   $(document).ready(function() {
     // Setup - add a text input to each footer cell
     $('#tblbarang tfoot th').each(function(){
@@ -82,30 +87,31 @@
         });
     });
 
+    var pilih = [];
     $('#tblbarang tbody').on( 'click', 'button', function () {
+
+        var data = $(this).closest("tr")[0].children[0].innerHTML;
+
         $(this).toggleClass('btn-success btn-danger');
+
         if($(this).hasClass('btn-success')){
           $(this).closest("tr").removeClass('selected');
           $(this).html('Select');
+
+          var index = pilih.indexOf(data);
+          if (index > -1) {
+            pilih.splice(index, 1);
+          }
+
         }else{
           $(this).html('UnSelect');
           $(this).closest("tr").addClass('selected');
+          pilih.push(data);
         }
-    });
 
-    $('#simpan').on( 'click', function () {
-        if($('#cari_barang').modal('hide')){
-            if(confirm("yakin Akan Memilih Barang Ini?")==true){
-              var pilih = [];
-              for (var i = 0; i < table.rows('.selected').data().length; i++) {
-                pilih.push(table.rows('.selected').data()[i][0]);
-              }
-              pilih.push($('#barang_id').val());
-              $("tr").removeClass('selected');
-              //masukan ke combobox
-              $('#barang_id').val(pilih).trigger('change');
-            }
-        }
+        console.log(pilih);
+        $('#barang_id').val(pilih).trigger('change');
+        document.getElementById('hiden').value = $('#barang_id').val();
     });
 
   });

@@ -46,7 +46,7 @@
             <div class="form-group">
               {!! Form::label('pangkat_id', 'Pangkat *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}
               <div class="col-md-6 col-sm-6 col-xs-12">
-                {!! Form::select('pangkat_id', $satker, null, ['class' => 'foselect2_single form-control']) !!}
+                {!! Form::select('pangkat_id', $pangkat, null, ['class' => 'foselect2_single form-control']) !!}
               </div>
             </div>
 

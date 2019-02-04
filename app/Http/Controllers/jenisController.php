@@ -22,18 +22,18 @@ class jenisController extends Controller
           ->leftjoin('barang_jenis','barang.id_jenis','=','barang_jenis.id')
           ->leftjoin('satker','barang.id_satker','=','satker.id');
 
-          $mereks = merek::select('merek.id','merek.nama',DB::raw('count(barang.id) as total'))
+          $mereks = merek::select('merek.id','merek.nama',DB::raw('count(barang.id_jenis) as total'))
           ->leftjoin('barang','merek.id','barang.id_merek');
 
-          $jeniss = jenis::select('barang_jenis.id','barang_jenis.nama',DB::raw('count(barang.id) as total'))
+          $jeniss = jenis::select('barang_jenis.id','barang_jenis.nama',DB::raw('count(barang.id_merek) as total'))
           ->leftjoin('barang','barang_jenis.id','barang.id_jenis');
 
 
           if(!Sentinel::getUser()->inrole(1)){
             $barangs = $barangs->where('barang.id_satker',Sentinel::getuser()->satker_id);
-            $mereks = merek::select('merek.id','merek.nama',DB::raw('count(case when barang.id='.Sentinel::getuser()->satker_id.' then 1 end) as total'))
+            $mereks = merek::select('merek.id','merek.nama',DB::raw('count(case when barang.id_satker='.Sentinel::getuser()->satker_id.' then 1 end) as total'))
             ->leftjoin('barang','merek.id','barang.id_merek');
-            $jeniss = jenis::select('barang_jenis.id','barang_jenis.nama',DB::raw('count(case when barang.id='.Sentinel::getuser()->satker_id.' then 1 end) as total'))
+            $jeniss = jenis::select('barang_jenis.id','barang_jenis.nama',DB::raw('count(case when barang.id_satker='.Sentinel::getuser()->satker_id.' then 1 end) as total'))
             ->leftjoin('barang','barang_jenis.id','barang.id_jenis');
           }
 

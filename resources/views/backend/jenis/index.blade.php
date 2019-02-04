@@ -10,8 +10,12 @@
     <h2>List Jenis Barang</h2>
     <ul class="nav navbar-right panel_toolbox">
       @if (Sentinel::getUser()->hasAnyAccess(['jenis-barang.create','merek.create','barang.create']))
-        <a href="{{route('jenis-barang.create')}}" class="btn btn-success">New Jenis Barang</a>
-        <a href="{{route('merek.create')}}" class="btn btn-success">New Merek</a>
+        @if (Sentinel::getUser()->hasAccess(['jenis-barang.create']))
+          <a href="{{route('jenis-barang.create')}}" class="btn btn-success">New Jenis Barang</a>
+        @endif
+        @if (Sentinel::getUser()->hasAccess(['merek.create']))
+          <a href="{{route('merek.create')}}" class="btn btn-success">New Merek</a>
+        @endif
         <a href="{{route('barang.create')}}" class="btn btn-success">New Barang</a>
       @endif
     </ul>

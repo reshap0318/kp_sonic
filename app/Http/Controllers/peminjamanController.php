@@ -13,7 +13,7 @@ class peminjamanController extends Controller
     public function index(Request $request)
     {
         try {
-          $peminjamans = peminjaman::all();
+          $peminjamans = peminjaman::whereRAW('id not in (select peminjaman_id from pengembalian)')->get();
           if(!Sentinel::getuser()->inrole(1)){
             $peminjamans = peminjaman::select('peminjaman.*')->join('barang','peminjaman.barang_id','=','barang.id')->where('barang.id_satker',Sentinel::getuser()->satker_id)->get();
           }
@@ -34,9 +34,9 @@ class peminjamanController extends Controller
           if(!Sentinel::getuser()->inrole(1)){
             $barang = $barang->where('id_satker',Sentinel::getuser()->satker_id);
           }
+          $barangs = $barang->where('status',1)->get();
           $barang = $barang->where('status',1)->pluck('no_serial','id');
           $user = $user->pluck('nama','nrp_nip');
-          $barangs = barang::where('status',1)->get();
           // dd($barang);
           return view('backend.peminjaman.create',compact('barang','user','barangs'));
         } catch (\Exception $e) {
@@ -55,6 +55,7 @@ class peminjamanController extends Controller
         ]);
         try {
           $barang = 0;
+          $request->barang_id = explode(",",$request->barang_id);
           for ($i=0; $i < count($request->barang_id) ; $i++) {
             $peminjaman = new peminjaman;
             $barang = barang::find($request->barang_id[$i]);
@@ -102,9 +103,9 @@ class peminjamanController extends Controller
           if(!Sentinel::getuser()->inrole(1)){
             $barang = $barang->where('id_satker',Sentinel::getuser()->satker_id);
           }
-          $barang = $barang->whereOr('status',1)->pluck('no_serial','id');
+          $barangs = $barang->whereOr('status',1)->whereOr('id',$peminjaman->barang_id)->get();
+          $barang = $barang->whereOr('status',1)->whereOr('id',$peminjaman->barang_id)->pluck('no_serial','id');
           $user = $user->pluck('nama','nrp_nip');
-          $barangs = barang::whereOr('status',1)->whereOr('id',$peminjaman->barang_id)->get();
           // dd($barang);
           return view('backend.peminjaman.edit',compact('peminjaman','user','barang','barangs'));
         } catch (\Exception $e) {

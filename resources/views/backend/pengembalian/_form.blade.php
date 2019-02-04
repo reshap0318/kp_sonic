@@ -4,8 +4,7 @@
   <div class="col-md-6 col-sm-6 col-xs-12">
     {!! Form::select('peminjaman_id', $peminjaman, null, ['class' => 'js-example-basic-single form-control','multiple'=>'multiple','id'=>'barang_id']) !!}
   </div>
-  <button type="button" name="button" class="btn btn-success"> <i class="fa fa-qrcode"></i> </button>
-  <button type="button" name="button" class="btn btn-success" onclick="bukamodal()"> <i class="fa fa-search"></i> </button>
+  <button type="button" name="button" class="btn btn-success" data-toggle="modal" data-target="#cari_barang" > <i class="fa fa-search"></i> </button>
 </div>
 
 <div class="form-group">
@@ -24,3 +23,5 @@
     {!! Form::textarea('keterangan', null, ['class' => 'form-control','class'=>'form-control col-md-7 col-xs-12']) !!}
   </div>
 </div>
+
+<input id="hiden" type="hidden" name="peminjaman_id" value="">

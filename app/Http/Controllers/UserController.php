@@ -19,17 +19,22 @@ class UserController extends Controller
     public function index(Request $request)
     {
       try {
-        $users = user::all();
+        $users = user::select('*');
         if($request->jabatan){
           $jabatan = jabatan::where('nama',$request->jabatan)->first();
-          $users = user::where('jabatan_id',$jabatan->id)->get();
+          $users = user::where('jabatan_id',$jabatan->id);
         }else if($request->satker){
           $satker = satker::where('nama',$request->satker)->first();
-          $users = user::where('satker_id',$satker->id)->get();
+          $users = user::where('satker_id',$satker->id);
         }else if($request->pangkat){
           $pangkat = pangkat::where('nama',$request->pangkat)->first();
-          $users = user::where('pangkat_id',$pangkat->id)->get();
+          $users = user::where('pangkat_id',$pangkat->id);
         }
+
+        if(!Sentinel::getuser()->inrole(1)){
+          $users = $users->where('satker_id',Sentinel::getuser()->satker_id);
+        }
+        $users = $users->get();
         return view('backend.user.index',compact('users'));
       } catch (\Exception $e) {
         toast()->error($e->getMessage(), 'Eror');
@@ -46,6 +51,10 @@ class UserController extends Controller
           $pangkat = pangkat::pluck('nama','id');
           $jabatan = jabatan::pluck('nama','id');
           $satker = satker::pluck('nama','id');
+          if(!Sentinel::getuser()->inrole(1)){
+            $role = Role::whereNotIn('id',[1])->pluck('name', 'id');
+            $satker = satker::where('id',Sentinel::getuser()->satker_id)->pluck('nama','id');
+          }
           return view('backend.user.create',compact('role','pangkat','jabatan','satker'));
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');

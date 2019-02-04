@@ -7,6 +7,7 @@ use App\pengembalian;
 use App\peminjaman;
 use App\User;
 use App\barang;
+use DB;
 use Sentinel;
 
 class pengembalianController extends Controller
@@ -14,9 +15,9 @@ class pengembalianController extends Controller
     public function index(Request $request)
     {
         try {
-          $pengembalians = pengembalian::all();
+          $pengembalians = pengembalian::orderby('tanggal','asc')->get();
           if(!Sentinel::getuser()->inrole(1)){
-            $pengembalians = pengembalian::select('pengembalian.*')->join('peminjaman','pengembalian.peminjaman_id','=','peminjaman.id')->join('barang','peminjaman.barang_id','=','barang.id')->where('barang.id_satker',Sentinel::getuser()->satker_id)->get();
+            $pengembalians = pengembalian::select('pengembalian.*')->join('peminjaman','pengembalian.peminjaman_id','=','peminjaman.id')->join('barang','peminjaman.barang_id','=','barang.id')->where('barang.id_satker',Sentinel::getuser()->satker_id)->orderby('tanggal','asc')->get();
           }
           // dd($pengembalians);
           return view('backend.pengembalian.index',compact('pengembalians'));
@@ -31,7 +32,7 @@ class pengembalianController extends Controller
     public function create(Request $request)
     {
         try {
-          $peminjaman = peminjaman::select('peminjaman.*','barang.no_serial')->join('barang','peminjaman.barang_id','=','barang.id');
+          $peminjaman = peminjaman::select('peminjaman.*','barang.no_serial')->join('barang','peminjaman.barang_id','=','barang.id')->whereRAW('peminjaman.id not in (select peminjaman_id from pengembalian)');
           $user = User::select('*');
           if(!Sentinel::getuser()->inrole(1)){
             $peminjaman = $peminjaman->where('barang.id_satker',Sentinel::getuser()->satker_id);
@@ -66,10 +67,11 @@ class pengembalianController extends Controller
             if($pengembalian->save()){
               $peminjaman = peminjaman::find($request->peminjaman_id);
               $barang = barang::find($peminjaman->barang_id);
+              $barang->kondisi = $request->kondisi;
               $barang->status = 1;
               $barang->update();
             }
-        toast()->success('Berhasil Menyimpan Pengembalian Barang', 'Berhasil');
+         toast()->success('Berhasil Menyimpan Pengembalian Barang', 'Berhasil');
          return redirect()->route('pengembalian.index');
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
@@ -93,7 +95,7 @@ class pengembalianController extends Controller
     {
         try {
           $pengembalian = pengembalian::find($id);
-          $peminjaman = peminjaman::select('peminjaman.*','barang.no_serial')->join('barang','peminjaman.barang_id','=','barang.id');
+          $peminjaman = peminjaman::select('peminjaman.*','barang.no_serial')->join('barang','peminjaman.barang_id','=','barang.id')->whereRAW('peminjaman.id not in (select peminjaman_id from pengembalian)');
           $user = User::select('*');
           if(!Sentinel::getuser()->inrole(1)){
             $peminjaman = $peminjaman->where('barang.id_satker',Sentinel::getuser()->satker_id);
@@ -129,11 +131,12 @@ class pengembalianController extends Controller
             if($pengembalian->save()){
               $peminjaman = peminjaman::find($request->peminjaman_id);
               $barang = barang::find($peminjaman->barang_id);
+              $barang->kondisi = $request->kondisi;
               $barang->status = 1;
               $barang->update();
             }
+         toast()->success('Berhasil Menyimpan Pengembalian Barang', 'Berhasil');
          return redirect()->route('pengembalian.index');
-         toast()->success('Berhasil Menyimpan Pangkat', 'Berhasil');
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');

@@ -44,7 +44,17 @@
           <td class=" ">{{optional(optional($pengembalian->peminjaman)->barang)->no_serial}}</td>
           <td class=" ">{{optional(optional(optional($pengembalian->peminjaman)->barang)->jenis)->nama}}</td>
           <td class=" ">{{optional(optional(optional($pengembalian->peminjaman)->barang)->merek)->nama}}</td>
-          <td class=" ">{{$pengembalian->kondisi}}</td>
+          <td class=" ">@if($pengembalian->kondisi==1)
+            Baik
+            @elseif($pengembalian->kondisi==2)
+            Rusak Ringan
+            @elseif($pengembalian->kondisi==3)
+            Rusak Berat
+            @elseif($pengembalian->kondisi==4)
+            Dihapuskan
+            @else
+            Kesalahan
+          @endif</td>
           <td class=" ">{{optional($pengembalian->peminjaman)->tanggal}}</td>
           <td class=" last">
             @if (Sentinel::getUser()->hasAccess(['pengembalian.show']))
