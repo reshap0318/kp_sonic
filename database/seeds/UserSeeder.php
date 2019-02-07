@@ -11,25 +11,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-          DB::table('satker')->insert([
-            [
-                'nama'		     => 'POLDA SUMBAR',
-            ]
-         ]);
-
-           DB::table('pangkat')->insert([
-             [
-                 'nama'		     => 'Bintang 3',
-             ]
-          ]);
-
-            DB::table('jabatan')->insert([
-              [
-                  'nama'		     => 'Kapolda',
-              ]
-           ]);
-
-
          DB::table('users')->insert([
            [
  			    		'nrp_nip'		 => 'admin',

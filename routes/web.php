@@ -23,6 +23,7 @@ Route::group(['middleware' => ['web', 'auth', 'permission'] ], function () {
 	//users
 	Route::resource('user', 'UserController');
 	Route::post('user/ajax_all', ['uses' => 'UserController@ajax_all']);
+  Route::post('user/peminjaman','UserController@userpeminjaman');
 	//users profil
 	Route::post('user/ganti-profil/{id}', ['uses' => 'UserController@gantiprofil']);
 	Route::get('profil', ['uses' => 'UserController@showprofil']);

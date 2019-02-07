@@ -28,7 +28,6 @@
 					</div>
 
           @include('backend.peminjaman._form')
-					@include('backend.peminjaman.table')
 
           <div class="ln_solid"></div>
           <div class="form-group">
@@ -43,4 +42,7 @@
     </div>
   </div>
 </div>
+
+@include('backend.peminjaman.table')
+@include('backend.peminjaman.adduser')
 @stop

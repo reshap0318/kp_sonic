@@ -47,14 +47,23 @@ class UserController extends Controller
     public function create()
     {
         try {
-          $role = Role::get()->pluck('name', 'id');
           $pangkat = pangkat::pluck('nama','id');
           $jabatan = jabatan::pluck('nama','id');
           $satker = satker::pluck('nama','id');
-          if(!Sentinel::getuser()->inrole(1)){
-            $role = Role::whereNotIn('id',[1])->pluck('name', 'id');
+
+          if(Sentinel::getuser()->inrole(1)){
+            $role = Role::whereRaw('id not in (3)')->pluck('name', 'id');
+            $satker = satker::where('id',Sentinel::getuser()->satker_id)->pluck('nama','id');
+          }elseif(!Sentinel::getuser()->inrole(1)){
+            $role = Role::whereRaw('id not in (2,3)')->pluck('name', 'id');
             $satker = satker::where('id',Sentinel::getuser()->satker_id)->pluck('nama','id');
           }
+
+          if(Sentinel::getuser()->id==1){
+            $role = Role::get()->pluck('name', 'id');
+          }
+
+
           return view('backend.user.create',compact('role','pangkat','jabatan','satker'));
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
@@ -144,11 +153,23 @@ class UserController extends Controller
     public function edit($id)
     {
         try {
-          $role = Role::get()->pluck('name', 'id');
           $user = User::find($id);
+
           $pangkat = pangkat::pluck('nama','id');
           $jabatan = jabatan::pluck('nama','id');
           $satker = satker::pluck('nama','id');
+
+          if(Sentinel::getuser()->inrole(1)){
+            $role = Role::whereRaw('id not in (3)')->pluck('name', 'id');
+            $satker = satker::where('id',Sentinel::getuser()->satker_id)->pluck('nama','id');
+          }elseif(!Sentinel::getuser()->inrole(1)){
+            $role = Role::whereRaw('id not in (2,3)')->pluck('name', 'id');
+            $satker = satker::where('id',Sentinel::getuser()->satker_id)->pluck('nama','id');
+          }
+
+          if(Sentinel::getuser()->id==1){
+            $role = Role::get()->pluck('name', 'id');
+          }
           return view('backend.user.edit',compact('role','pangkat','jabatan','satker','user'));
         } catch (\Exception $e) {
           toast()->error($e, 'Eror');
@@ -175,7 +196,9 @@ class UserController extends Controller
           $user = User::find($id);
           $user->nrp_nip = $request->nrp_nip;
           $user->nama = $request->nama;
-          $user->password = bcrypt($request->password);
+          if($request->password){
+            $user->password = bcrypt($request->password);
+          }
           $user->satker_id = $request->satker_id;
           $user->pangkat_id = $request->pangkat_id;
           $user->jenis_kelamin = $request->jenis_kelamin;
@@ -468,4 +491,48 @@ class UserController extends Controller
             return response()->json(['success' => true, 'status' => 'Sucesfully Activated']);
         }
     }
+
+
+    public function userpeminjaman(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'nrp_nip' => 'required|min:3|unique:users',
+            'nama' => 'required|min:3',
+            'satker_id' => 'required',
+            'pangkat_id' => 'required',
+            'jenis_kelamin' => 'required',
+            'jabatan_id' => 'required',
+        ]);
+        try {
+          $user = new User;
+          $user->nrp_nip = $request->nrp_nip;
+          $user->nama = $request->nama;
+          $user->password = bcrypt($request->nrp_nip);
+          $user->satker_id = $request->satker_id;
+          $user->pangkat_id = $request->pangkat_id;
+          $user->jenis_kelamin = $request->jenis_kelamin;
+          $user->jabatan_id = $request->jabatan_id;
+          $user->permissions = ['{"home.dashboard":true}'];
+          if($user->save()){
+             toast()->success('Berhasil Menambahkan Peminjam', 'Berhasil');
+              $activation = Activation::create($user);
+              $activation = Activation::complete($user, $activation->code);
+              //role
+
+              $user->roles()->sync([3]);
+
+              return redirect()->route('serah-terima.create');
+              //aktive
+
+          }
+        } catch (\Exception $e) {
+          toast()->error($e->getMessage(), 'Eror');
+          toast()->error('Terjadi Eror Saat Meng-Nyimpan Data', 'Gagal');
+          return redirect()->back();
+        }
+    }
+
+
+
 }

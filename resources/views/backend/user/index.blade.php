@@ -68,15 +68,6 @@ Users
         @endforeach
       </tbody>
     </table>
-    @if (Sentinel::getUser()->hasAccess(['user.destroy']))
-    <button id="delete_all" class='btn btn-danger btn-xs'>Delete Selected</button>
-    @endif
-    @if (Sentinel::getUser()->hasAccess(['user.activate']))
-    <button id="activate_all" class='btn btn-primary btn-xs'>Activate Selected</button>
-    @endif
-    @if (Sentinel::getUser()->hasAccess(['user.deactivate']))
-    <button id="deactivate_all" class='btn btn-danger btn-xs'>Deactivate Selected</button>
-    @endif
   </div>
 </div>
 @endsection

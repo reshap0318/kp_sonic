@@ -4,6 +4,7 @@
   <div class="col-md-6 col-sm-6 col-xs-12">
     {!! Form::select('nrp_nip', $user, null, ['class' => 'js-example-basic-single form-control']) !!}
   </div>
+  <button type="button" name="button" class="btn btn-primary" data-toggle="modal" data-target="#add_user"> <i class="fa fa-plus"></i> </button>
 </div>
 <div class="form-group">
   {!! Form::label('barang_id', 'Barang *', ['class' => 'control-label col-md-3 col-sm-3 col-xs-12']) !!}

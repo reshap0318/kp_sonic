@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\peminjaman;
 use App\barang;
+use App\pangkat;
+use App\jabatan;
+use App\satker;
 use App\User;
 use Sentinel;
 
@@ -37,8 +40,15 @@ class peminjamanController extends Controller
           $barangs = $barang->where('status',1)->get();
           $barang = $barang->where('status',1)->pluck('no_serial','id');
           $user = $user->pluck('nama','nrp_nip');
+
+          $pangkat = pangkat::pluck('nama','id');
+          $jabatan = jabatan::pluck('nama','id');
+          $satker = satker::pluck('nama','id');
+          if(!Sentinel::getuser()->inrole(1)){
+            $satker = satker::where('id',Sentinel::getuser()->satker_id)->pluck('nama','id');
+          }
           // dd($barang);
-          return view('backend.peminjaman.create',compact('barang','user','barangs'));
+          return view('backend.peminjaman.create',compact('barang','user','barangs','pangkat','jabatan','satker'));
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
@@ -106,8 +116,15 @@ class peminjamanController extends Controller
           $barangs = $barang->whereOr('status',1)->whereOr('id',$peminjaman->barang_id)->get();
           $barang = $barang->whereOr('status',1)->whereOr('id',$peminjaman->barang_id)->pluck('no_serial','id');
           $user = $user->pluck('nama','nrp_nip');
+
+          $pangkat = pangkat::pluck('nama','id');
+          $jabatan = jabatan::pluck('nama','id');
+          $satker = satker::pluck('nama','id');
+          if(!Sentinel::getuser()->inrole(1)){
+            $satker = satker::where('id',Sentinel::getuser()->satker_id)->pluck('nama','id');
+          }
           // dd($barang);
-          return view('backend.peminjaman.edit',compact('peminjaman','user','barang','barangs'));
+          return view('backend.peminjaman.edit',compact('peminjaman','user','barang','barangs','pangkat','jabatan','satker'));
         } catch (\Exception $e) {
           toast()->error($e->getMessage(), 'Eror');
           toast()->error('Terjadi Eror Saat Meng-Load Data', 'Gagal');
